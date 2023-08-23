@@ -1,48 +1,10 @@
-# EditorConfig is awesome: https://EditorConfig.org
-
 # top-most EditorConfig file
 root = true
 
-# Unix-style newlines with a newline ending every file
 [*]
+charset = utf-8
 end_of_line = lf
+indent_size = 4
+indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
-
-# Matches multiple files with brace expansion notation
-# Set default charset
-[*.{js,py}]
-charset = utf-8
-
-# 4 space indentation
-[*.{js,py,rs,md,go,html,css,scss,less,php,java,xml,yml,yaml,conf,ini,sh}]
-indent_style = space
-indent_size = 4
-
-# Tab indentation (no size specified)
-[Makefile]
-indent_style = tab
-
-# Indentation override for all JS under lib directory
-[lib/**.js]
-indent_style = space
-indent_size = 2
-
-# Matches the exact files either package.json or .travis.yml
-[{package.json,.travis.yml}]
-indent_style = space
-indent_size = 2
-
-# Matches the exact file either Gruntfile.js, Gulpfile.js or Jakefile.js
-[*.{Gruntfile,Gulpfile,Jakefile}.js]
-indent_style = space
-indent_size = 2
-
-# You can use `*` for wildcard matches, as well as single character wildcards
-# like `?` to match single characters.
-# The dot `.` matches anything except a slash.
-# Hence, `*.` matches all files without extension and `build/*` matches
-# all files inside build directory.
-[build/*.js]
-indent_style = space
-indent_size = 2

@@ -184,11 +184,7 @@ impl Tree {
         for child in &self.children {
             match child {
                 Child::Token(token) => {
-                    format_to!(
-                        buf,
-                        "{indent}  '{}'\n",
-                        token.lexeme
-                    )
+                    format_to!(buf, "{indent}  '{}'\n", token.lexeme)
                 }
                 Child::Tree(tree) => tree.print(buf, level + 1),
             }

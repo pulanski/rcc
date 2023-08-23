@@ -23,13 +23,7 @@ fn large_parser_prefix() -> String {
 }
 
 fn small_parser_prefix() -> String {
-    format!(
-        "\t{}{}{}",
-        "[".black(),
-        " PARSER ".yellow(),
-        "]".black(),
-    )
-    .into()
+    format!("\t{}{}{}", "[".black(), " PARSER ".yellow(), "]".black(),).into()
 }
 
 fn format_call_stack(call_stack: &[String]) -> String {
@@ -94,13 +88,7 @@ pub struct ParserCall {
 
 impl Parser {
     pub fn new(tokens: TokenStream) -> Parser {
-        Parser {
-            tokens,
-            pos: 0,
-            fuel: Cell::new(256),
-            events: Vec::new(),
-            call_stack: Vec::new(),
-        }
+        Parser { tokens, pos: 0, fuel: Cell::new(256), events: Vec::new(), call_stack: Vec::new() }
     }
 
     pub fn enter(&mut self, tree_kind: TreeKind) {
@@ -125,13 +113,7 @@ impl Parser {
             .map(|call| {
                 let call_name = call.name.clone().to_string();
 
-                format!(
-                    "{}{}{}",
-                    "<".black(),
-                    call_name.cyan(),
-                    ">".black()
-                )
-                .into()
+                format!("{}{}{}", "<".black(), call_name.cyan(), ">".black()).into()
             })
             .collect::<Vec<String>>();
         // .join(&" -> ".yellow().to_string());
@@ -273,11 +255,7 @@ impl Parser {
                 format!(
                     "{}{}",
                     tree.kind,
-                    if tree.children.is_empty() {
-                        "".to_string()
-                    } else {
-                        " {".to_string()
-                    }
+                    if tree.children.is_empty() { "".to_string() } else { " {".to_string() }
                 )
                 .blue()
             );
@@ -289,10 +267,7 @@ impl Parser {
                         for _ in 0..indent {
                             print!("  ");
                         }
-                        println!(
-                            "{}",
-                            format!("{}", token.kind).green()
-                        );
+                        println!("{}", format!("{}", token.kind).green());
                     }
                 }
             }
@@ -324,29 +299,20 @@ impl Parser {
             // println!("event: {:?}", event);
             match event {
                 // Starting a new node; just push an empty tree to the stack.
-                Event::Open { kind } => stack
-                    .push(Tree { kind, children: Vec::new() }),
+                Event::Open { kind } => stack.push(Tree { kind, children: Vec::new() }),
 
                 // A tree is done.
                 // Pop it off the stack and append to a new current tree.
                 Event::Close => {
                     let tree = stack.pop().unwrap();
-                    stack
-                        .last_mut()
-                        .unwrap()
-                        .children
-                        .push(Child::Tree(tree));
+                    stack.last_mut().unwrap().children.push(Child::Tree(tree));
                 }
 
                 // Consume a token and append it to the current tree.
                 Event::Advance => {
                     let token = tokens.next().unwrap();
                     // println!("token: {:?}", token);
-                    stack
-                        .last_mut()
-                        .unwrap()
-                        .children
-                        .push(Child::Token(token));
+                    stack.last_mut().unwrap().children.push(Child::Token(token));
                 }
             }
         }
@@ -372,25 +338,17 @@ impl Parser {
 
     fn open(&mut self) -> MarkOpened {
         let mark = MarkOpened { index: self.events.len() };
-        self.events
-            .push(Event::Open { kind: TreeKind::ErrorTree });
+        self.events.push(Event::Open { kind: TreeKind::ErrorTree });
         mark
     }
 
     fn open_before(&mut self, m: MarkClosed) -> MarkOpened {
         let mark = MarkOpened { index: m.index };
-        self.events.insert(
-            m.index,
-            Event::Open { kind: TreeKind::ErrorTree },
-        );
+        self.events.insert(m.index, Event::Open { kind: TreeKind::ErrorTree });
         mark
     }
 
-    fn close(
-        &mut self,
-        m: MarkOpened,
-        kind: TreeKind,
-    ) -> MarkClosed {
+    fn close(&mut self, m: MarkOpened, kind: TreeKind) -> MarkClosed {
         self.events[m.index] = Event::Open { kind };
         self.events.push(Event::Close);
         MarkClosed { index: m.index }
@@ -420,9 +378,7 @@ impl Parser {
             panic!("parser is stuck")
         }
         self.fuel.set(self.fuel.get() - 1);
-        self.tokens
-            .get(self.pos + lookahead)
-            .map_or(TokenKind::EOF, |it| it.kind)
+        self.tokens.get(self.pos + lookahead).map_or(TokenKind::EOF, |it| it.kind)
     }
 
     fn at(&self, kind: TokenKind) -> bool {
@@ -432,10 +388,7 @@ impl Parser {
     /// Checks if the current token is in contained within the
     /// given [`TokenSet`], `kinds`.
     pub(crate) fn at_ts(&self, kinds: TokenSet) -> bool {
-        tracing::trace!(
-            "Checking if current token is in {:?}",
-            kinds
-        );
+        tracing::trace!("Checking if current token is in {:?}", kinds);
         kinds.contains(self.current())
     }
 
@@ -469,12 +422,13 @@ impl Parser {
         }
         // TODO: Error reporting.
 
-        tracing::error!("Expected {expected}{comma} but instead found {found}{period}",
-      expected = kind.to_string().yellow(),
-      comma = ",".black(),
-      found = found.red(),
-      period = ".".black(),
-    );
+        tracing::error!(
+            "Expected {expected}{comma} but instead found {found}{period}",
+            expected = kind.to_string().yellow(),
+            comma = ",".black(),
+            found = found.red(),
+            period = ".".black(),
+        );
     }
 
     fn add_leaf(&mut self, kind: TreeKind) {
@@ -492,12 +446,14 @@ impl Parser {
 
         // TODO: Error reporting.
 
-        tracing::error!("Expected {expected}{comma} but instead found {found}{period}",
-      expected = kinds.iter().map(|it| it.to_string()).collect::<Vec<_>>().join(" or ").yellow(),
-      comma = ",".black(),
-      found = found.red(),
-      period = ".".black(),
-    );
+        tracing::error!(
+            "Expected {expected}{comma} but instead found {found}{period}",
+            expected =
+                kinds.iter().map(|it| it.to_string()).collect::<Vec<_>>().join(" or ").yellow(),
+            comma = ",".black(),
+            found = found.red(),
+            period = ".".black(),
+        );
     }
 
     fn at_assignment_operator(&self) -> bool {
@@ -761,19 +717,14 @@ pub(crate) fn statement(p: &mut Parser) {
     let m = p.open();
 
     if p.at_any(&[TokenKind::CASE_KW, TokenKind::DEFAULT_KW])
-        || (p.at(TokenKind::IDENTIFIER)
-            && p.nth(1) == TokenKind::COLON)
+        || (p.at(TokenKind::IDENTIFIER) && p.nth(1) == TokenKind::COLON)
     {
         labeled_statement(p);
     } else if p.at(TokenKind::LBRACE) {
         compound_statement(p);
     } else if p.at(TokenKind::IF_KW) {
         selection_statement(p);
-    } else if p.at_any(&[
-        TokenKind::WHILE_KW,
-        TokenKind::FOR_KW,
-        TokenKind::DO_KW,
-    ]) {
+    } else if p.at_any(&[TokenKind::WHILE_KW, TokenKind::FOR_KW, TokenKind::DO_KW]) {
         iteration_statement(p);
     } else if p.at_any(&[
         TokenKind::RETURN_KW,
@@ -782,9 +733,7 @@ pub(crate) fn statement(p: &mut Parser) {
         TokenKind::GOTO_KW,
     ]) {
         jump_statement(p);
-    } else if p
-        .at_any(&[TokenKind::IDENTIFIER, TokenKind::SEMICOLON])
-    {
+    } else if p.at_any(&[TokenKind::IDENTIFIER, TokenKind::SEMICOLON]) {
         expression_statement(p);
     } else {
         p.advance_with_error("Expected statement");
@@ -807,8 +756,7 @@ fn labeled_statement(p: &mut Parser) {
     p.enter(TreeKind::LabeledStatement);
     let m = p.open();
 
-    if p.at_any(&[TokenKind::IDENTIFIER, TokenKind::DEFAULT_KW])
-    {
+    if p.at_any(&[TokenKind::IDENTIFIER, TokenKind::DEFAULT_KW]) {
         p.advance();
         p.expect(TokenKind::COLON);
         statement(p);
@@ -914,9 +862,7 @@ pub(crate) fn selection_statement(p: &mut Parser) {
         p.expect(TokenKind::RPAREN);
         statement(p);
     } else {
-        p.advance_with_error(
-            "Expected IF_KW or SWITCH_KW in selection_statement",
-        );
+        p.advance_with_error("Expected IF_KW or SWITCH_KW in selection_statement");
     }
 
     p.close(m, TreeKind::SelectionStatement);
@@ -1080,9 +1026,7 @@ pub(crate) fn jump_statement(p: &mut Parser) {
             expression(p);
         }
         p.expect(TokenKind::SEMICOLON);
-    } else if p
-        .at_any(&[TokenKind::BREAK_KW, TokenKind::CONTINUE_KW])
-    {
+    } else if p.at_any(&[TokenKind::BREAK_KW, TokenKind::CONTINUE_KW]) {
         p.advance();
         p.expect(TokenKind::SEMICOLON);
     } else if p.at(TokenKind::GOTO_KW) {
@@ -1091,8 +1035,8 @@ pub(crate) fn jump_statement(p: &mut Parser) {
         p.expect(TokenKind::SEMICOLON);
     } else {
         p.advance_with_error(
-      "Expected RETURN_KW, BREAK_KW, CONTINUE_KW, or GOTO_KW in jump_statement",
-    );
+            "Expected RETURN_KW, BREAK_KW, CONTINUE_KW, or GOTO_KW in jump_statement",
+        );
     }
 
     p.close(m, TreeKind::JumpStatement);
@@ -1525,11 +1469,7 @@ fn equality_expression(p: &mut Parser) {
 fn relational_expression(p: &mut Parser) {
     let m = p.open();
     shift_expression(p);
-    while p.at(TokenKind::LT)
-        || p.at(TokenKind::GT)
-        || p.at(TokenKind::LE)
-        || p.at(TokenKind::GE)
-    {
+    while p.at(TokenKind::LT) || p.at(TokenKind::GT) || p.at(TokenKind::LE) || p.at(TokenKind::GE) {
         p.advance();
         shift_expression(p);
     }
@@ -1591,10 +1531,7 @@ fn additive_expression(p: &mut Parser) {
 fn multiplicative_expression(p: &mut Parser) {
     let m = p.open();
     cast_expression(p);
-    while p.at(TokenKind::STAR)
-        || p.at(TokenKind::SLASH)
-        || p.at(TokenKind::PERCENT)
-    {
+    while p.at(TokenKind::STAR) || p.at(TokenKind::SLASH) || p.at(TokenKind::PERCENT) {
         p.advance();
         cast_expression(p);
     }
@@ -1657,8 +1594,7 @@ fn specifier_qualifier_list(p: &mut Parser) {
         specifier_qualifier_list(p);
     } else {
         type_specifier(p);
-        if p.at(TokenKind::CONST_KW)
-            || p.at(TokenKind::VOLATILE_KW)
+        if p.at(TokenKind::CONST_KW) || p.at(TokenKind::VOLATILE_KW)
         // || p.at(TokenKind::RESTRICT_KW)
         {
             specifier_qualifier_list(p);
@@ -1808,13 +1744,10 @@ fn postfix_expression(p: &mut Parser) {
                 argument_expression_list(p);
             }
             p.expect(TokenKind::RPAREN);
-        } else if p.at(TokenKind::DOT) || p.at(TokenKind::PTR_OP)
-        {
+        } else if p.at(TokenKind::DOT) || p.at(TokenKind::PTR_OP) {
             p.advance();
             p.expect(TokenKind::IDENTIFIER);
-        } else if p.at(TokenKind::INC_OP)
-            || p.at(TokenKind::DEC_OP)
-        {
+        } else if p.at(TokenKind::INC_OP) || p.at(TokenKind::DEC_OP) {
             p.advance();
         }
     }
@@ -1861,11 +1794,7 @@ pub(crate) fn primary_expression(p: &mut Parser) {
     //   p.current_token().lexeme()
     // );
 
-    if p.at_any(&[
-        TokenKind::IDENTIFIER,
-        TokenKind::CONSTANT,
-        TokenKind::STRING,
-    ]) {
+    if p.at_any(&[TokenKind::IDENTIFIER, TokenKind::CONSTANT, TokenKind::STRING]) {
         p.advance();
     } else if p.at(TokenKind::LPAREN) {
         p.advance();
@@ -2038,8 +1967,7 @@ fn pointer(p: &mut Parser) {
     let m = p.open();
 
     p.expect(TokenKind::STAR);
-    if p.at(TokenKind::CONST_KW) || p.at(TokenKind::VOLATILE_KW)
-    {
+    if p.at(TokenKind::CONST_KW) || p.at(TokenKind::VOLATILE_KW) {
         type_qualifier_list(p);
     }
     if p.at(TokenKind::STAR) {
@@ -2060,9 +1988,7 @@ fn type_qualifier_list(p: &mut Parser) {
     p.enter(TreeKind::TypeQualifierList);
     let m = p.open();
 
-    while p.at(TokenKind::CONST_KW)
-        || p.at(TokenKind::VOLATILE_KW)
-    {
+    while p.at(TokenKind::CONST_KW) || p.at(TokenKind::VOLATILE_KW) {
         type_qualifier(p);
     }
 
@@ -2237,27 +2163,14 @@ fn declaration_specifiers(p: &mut Parser) {
         ]) {
             declaration_specifiers(p);
         }
-    } else if p.at_any(&[
-        TokenKind::CONST_KW,
-        TokenKind::RESTRICT_KW,
-        TokenKind::VOLATILE_KW,
-    ]) {
+    } else if p.at_any(&[TokenKind::CONST_KW, TokenKind::RESTRICT_KW, TokenKind::VOLATILE_KW]) {
         type_qualifier(p);
-        if p.at_any(&[
-            TokenKind::CONST_KW,
-            TokenKind::RESTRICT_KW,
-            TokenKind::VOLATILE_KW,
-        ]) {
+        if p.at_any(&[TokenKind::CONST_KW, TokenKind::RESTRICT_KW, TokenKind::VOLATILE_KW]) {
             declaration_specifiers(p);
         }
-    } else if p
-        .at_any(&[TokenKind::INLINE_KW, TokenKind::NORETURN_KW])
-    {
+    } else if p.at_any(&[TokenKind::INLINE_KW, TokenKind::NORETURN_KW]) {
         function_specifier(p);
-        if p.at_any(&[
-            TokenKind::INLINE_KW,
-            TokenKind::NORETURN_KW,
-        ]) {
+        if p.at_any(&[TokenKind::INLINE_KW, TokenKind::NORETURN_KW]) {
             declaration_specifiers(p);
         }
     } else if p.at(TokenKind::ALIGNAS_KW) {
@@ -2286,8 +2199,7 @@ fn function_specifier(p: &mut Parser) {
     p.enter(TreeKind::FunctionSpecifier);
     let m = p.open();
 
-    if p.at_any(&[TokenKind::INLINE_KW, TokenKind::NORETURN_KW])
-    {
+    if p.at_any(&[TokenKind::INLINE_KW, TokenKind::NORETURN_KW]) {
         p.advance();
     } else {
         // TODO: error reporting
@@ -2407,10 +2319,7 @@ fn storage_class_specifier(p: &mut Parser) {
     } else {
         // TODO: error reporting
         // p.error("expected storage class specifier");
-        p.advance_with_error(&format!(
-            "expected storage class specifier, but found {}",
-            p.nth(0),
-        ));
+        p.advance_with_error(&format!("expected storage class specifier, but found {}", p.nth(0),));
     }
 
     p.close(m, TreeKind::StorageClassSpecifier);
@@ -2458,9 +2367,7 @@ fn type_specifier(p: &mut Parser) {
         TokenKind::UNSIGNED_KW,
     ]) {
         p.advance();
-    } else if p
-        .at_any(&[TokenKind::STRUCT_KW, TokenKind::UNION_KW])
-    {
+    } else if p.at_any(&[TokenKind::STRUCT_KW, TokenKind::UNION_KW]) {
         struct_or_union_specifier(p);
     } else if p.at(TokenKind::ENUM_KW) {
         enum_specifier(p);
@@ -2552,13 +2459,7 @@ fn enumerator_list(p: &mut Parser) {
 fn enumerator(p: &mut Parser) {
     tracing::debug!(
         "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "enumerator".green()
-        )
+        &format!("{} {:?} {} {}", "PARSER".yellow(), p.nth(0), "->".yellow(), "enumerator".green())
     );
     let m = p.open();
 
@@ -2677,11 +2578,7 @@ fn struct_declaration(p: &mut Parser) {
 
     specifier_qualifier_list(p);
 
-    if p.at_any(&[
-        TokenKind::IDENTIFIER,
-        TokenKind::STAR,
-        TokenKind::LPAREN,
-    ]) {
+    if p.at_any(&[TokenKind::IDENTIFIER, TokenKind::STAR, TokenKind::LPAREN]) {
         struct_declarator_list(p);
     }
 

@@ -2,23 +2,9 @@
 use num_derive::{FromPrimitive, ToPrimitive};
 use strum_macros::EnumCount;
 
-#[allow(
-    clippy::manual_non_exhaustive,
-    non_snake_case,
-    non_camel_case_types
-)]
+#[allow(clippy::manual_non_exhaustive, non_snake_case, non_camel_case_types)]
 #[derive(
-    Clone,
-    Copy,
-    PartialEq,
-    Eq,
-    PartialOrd,
-    Ord,
-    Hash,
-    Debug,
-    FromPrimitive,
-    ToPrimitive,
-    EnumCount,
+    Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, FromPrimitive, ToPrimitive, EnumCount,
 )]
 #[repr(u16)]
 pub enum SyntaxKind {
@@ -281,9 +267,7 @@ impl SyntaxKind {
         };
         Some(kw)
     }
-    pub fn from_contextual_keyword(
-        ident: &str,
-    ) -> Option<SyntaxKind> {
+    pub fn from_contextual_keyword(ident: &str) -> Option<SyntaxKind> {
         let kw = match ident {
             _ => return None,
         };

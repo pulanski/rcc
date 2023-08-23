@@ -6,26 +6,11 @@ fn substitution() {
     let mut context = super::Context::new();
     context.macros.insert("Foo".to_string(), "Bar".to_string());
 
-    assert_eq!(
-        super::process_str("Foo", &mut context).unwrap(),
-        "Bar\n"
-    );
-    assert_eq!(
-        super::process_str("AFooB", &mut context).unwrap(),
-        "AFooB\n"
-    );
-    assert_eq!(
-        super::process_str("Foo_", &mut context).unwrap(),
-        "Foo_\n"
-    );
-    assert_eq!(
-        super::process_str("_Foo", &mut context).unwrap(),
-        "_Foo\n"
-    );
-    assert_eq!(
-        super::process_str("One Foo Two", &mut context).unwrap(),
-        "One Bar Two\n"
-    );
+    assert_eq!(super::process_str("Foo", &mut context).unwrap(), "Bar\n");
+    assert_eq!(super::process_str("AFooB", &mut context).unwrap(), "AFooB\n");
+    assert_eq!(super::process_str("Foo_", &mut context).unwrap(), "Foo_\n");
+    assert_eq!(super::process_str("_Foo", &mut context).unwrap(), "_Foo\n");
+    assert_eq!(super::process_str("One Foo Two", &mut context).unwrap(), "One Bar Two\n");
 }
 
 // #[test]
@@ -234,18 +219,14 @@ fn substitution() {
 #[case::variadic_macro("variadic_macro")]
 fn preprocess_file(#[case] filename: &str) {
     // For each test case, create a new context and process the file.
-    let file_path =
-        format!("testdata/preprocessor/{filename}/in.c");
+    let file_path = format!("testdata/preprocessor/{filename}/in.c");
 
     let mut context = super::Context::new();
-    let text =
-        super::process_file(&file_path, &mut context).unwrap();
+    let text = super::process_file(&file_path, &mut context).unwrap();
 
     // Compare the processed text with the expected output.
-    let expected_path =
-        format!("testdata/preprocessor/{filename}/expected.c");
-    let expected =
-        std::fs::read_to_string(expected_path).unwrap();
+    let expected_path = format!("testdata/preprocessor/{filename}/expected.c");
+    let expected = std::fs::read_to_string(expected_path).unwrap();
     assert_eq!(text, expected);
 }
 

@@ -126,11 +126,7 @@ impl Tree {
         for child in &self.children {
             match child {
                 Child::Token(token) => {
-                    format_to!(
-                        buf,
-                        "{indent}  '{}'\n",
-                        token.text
-                    )
+                    format_to!(buf, "{indent}  '{}'\n", token.text)
                 }
                 Child::Tree(tree) => tree.print(buf, level + 1),
             }
@@ -185,27 +181,19 @@ fn lex(mut text: &str) -> Vec<Token> {
 
     let mut result = Vec::new();
     while !text.is_empty() {
-        if let Some(rest) =
-            trim(text, |it| it.is_ascii_whitespace())
-        {
+        if let Some(rest) = trim(text, |it| it.is_ascii_whitespace()) {
             text = rest;
             continue;
         }
         let text_orig = text;
         let mut kind = 'kind: {
-            for (i, symbol) in punctuation
-                .0
-                .split_ascii_whitespace()
-                .enumerate()
-            {
+            for (i, symbol) in punctuation.0.split_ascii_whitespace().enumerate() {
                 if let Some(rest) = text.strip_prefix(symbol) {
                     text = rest;
                     break 'kind punctuation.1[i];
                 }
             }
-            if let Some(rest) =
-                trim(text, |it| it.is_ascii_digit())
-            {
+            if let Some(rest) = trim(text, |it| it.is_ascii_digit()) {
                 text = rest;
                 break 'kind TokenKind::Int;
             }
@@ -213,29 +201,21 @@ fn lex(mut text: &str) -> Vec<Token> {
                 text = rest;
                 break 'kind TokenKind::Name;
             }
-            let error_index = text
-                .find(|it: char| it.is_ascii_whitespace())
-                .unwrap_or(text.len());
+            let error_index = text.find(|it: char| it.is_ascii_whitespace()).unwrap_or(text.len());
             text = &text[error_index..];
             TokenKind::ErrorToken
         };
         assert!(text.len() < text_orig.len());
-        let token_text =
-            &text_orig[..text_orig.len() - text.len()];
+        let token_text = &text_orig[..text_orig.len() - text.len()];
         if kind == TokenKind::Name {
-            for (i, symbol) in
-                keywords.0.split_ascii_whitespace().enumerate()
-            {
+            for (i, symbol) in keywords.0.split_ascii_whitespace().enumerate() {
                 if token_text == symbol {
                     kind = keywords.1[i];
                     break;
                 }
             }
         }
-        result.push(Token {
-            kind,
-            text: token_text.to_string().into(),
-        })
+        result.push(Token { kind, text: token_text.to_string().into() })
     }
     return result;
 
@@ -243,13 +223,8 @@ fn lex(mut text: &str) -> Vec<Token> {
         matches!(c, '_' | 'a'..='z' | 'A'..='Z' | '0'..='9')
     }
 
-    fn trim(
-        text: &str,
-        predicate: impl std::ops::Fn(char) -> bool,
-    ) -> Option<&str> {
-        let index = text
-            .find(|it: char| !predicate(it))
-            .unwrap_or(text.len());
+    fn trim(text: &str, predicate: impl std::ops::Fn(char) -> bool) -> Option<&str> {
+        let index = text.find(|it: char| !predicate(it)).unwrap_or(text.len());
         if index == 0 {
             None
         } else {
@@ -289,12 +264,7 @@ struct Parser {
 
 impl Parser {
     fn new(tokens: Vec<Token>) -> Parser {
-        Parser {
-            tokens,
-            pos: 0,
-            fuel: Cell::new(256),
-            events: Vec::new(),
-        }
+        Parser { tokens, pos: 0, fuel: Cell::new(256), events: Vec::new() }
     }
 
     fn build_tree(self) -> Tree {
@@ -309,28 +279,19 @@ impl Parser {
         for event in events {
             match event {
                 // Starting a new node; just push an empty tree to the stack.
-                Event::Open { kind } => stack
-                    .push(Tree { kind, children: Vec::new() }),
+                Event::Open { kind } => stack.push(Tree { kind, children: Vec::new() }),
 
                 // A tree is done.
                 // Pop it off the stack and append to a new current tree.
                 Event::Close => {
                     let tree = stack.pop().unwrap();
-                    stack
-                        .last_mut()
-                        .unwrap()
-                        .children
-                        .push(Child::Tree(tree));
+                    stack.last_mut().unwrap().children.push(Child::Tree(tree));
                 }
 
                 // Consume a token and append it to the current tree.
                 Event::Advance => {
                     let token = tokens.next().unwrap();
-                    stack
-                        .last_mut()
-                        .unwrap()
-                        .children
-                        .push(Child::Token(token));
+                    stack.last_mut().unwrap().children.push(Child::Token(token));
                 }
             }
         }
@@ -346,25 +307,17 @@ impl Parser {
 
     fn open(&mut self) -> MarkOpened {
         let mark = MarkOpened { index: self.events.len() };
-        self.events
-            .push(Event::Open { kind: TreeKind::ErrorTree });
+        self.events.push(Event::Open { kind: TreeKind::ErrorTree });
         mark
     }
 
     fn open_before(&mut self, m: MarkClosed) -> MarkOpened {
         let mark = MarkOpened { index: m.index };
-        self.events.insert(
-            m.index,
-            Event::Open { kind: TreeKind::ErrorTree },
-        );
+        self.events.insert(m.index, Event::Open { kind: TreeKind::ErrorTree });
         mark
     }
 
-    fn close(
-        &mut self,
-        m: MarkOpened,
-        kind: TreeKind,
-    ) -> MarkClosed {
+    fn close(&mut self, m: MarkOpened, kind: TreeKind) -> MarkClosed {
         self.events[m.index] = Event::Open { kind };
         self.events.push(Event::Close);
         MarkClosed { index: m.index }
@@ -394,9 +347,7 @@ impl Parser {
             panic!("parser is stuck")
         }
         self.fuel.set(self.fuel.get() - 1);
-        self.tokens
-            .get(self.pos + lookahead)
-            .map_or(TokenKind::Eof, |it| it.kind)
+        self.tokens.get(self.pos + lookahead).map_or(TokenKind::Eof, |it| it.kind)
     }
 
     fn at(&self, kind: TokenKind) -> bool {
@@ -423,12 +374,13 @@ impl Parser {
         }
         // TODO: Error reporting.
 
-        tracing::error!("Expected {expected}{comma} but instead found {found}{period}",
-      expected = kind.yellow(),
-      comma = ",".black(),
-      found = found.red(),
-      period = ".".black(),
-    );
+        tracing::error!(
+            "Expected {expected}{comma} but instead found {found}{period}",
+            expected = kind.yellow(),
+            comma = ",".black(),
+            found = found.red(),
+            period = ".".black(),
+        );
     }
 }
 
@@ -436,13 +388,7 @@ impl Parser {
 fn file(p: &mut Parser) {
     tracing::debug!(
         "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "file".green()
-        )
+        &format!("{} {:?} {} {}", "PARSER".yellow(), p.nth(0), "->".yellow(), "file".green())
     );
     let m = p.open();
 
@@ -455,12 +401,13 @@ fn file(p: &mut Parser) {
         } else if !error_emitted {
             let error_tree = p.open(); // Start a new error tree.
 
-            tracing::error!("Expected {expected}{comma} but instead found {found}{period}",
-        expected = "'fn'".yellow(),
-        comma = ",".black(),
-        found = p.nth(0).red(),
-        period = ".".black(),
-      );
+            tracing::error!(
+                "Expected {expected}{comma} but instead found {found}{period}",
+                expected = "'fn'".yellow(),
+                comma = ",".black(),
+                found = p.nth(0).red(),
+                period = ".".black(),
+            );
 
             while !p.at(TokenKind::FnKeyword) && !p.eof() {
                 p.advance(); // Consume tokens until "fn" is found.
@@ -482,13 +429,7 @@ fn file(p: &mut Parser) {
 fn func(p: &mut Parser) {
     tracing::debug!(
         "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "func".green()
-        )
+        &format!("{} {:?} {} {}", "PARSER".yellow(), p.nth(0), "->".yellow(), "func".green())
     );
     assert!(p.at(TokenKind::FnKeyword));
     let m = p.open();
@@ -511,13 +452,7 @@ fn func(p: &mut Parser) {
 fn param_list(p: &mut Parser) {
     tracing::debug!(
         "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "param_list".green()
-        )
+        &format!("{} {:?} {} {}", "PARSER".yellow(), p.nth(0), "->".yellow(), "param_list".green())
     );
     assert!(p.at(TokenKind::LParen));
     let m = p.open();
@@ -561,13 +496,7 @@ const STMT_EXPECTED: &[TokenKind] = &[
 fn block(p: &mut Parser) {
     tracing::debug!(
         "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "block".green()
-        )
+        &format!("{} {:?} {} {}", "PARSER".yellow(), p.nth(0), "->".yellow(), "block".green())
     );
     assert!(p.at(TokenKind::LCurly));
     let m = p.open();
@@ -589,23 +518,16 @@ fn block(p: &mut Parser) {
                         .iter()
                         .map(|k| format!("{k}", k = k.yellow()))
                         .collect::<Vec<_>>()
-                        .join(
-                            format!(
-                                "{comma} ",
-                                comma = ",".black()
-                            )
-                            .as_str(),
-                        );
+                        .join(format!("{comma} ", comma = ",".black()).as_str());
 
                     let found: String =
-                        format!("{found}", found = p.nth(0))
-                            .red()
-                            .to_string()
-                            .into();
+                        format!("{found}", found = p.nth(0)).red().to_string().into();
 
                     p.advance_with_error(&format!(
-            "Expected one of {expected}{comma} but instead found {found}{period}", comma = ",".black(), period = ".".black()
-          ));
+                        "Expected one of {expected}{comma} but instead found {found}{period}",
+                        comma = ",".black(),
+                        period = ".".black()
+                    ));
                 }
             }
         }
@@ -619,13 +541,7 @@ fn block(p: &mut Parser) {
 fn stmt_let(p: &mut Parser) {
     tracing::debug!(
         "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "stmt_let".green()
-        )
+        &format!("{} {:?} {} {}", "PARSER".yellow(), p.nth(0), "->".yellow(), "stmt_let".green())
     );
 
     assert!(p.at(TokenKind::LetKeyword));
@@ -662,13 +578,7 @@ fn stmt_return(p: &mut Parser) {
 fn stmt_expr(p: &mut Parser) {
     tracing::debug!(
         "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "stmt_expr".green()
-        )
+        &format!("{} {:?} {} {}", "PARSER".yellow(), p.nth(0), "->".yellow(), "stmt_expr".green())
     );
 
     let m = p.open();
@@ -680,13 +590,7 @@ fn stmt_expr(p: &mut Parser) {
 fn expr(p: &mut Parser) {
     tracing::debug!(
         "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "expr".green()
-        )
+        &format!("{} {:?} {} {}", "PARSER".yellow(), p.nth(0), "->".yellow(), "expr".green())
     );
 
     expr_rec(p, TokenKind::Eof);
@@ -713,10 +617,7 @@ fn expr_rec(p: &mut Parser, left: TokenKind) {
         }
     }
 }
-fn right_binds_tighter(
-    left: TokenKind,
-    right: TokenKind,
-) -> bool {
+fn right_binds_tighter(left: TokenKind, right: TokenKind) -> bool {
     fn tightness(kind: TokenKind) -> Option<usize> {
         [
             // Precedence table:
@@ -740,13 +641,7 @@ fn right_binds_tighter(
 fn arg_list(p: &mut Parser) {
     tracing::debug!(
         "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "arg_list".green()
-        )
+        &format!("{} {:?} {} {}", "PARSER".yellow(), p.nth(0), "->".yellow(), "arg_list".green())
     );
     assert!(p.at(TokenKind::LParen));
     let m = p.open();
@@ -774,9 +669,7 @@ fn arg(p: &mut Parser) {
 // | ExprUnary  // -Expr
 fn expr_delimited(p: &mut Parser) -> Option<MarkClosed> {
     let result = match p.nth(0) {
-        TokenKind::TrueKeyword
-        | TokenKind::FalseKeyword
-        | TokenKind::Int => {
+        TokenKind::TrueKeyword | TokenKind::FalseKeyword | TokenKind::Int => {
             tracing::debug!(
                 "{}",
                 &format!(
@@ -832,13 +725,7 @@ fn expr_delimited(p: &mut Parser) -> Option<MarkClosed> {
 fn param(p: &mut Parser) {
     tracing::debug!(
         "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "param".green()
-        )[..]
+        &format!("{} {:?} {} {}", "PARSER".yellow(), p.nth(0), "->".yellow(), "param".green())[..]
     );
     assert!(p.at(TokenKind::Name));
     let m = p.open();
@@ -877,8 +764,7 @@ fn main() {
         .finish();
 
     // Set the subscriber as the default.
-    tracing::subscriber::set_global_default(subscriber)
-        .expect("failed to set subscriber");
+    tracing::subscriber::set_global_default(subscriber).expect("failed to set subscriber");
 
     let text = "fn f1(x: i32,
 fn f2(x: i32,, z: i32) {}

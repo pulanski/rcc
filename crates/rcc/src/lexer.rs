@@ -15,18 +15,7 @@ use typed_builder::TypedBuilder;
 use crate::cst::SyntaxKind;
 
 #[allow(non_camel_case_types, clippy::upper_case_acronyms)]
-#[derive(
-    Logos,
-    Debug,
-    Display,
-    Clone,
-    Copy,
-    Hash,
-    PartialEq,
-    Eq,
-    PartialOrd,
-    Ord,
-)]
+#[derive(Logos, Debug, Display, Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord)]
 pub enum TokenKind {
     // Punctuation
     #[token("+")]
@@ -407,28 +396,13 @@ impl TokenKind {
             TokenKind::GENERIC_KW => SyntaxKind::GENERIC_KW,
             TokenKind::IMAGINARY_KW => SyntaxKind::IMAGINARY_KW,
             TokenKind::NORETURN_KW => SyntaxKind::NORETURN_KW,
-            TokenKind::STATIC_ASSERT_KW => {
-                SyntaxKind::STATIC_ASSERT_KW
-            }
-            TokenKind::THREAD_LOCAL_KW => {
-                SyntaxKind::THREAD_LOCAL_KW
-            }
+            TokenKind::STATIC_ASSERT_KW => SyntaxKind::STATIC_ASSERT_KW,
+            TokenKind::THREAD_LOCAL_KW => SyntaxKind::THREAD_LOCAL_KW,
         }
     }
 }
 
-#[derive(
-    Debug,
-    Display,
-    Default,
-    Clone,
-    Copy,
-    PartialEq,
-    Eq,
-    Hash,
-    Ord,
-    PartialOrd,
-)]
+#[derive(Debug, Display, Default, Clone, Copy, PartialEq, Eq, Hash, Ord, PartialOrd)]
 #[display(fmt = "{start}..{end}")]
 pub struct Span {
     start: usize,
@@ -454,25 +428,12 @@ impl From<Range<usize>> for Span {
 
 impl Span {
     pub fn merge(&self, range: Range<usize>) -> Self {
-        Self {
-            start: self.start.min(range.start),
-            end: self.end.max(range.end),
-        }
+        Self { start: self.start.min(range.start), end: self.end.max(range.end) }
     }
 }
 
 #[derive(
-    Debug,
-    Clone,
-    PartialEq,
-    Eq,
-    Hash,
-    Ord,
-    PartialOrd,
-    Getters,
-    MutGetters,
-    Setters,
-    TypedBuilder,
+    Debug, Clone, PartialEq, Eq, Hash, Ord, PartialOrd, Getters, MutGetters, Setters, TypedBuilder,
 )]
 #[getset(get = "pub", get_mut = "pub", set = "pub")]
 pub struct Token {
@@ -482,22 +443,12 @@ pub struct Token {
 }
 
 impl Token {
-    pub fn new(
-        kind: TokenKind,
-        lexeme: String,
-        span: Span,
-    ) -> Self {
+    pub fn new(kind: TokenKind, lexeme: String, span: Span) -> Self {
         Self { kind, lexeme, span }
     }
 
     pub fn pretty_print(&self) -> String {
-        format!(
-            "{} {} {}",
-            self.kind.blue(),
-            self.lexeme,
-            self.span.black().italic(),
-        )
-        .into()
+        format!("{} {} {}", self.kind.blue(), self.lexeme, self.span.black().italic(),).into()
     }
 }
 
@@ -507,16 +458,7 @@ impl Display for Token {
     }
 }
 
-#[derive(
-    Debug,
-    Clone,
-    PartialEq,
-    Eq,
-    Getters,
-    Setters,
-    MutGetters,
-    TypedBuilder,
-)]
+#[derive(Debug, Clone, PartialEq, Eq, Getters, Setters, MutGetters, TypedBuilder)]
 #[getset(set = "pub", get_mut = "pub")]
 pub struct TokenSink {
     pub tokens: TokenStream,
@@ -541,17 +483,7 @@ impl TokenSink {
 }
 
 #[derive(
-    Debug,
-    Clone,
-    PartialEq,
-    Eq,
-    Hash,
-    Ord,
-    PartialOrd,
-    Getters,
-    MutGetters,
-    Setters,
-    TypedBuilder,
+    Debug, Clone, PartialEq, Eq, Hash, Ord, PartialOrd, Getters, MutGetters, Setters, TypedBuilder,
 )]
 pub struct TokenStream {
     #[getset(get = "pub", get_mut = "pub", set = "pub")]

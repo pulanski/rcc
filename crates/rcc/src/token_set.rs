@@ -289,10 +289,7 @@ impl TokenSet {
     /// assert!(!symmetric_difference_set.contains(SyntaxKind::Keyword));
     /// assert!(symmetric_difference_set.contains(SyntaxKind::Punctuation));
     /// ```
-    pub fn symmetric_difference(
-        &self,
-        other: TokenSet,
-    ) -> TokenSet {
+    pub fn symmetric_difference(&self, other: TokenSet) -> TokenSet {
         TokenSet(self.0 ^ other.0)
     }
 
@@ -466,10 +463,7 @@ impl TokenSet {
 #[inline]
 #[must_use]
 const fn mask(kind: SyntaxKind) -> u128 {
-    debug_assert!(
-        kind as usize <= SyntaxKind::__LAST as usize,
-        "Invalid SyntaxKind"
-    );
+    debug_assert!(kind as usize <= SyntaxKind::__LAST as usize, "Invalid SyntaxKind");
     1u128 << (kind as usize)
 }
 

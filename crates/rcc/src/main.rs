@@ -44,9 +44,7 @@ pub fn parse_tree(text: &str, tree_kind: TreeKind) -> Tree {
         TreeKind::ConditionalExpression => todo!(),
         TreeKind::EnumeratorList => todo!(),
         TreeKind::StructOrUnionSpecifier => todo!(),
-        TreeKind::PrimaryExpression => {
-            parser::primary_expression(&mut p)
-        }
+        TreeKind::PrimaryExpression => parser::primary_expression(&mut p),
         TreeKind::StructDeclaratorList => todo!(),
         TreeKind::StructDeclaration => todo!(),
         TreeKind::StructDeclarationList => todo!(),
@@ -55,9 +53,7 @@ pub fn parse_tree(text: &str, tree_kind: TreeKind) -> Tree {
         TreeKind::SpecifierQualifierList => todo!(),
         TreeKind::DirectDeclarator => todo!(),
         TreeKind::ErrorTree => todo!(),
-        TreeKind::CompoundStatement => {
-            parser::compound_statement(&mut p)
-        }
+        TreeKind::CompoundStatement => parser::compound_statement(&mut p),
         TreeKind::LogicalAndExpression => todo!(),
         TreeKind::ExternDecl => todo!(),
         TreeKind::File => todo!(),
@@ -71,9 +67,7 @@ pub fn parse_tree(text: &str, tree_kind: TreeKind) -> Tree {
         TreeKind::AdditiveExpression => todo!(),
         TreeKind::MultiplicativeExpression => todo!(),
         TreeKind::CastExpression => todo!(),
-        TreeKind::UnaryExpression => {
-            parser::unary_expression(&mut p)
-        }
+        TreeKind::UnaryExpression => parser::unary_expression(&mut p),
         TreeKind::IdentifierList => todo!(),
         TreeKind::StatementList => todo!(),
         TreeKind::DirectAbstractDeclarator => todo!(),
@@ -110,9 +104,7 @@ pub fn parse_tree(text: &str, tree_kind: TreeKind) -> Tree {
         TreeKind::LabeledStatement => todo!(),
         TreeKind::ExpressionStatement => todo!(),
         TreeKind::IterationStatement => todo!(),
-        TreeKind::JumpStatement => {
-            parser::jump_statement(&mut p)
-        }
+        TreeKind::JumpStatement => parser::jump_statement(&mut p),
         TreeKind::SelectionStatement => todo!(),
         TreeKind::AssignmentExpression => todo!(),
         TreeKind::ConstantExpression => todo!(),
@@ -146,9 +138,7 @@ pub fn lex(input: &str) -> TokenSink {
     while let Some(token_result) = lexer.next() {
         match token_result {
             Ok(token) => {
-                if let Some(unknown_token) =
-                    current_unknown_token.clone()
-                {
+                if let Some(unknown_token) = current_unknown_token.clone() {
                     // TODO: Add diagnostic
                     // token_sink.lexical_errors.push(
                     //   unknown_token_diagnostic(
@@ -183,29 +173,22 @@ pub fn lex(input: &str) -> TokenSink {
                 ));
             }
             Err(()) => {
-                if let Some(unknown_token) =
-                    current_unknown_token.clone()
-                {
-                    let Token { kind: _, span, lexeme } =
-                        unknown_token;
+                if let Some(unknown_token) = current_unknown_token.clone() {
+                    let Token { kind: _, span, lexeme } = unknown_token;
 
                     let span = span.merge(lexer.span());
-                    let updated_lexeme =
-                        format!("{}{}", lexeme, lexer.slice());
+                    let updated_lexeme = format!("{}{}", lexeme, lexer.slice());
 
                     tracing::debug!(
-                            "Gluing together unknown tokens {} and {} to form {} at {}",
-                            lexeme,
-                            lexer.slice(),
-                            updated_lexeme,
-                            span
-                        );
+                        "Gluing together unknown tokens {} and {} to form {} at {}",
+                        lexeme,
+                        lexer.slice(),
+                        updated_lexeme,
+                        span
+                    );
 
-                    current_unknown_token = Some(Token::new(
-                        TokenKind::UNKNOWN,
-                        updated_lexeme.into(),
-                        span,
-                    ));
+                    current_unknown_token =
+                        Some(Token::new(TokenKind::UNKNOWN, updated_lexeme.into(), span));
                 } else {
                     tracing::debug!(
                         "Creating new unknown token {} at {:?}",
@@ -230,11 +213,7 @@ pub fn lex(input: &str) -> TokenSink {
         lexer.span().black().italic()
     );
 
-    token_sink.tokens.push(Token::new(
-        TokenKind::EOF,
-        "".to_string().into(),
-        lexer.span().into(),
-    ));
+    token_sink.tokens.push(Token::new(TokenKind::EOF, "".to_string().into(), lexer.span().into()));
 
     // Pretty print the tokens.
     for (idx, token) in token_sink.tokens().iter().enumerate() {
@@ -274,8 +253,7 @@ fn main() {
         .finish();
 
     // Set the subscriber as the default.
-    tracing::subscriber::set_global_default(subscriber)
-        .expect("failed to set subscriber");
+    tracing::subscriber::set_global_default(subscriber).expect("failed to set subscriber");
 
     // let input = &read_to_string("testdata/a.c").unwrap();
     let input = "#include <stdio.h>\nint main() { printf(\"Hello, World!\"); return 0; }";
@@ -299,11 +277,11 @@ fn main() {
 
     let decl_test_cases = vec![
         // Declaration tests
-        "int x;", // Declaration with a single variable
-        "int x, y, z;", // Declaration with multiple variables
-        "extern int x = 42;", // Extern declaration with initialization
-        "typedef int* IntPtr;", // Typedef declaration
-        "struct Point { int x; int y; };", // Struct declaration
+        "int x;",                           // Declaration with a single variable
+        "int x, y, z;",                     // Declaration with multiple variables
+        "extern int x = 42;",               // Extern declaration with initialization
+        "typedef int* IntPtr;",             // Typedef declaration
+        "struct Point { int x; int y; };",  // Struct declaration
         "enum Color { RED, GREEN, BLUE };", // Enum declaration
         // Initializer tests
         "int x = 42;", // Declaration with initialization
@@ -325,21 +303,21 @@ fn main() {
         "label: return 0;", // Labeled statement
         "x = 42;",          // Expression statement
         // Selection statement tests
-        "if (x > 0) { return x; }", // If statement
+        "if (x > 0) { return x; }",                     // If statement
         "if (x > 0) { return x; } else { return -x; }", // If-Else statement
         // Iteration statement tests
         "while (x > 0) { x--; }", // While loop
         "for (int i = 0; i < 10; i++) { printf(\"%d\\n\", i); }", // For loop
         "do { x--; } while (x > 0);", // Do-While loop
-                                      // Jump statement tests
+                                  // Jump statement tests
 
-                                      //
-                                      // "goto label; label: return 0;", // Goto statement
-                                      // "switch (x) { case 1: y = 42; break; default: y = 0; }", // Switch statement
-                                      // "while (x > 0) { x--; }", // While loop
-                                      // "for (int i = 0; i < 10; i++) { printf(\"%d\\n\", i); }", // For loop
-                                      // "do { x--; } while (x > 0);", // Do-While loop
-                                      // "if (x > 0) { return x; }", // If statement with return
+                                  //
+                                  // "goto label; label: return 0;", // Goto statement
+                                  // "switch (x) { case 1: y = 42; break; default: y = 0; }", // Switch statement
+                                  // "while (x > 0) { x--; }", // While loop
+                                  // "for (int i = 0; i < 10; i++) { printf(\"%d\\n\", i); }", // For loop
+                                  // "do { x--; } while (x > 0);", // Do-While loop
+                                  // "if (x > 0) { return x; }", // If statement with return
     ];
 
     // for input in statement_test_cases {

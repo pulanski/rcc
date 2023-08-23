@@ -142,10 +142,7 @@ struct Preprocessor {
 
 impl Preprocessor {
     fn new() -> Self {
-        Preprocessor {
-            macros: HashMap::new(),
-            include_paths: vec![PathBuf::from(".")],
-        }
+        Preprocessor { macros: HashMap::new(), include_paths: vec![PathBuf::from(".")] }
     }
 
     fn define_macro(&mut self, name: &str, value: &str) {
@@ -203,9 +200,7 @@ impl Preprocessor {
             if c.is_whitespace() {
                 if in_directive {
                     if !buffer.trim().is_empty() {
-                        tokens.push(Token::Directive(
-                            buffer.clone(),
-                        ));
+                        tokens.push(Token::Directive(buffer.clone()));
                     }
                 } else if !buffer.trim().is_empty() {
                     tokens.push(Token::Text(buffer.clone()));
@@ -228,9 +223,7 @@ impl Preprocessor {
     fn include_file(&self, filename: &str) -> Result<String> {
         // Implement this method to handle file inclusion.
         // You'll need to search for the file in include paths and process it.
-        Err(anyhow::anyhow!(
-            "Include file handling not implemented"
-        ))
+        Err(anyhow::anyhow!("Include file handling not implemented"))
     }
 }
 
@@ -240,19 +233,14 @@ pub(crate) fn preprocessor() {
     // preprocessor.define_macro("PI", "3.14159");
     // preprocessor.define_macro("RADTODEG(x)", "((x) * 57.29578)");
 
-    if let Ok(processed_content) =
-        preprocessor.process_file("testdata/a.c")
-    {
+    if let Ok(processed_content) = preprocessor.process_file("testdata/a.c") {
         println!("{processed_content}");
     } else {
         println!("Error processing file.");
     }
 }
 
-fn process_str(
-    content: &str,
-    context: &mut Preprocessor,
-) -> Result<String> {
+fn process_str(content: &str, context: &mut Preprocessor) -> Result<String> {
     let tokens = context.tokenize(content);
     let processed = context.process(tokens);
     Ok(processed.join(""))

@@ -7,9 +7,7 @@ use std::error;
 use std::fmt;
 use std::fs::File;
 use std::io::{self, BufRead, BufReader, Write};
-use std::process::{
-    Child, Command as SystemCommand, ExitStatus, Stdio,
-};
+use std::process::{Child, Command as SystemCommand, ExitStatus, Stdio};
 use std::string::FromUtf8Error;
 
 /// Context of the current processing.
@@ -48,18 +46,12 @@ impl Context {
         Self::new().exec(true)
     }
     /// Create a context from a map of macros.
-    pub fn from_macros(
-        macros: impl Into<HashMap<String, String>>,
-    ) -> Self {
+    pub fn from_macros(macros: impl Into<HashMap<String, String>>) -> Self {
         Self { macros: macros.into(), ..Default::default() }
     }
     /// Create a context from an iterator over tuples.
-    pub fn from_macros_iter(
-        macros: impl IntoIterator<Item = (String, String)>,
-    ) -> Self {
-        Self::from_macros(
-            macros.into_iter().collect::<HashMap<_, _>>(),
-        )
+    pub fn from_macros_iter(macros: impl IntoIterator<Item = (String, String)>) -> Self {
+        Self::from_macros(macros.into_iter().collect::<HashMap<_, _>>())
     }
     /// Set whther exec commands are allowed.
     pub fn exec(mut self, allow_exec: bool) -> Self {
@@ -134,11 +126,7 @@ impl fmt::Display for Error {
                 write!(f, "Unexpected command #{}", command)
             }
             Error::ChildFailed { status } => {
-                write!(
-                    f,
-                    "Child failed with exit code {}",
-                    status
-                )
+                write!(f, "Child failed with exit code {}", status)
             }
             Error::PipeFailed => {
                 write!(f, "Pipe to child failed")
@@ -148,11 +136,7 @@ impl fmt::Display for Error {
                 write!(f, "UTF-8 Error: {}", e)
             }
             Error::FileError { filename, line, error } => {
-                write!(
-                    f,
-                    "Error in {}:{}: {}",
-                    filename, line, error
-                )
+                write!(f, "Error in {}:{}: {}", filename, line, error)
             }
             Error::MacroNotFound { macro_name } => {
                 write!(f, "Macro not found: {}", macro_name)
@@ -187,11 +171,7 @@ impl From<FromUtf8Error> for Error {
 }
 
 fn shell(cmd: &str) -> SystemCommand {
-    let (shell, flag) = if cfg!(target_os = "windows") {
-        ("cmd", "/C")
-    } else {
-        ("/bin/sh", "-c")
-    };
+    let (shell, flag) = if cfg!(target_os = "windows") { ("cmd", "/C") } else { ("/bin/sh", "-c") };
     let mut command = SystemCommand::new(shell);
     command.args(&[flag, cmd]);
     command
@@ -200,64 +180,37 @@ fn shell(cmd: &str) -> SystemCommand {
 fn process_exec(line: &str, _: &mut Context) -> Result<String> {
     let output = shell(line).output()?;
     if !output.status.success() {
-        return Err(Error::ChildFailed {
-            status: output.status,
-        }
-        .into());
+        return Err(Error::ChildFailed { status: output.status }.into());
     }
     Ok(String::from_utf8(output.stdout)?)
 }
 
-fn process_in(
-    line: &str,
-    context: &mut Context,
-) -> Result<String> {
-    let child = shell(line)
-        .stdin(Stdio::piped())
-        .stdout(Stdio::piped())
-        .spawn()?;
+fn process_in(line: &str, context: &mut Context) -> Result<String> {
+    let child = shell(line).stdin(Stdio::piped()).stdout(Stdio::piped()).spawn()?;
     context.in_stack.push(child);
     Ok(String::new())
 }
 
-fn process_endin(
-    line: &str,
-    context: &mut Context,
-) -> Result<String> {
+fn process_endin(line: &str, context: &mut Context) -> Result<String> {
     if !line.is_empty() {
-        return Err(Error::TooManyParameters {
-            command: "endin",
-        }
-        .into());
+        return Err(Error::TooManyParameters { command: "endin" }.into());
     }
     if context.in_stack.is_empty() {
-        return Err(Error::UnexpectedCommand {
-            command: "endin",
-        }
-        .into());
+        return Err(Error::UnexpectedCommand { command: "endin" }.into());
     }
     let child = context.in_stack.pop().unwrap();
     let output = child.wait_with_output()?;
     if !output.status.success() {
-        return Err(Error::ChildFailed {
-            status: output.status,
-        }
-        .into());
+        return Err(Error::ChildFailed { status: output.status }.into());
     }
     Ok(String::from_utf8(output.stdout)?)
 }
 
-fn process_include(
-    line: &str,
-    context: &mut Context,
-) -> Result<String> {
+fn process_include(line: &str, context: &mut Context) -> Result<String> {
     process_file(line, context)
 }
 
-fn process_define(
-    line: &str,
-    context: &mut Context,
-) -> Result<String> {
+fn process_define(line: &str, context: &mut Context) -> Result<String> {
     let mut parts = line.splitn(2, ' ');
     let name = parts.next().unwrap();
     let value = parts.next().unwrap_or("");
@@ -266,19 +219,12 @@ fn process_define(
     Ok(String::new())
 }
 
-fn process_undef(
-    line: &str,
-    context: &mut Context,
-) -> Result<String> {
+fn process_undef(line: &str, context: &mut Context) -> Result<String> {
     context.macros.remove(line);
     Ok(String::new())
 }
 
-fn process_ifdef(
-    line: &str,
-    context: &mut Context,
-    inverted: bool,
-) -> Result<String> {
+fn process_ifdef(line: &str, context: &mut Context, inverted: bool) -> Result<String> {
     if context.inactive_stack > 0 {
         context.inactive_stack += 1;
     } else if context.macros.contains_key(line) == inverted {
@@ -290,11 +236,7 @@ fn process_ifdef(
     Ok(String::new())
 }
 
-fn process_elifdef(
-    line: &str,
-    context: &mut Context,
-    inverted: bool,
-) -> Result<String> {
+fn process_elifdef(line: &str, context: &mut Context, inverted: bool) -> Result<String> {
     if context.inactive_stack == 0 {
         context.inactive_stack = 1;
     } else if context.inactive_stack == 1
@@ -306,15 +248,9 @@ fn process_elifdef(
     Ok(String::new())
 }
 
-fn process_else(
-    line: &str,
-    context: &mut Context,
-) -> Result<String> {
+fn process_else(line: &str, context: &mut Context) -> Result<String> {
     if !line.is_empty() {
-        return Err(Error::TooManyParameters {
-            command: "else",
-        }
-        .into());
+        return Err(Error::TooManyParameters { command: "else" }.into());
     }
     context.inactive_stack = match context.inactive_stack {
         0 => 1,
@@ -324,15 +260,9 @@ fn process_else(
     Ok(String::new())
 }
 
-fn process_endif(
-    line: &str,
-    context: &mut Context,
-) -> Result<String> {
+fn process_endif(line: &str, context: &mut Context) -> Result<String> {
     if !line.is_empty() {
-        return Err(Error::TooManyParameters {
-            command: "endif",
-        }
-        .into());
+        return Err(Error::TooManyParameters { command: "endif" }.into());
     }
     if context.inactive_stack != 0 {
         context.inactive_stack -= 1;
@@ -397,36 +327,28 @@ const COMMANDS: &[Command] = &[
         requires_exec: false,
         ignored_by_if: true,
         supports_variadic: false,
-        execute: |line, context| {
-            process_ifdef(line, context, false)
-        },
+        execute: |line, context| process_ifdef(line, context, false),
     },
     Command {
         name: "ifndef",
         requires_exec: false,
         ignored_by_if: true,
         supports_variadic: false,
-        execute: |line, context| {
-            process_ifdef(line, context, true)
-        },
+        execute: |line, context| process_ifdef(line, context, true),
     },
     Command {
         name: "elifdef",
         requires_exec: false,
         ignored_by_if: true,
         supports_variadic: false,
-        execute: |line, context| {
-            process_elifdef(line, context, false)
-        },
+        execute: |line, context| process_elifdef(line, context, false),
     },
     Command {
         name: "elifndef",
         requires_exec: false,
         ignored_by_if: true,
         supports_variadic: false,
-        execute: |line, context| {
-            process_elifdef(line, context, true)
-        },
+        execute: |line, context| process_elifdef(line, context, true),
     },
     Command {
         name: "else",
@@ -450,10 +372,7 @@ fn is_word_char(c: char) -> bool {
 
 /// Finds the next macro name word in the line, and replaces it with its value, returning None when
 /// it can't find a macro.
-fn replace_next_macro(
-    line: &str,
-    macros: &HashMap<String, String>,
-) -> Option<String> {
+fn replace_next_macro(line: &str, macros: &HashMap<String, String>) -> Option<String> {
     macros.iter().find_map(|(name, value)| {
         let mut parts = line.splitn(2, name);
         let before = parts.next().unwrap();
@@ -464,9 +383,7 @@ fn replace_next_macro(
         {
             return None;
         }
-        let mut new_line = String::with_capacity(
-            before.len() + value.len() + after.len(),
-        );
+        let mut new_line = String::with_capacity(before.len() + value.len() + after.len());
         new_line.push_str(before);
         new_line.push_str(value);
         new_line.push_str(after);
@@ -491,10 +408,7 @@ fn replace_next_macro(
 
 //   Ok(String::new())
 // }
-fn process_variadic_macro(
-    line: &str,
-    context: &mut Context,
-) -> Result<String> {
+fn process_variadic_macro(line: &str, context: &mut Context) -> Result<String> {
     // Split the line to extract the macro name and its arguments
     let mut parts = line.trim().splitn(2, ' ');
     let macro_name = parts.next().unwrap();
@@ -523,16 +437,12 @@ fn process_variadic_macro(
         let combined_args = expanded_args.join(", ");
 
         // Replace the macro arguments in the expanded_macro
-        expanded_macro = expanded_macro
-            .replace("__VA_ARGS__", &combined_args);
+        expanded_macro = expanded_macro.replace("__VA_ARGS__", &combined_args);
 
         // Process the expanded_macro
         process_line(&expanded_macro, context)
     } else {
-        Err(Error::InvalidCommand {
-            command_name: macro_name.to_owned(),
-        }
-        .into())
+        Err(Error::InvalidCommand { command_name: macro_name.to_owned() }.into())
     }
 }
 
@@ -558,10 +468,7 @@ fn process_variadic_macro(
 /// assert_eq!(gpp::process_line("#define Foo Bar", &mut context).unwrap(), "");
 /// assert_eq!(context.macros.get("Foo").unwrap(), "Bar");
 /// ```
-pub fn process_line(
-    line: &str,
-    context: &mut Context,
-) -> Result<String> {
+pub fn process_line(line: &str, context: &mut Context) -> Result<String> {
     // TODO: The core algorithm here needs to be rewritten to be more efficient and to support
     //   all the features of the C preprocessor.
 
@@ -570,10 +477,7 @@ pub fn process_line(
         return Ok(String::new());
     }
 
-    let line = line
-        .strip_suffix("\r\n")
-        .or_else(|| line.strip_suffix('\n'))
-        .unwrap_or(line);
+    let line = line.strip_suffix("\r\n").or_else(|| line.strip_suffix('\n')).unwrap_or(line);
 
     enum Line<'a> {
         Text(&'a str),
@@ -586,60 +490,36 @@ pub fn process_line(
         } else {
             let mut parts = rest.trim_start().splitn(2, ' ');
             let command_name = parts.next().unwrap();
-            let content =
-                parts.next().unwrap_or("").trim_start();
+            let content = parts.next().unwrap_or("").trim_start();
             //   println!("command_name: {command_name}");
             //   println!("content: {content}");
 
             if let Some(command) = COMMANDS
                 .iter()
                 .copied()
-                .filter(|command| {
-                    context.allow_exec || !command.requires_exec
-                })
+                .filter(|command| context.allow_exec || !command.requires_exec)
                 .find(|command| command.name == command_name)
             {
                 // Check if it's a variadic macro and parse its arguments
-                if let Some((macro_name, args)) =
-                    parse_variadic_macro(content)
-                {
-                    println!(
-                        "variadic macro: {macro_name} {args:#?}"
-                    );
+                if let Some((macro_name, args)) = parse_variadic_macro(content) {
+                    println!("variadic macro: {macro_name} {args:#?}");
                     println!("command_name: {command_name}");
 
                     // Handle variadic macros
                     if macro_name == command_name {
-                        if let Some(macro_value) =
-                            context.macros.get(macro_name)
-                        {
-                            let mut expanded_macro =
-                                macro_value.clone();
+                        if let Some(macro_value) = context.macros.get(macro_name) {
+                            let mut expanded_macro = macro_value.clone();
 
                             // Find the position of __VA_ARGS__ in the macro value
-                            while let Some(args_pos) =
-                                expanded_macro
-                                    .find("__VA_ARGS__")
-                            {
+                            while let Some(args_pos) = expanded_macro.find("__VA_ARGS__") {
                                 // Replace __VA_ARGS__ with the actual arguments
-                                let mut new_macro =
-                                    String::new();
-                                new_macro.push_str(
-                                    &expanded_macro[..args_pos],
-                                );
-                                new_macro.push_str(
-                                    args.join(", ").as_str(),
-                                );
-                                new_macro.push_str(
-                                    &expanded_macro
-                                        [args_pos + 10..],
-                                ); // 10 is the length of "__VA_ARGS__"
-                                expanded_macro =
-                                    new_macro.clone();
+                                let mut new_macro = String::new();
+                                new_macro.push_str(&expanded_macro[..args_pos]);
+                                new_macro.push_str(args.join(", ").as_str());
+                                new_macro.push_str(&expanded_macro[args_pos + 10..]); // 10 is the length of "__VA_ARGS__"
+                                expanded_macro = new_macro.clone();
 
-                                println!(
-                                    "new_macro: {new_macro}"
-                                );
+                                println!("new_macro: {new_macro}");
                             }
 
                             // TODO:Need to handle case such as:
@@ -649,16 +529,11 @@ pub fn process_line(
                             println!("expanded_macro: {expanded_macro}");
 
                             // Process the expanded_macro recursively
-                            return process_line(
-                                &expanded_macro,
-                                context,
-                            );
+                            return process_line(&expanded_macro, context);
                         } else {
-                            return Err(Error::MacroNotFound {
-                                macro_name: macro_name
-                                    .to_owned(),
-                            }
-                            .into());
+                            return Err(
+                                Error::MacroNotFound { macro_name: macro_name.to_owned() }.into()
+                            );
                         }
 
                         // // For now, we'll just return the original line
@@ -668,10 +543,7 @@ pub fn process_line(
 
                 Line::Command(command, content)
             } else {
-                return Err(Error::InvalidCommand {
-                    command_name: command_name.to_owned(),
-                }
-                .into());
+                return Err(Error::InvalidCommand { command_name: command_name.to_owned() }.into());
             }
         }
     } else {
@@ -679,30 +551,25 @@ pub fn process_line(
     };
 
     let line = match line {
-        Line::Text(_)
-        | Line::Command(
-            Command { ignored_by_if: false, .. },
-            _,
-        ) if context.inactive_stack > 0 => String::new(),
+        Line::Text(_) | Line::Command(Command { ignored_by_if: false, .. }, _)
+            if context.inactive_stack > 0 =>
+        {
+            String::new()
+        }
         Line::Text(text) => {
             let mut line = format!("{text}\n");
 
-            while let Some(s) =
-                replace_next_macro(&line, &context.macros)
-            {
+            while let Some(s) = replace_next_macro(&line, &context.macros) {
                 line = s;
             }
 
             line
         }
-        Line::Command(command, content) => {
-            (command.execute)(content, context)?
-        }
+        Line::Command(command, content) => (command.execute)(content, context)?,
     };
 
     Ok(if let Some(child) = context.in_stack.last_mut() {
-        let input =
-            child.stdin.as_mut().ok_or(Error::PipeFailed)?;
+        let input = child.stdin.as_mut().ok_or(Error::PipeFailed)?;
         input.write_all(line.as_bytes())?;
         String::new()
     } else {
@@ -719,20 +586,14 @@ pub fn process_line(
 /// ```
 /// assert_eq!(gpp::process_str("#define A 1\n A 2 3 \n", &mut gpp::Context::new()).unwrap(), " 1 2 3 \n");
 /// ```
-pub fn process_str(
-    s: &str,
-    context: &mut Context,
-) -> Result<String> {
+pub fn process_str(s: &str, context: &mut Context) -> Result<String> {
     process_buf(s.as_bytes(), "<string>", context)
 }
 
 /// Process a file.
 ///
 /// See `process_buf` for more details.
-pub fn process_file(
-    filename: &str,
-    context: &mut Context,
-) -> Result<String> {
+pub fn process_file(filename: &str, context: &mut Context) -> Result<String> {
     println!("process_file: {filename}");
     println!("cwd: {:?}", std::env::current_dir()?);
 
@@ -750,21 +611,15 @@ pub fn process_file(
 ///
 /// This function is a wrapper around `process_line`. It splits up the input into lines (adding a
 /// newline on the end if there isn't one) and then processes each line.
-pub fn process_buf<T: BufRead>(
-    buf: T,
-    buf_name: &str,
-    context: &mut Context,
-) -> Result<String> {
+pub fn process_buf<T: BufRead>(buf: T, buf_name: &str, context: &mut Context) -> Result<String> {
     buf.lines()
         .enumerate()
         .map(|(num, line)| {
             Ok({
-                process_line(&line?, context).map_err(|e| {
-                    Error::FileError {
-                        filename: String::from(buf_name),
-                        line: num,
-                        error: Box::new(e),
-                    }
+                process_line(&line?, context).map_err(|e| Error::FileError {
+                    filename: String::from(buf_name),
+                    line: num,
+                    error: Box::new(e),
                 })?
             })
         })
@@ -772,28 +627,17 @@ pub fn process_buf<T: BufRead>(
 }
 
 // Function to parse variadic macro arguments
-fn parse_variadic_macro(
-    content: &str,
-) -> Option<(&str, Vec<&str>)> {
+fn parse_variadic_macro(content: &str) -> Option<(&str, Vec<&str>)> {
     // Parse the macro definition format: "#define MACRO(args) ..."
-    let re =
-        regex::Regex::new(r"^\s*(\w+)\s*\(([^)]*)\)").unwrap();
+    let re = regex::Regex::new(r"^\s*(\w+)\s*\(([^)]*)\)").unwrap();
 
     println!("parsing variadic macro: {content}");
 
     if let Some(captures) = re.captures(content) {
         // println!("captures: {captures:#?}");
         let macro_name = captures.get(1).unwrap().as_str();
-        let args = captures
-            .get(2)
-            .unwrap()
-            .as_str()
-            .split(',')
-            .map(str::trim)
-            .collect();
-        println!(
-            "(macro_name, args): ({macro_name}, {args:#?})"
-        );
+        let args = captures.get(2).unwrap().as_str().split(',').map(str::trim).collect();
+        println!("(macro_name, args): ({macro_name}, {args:#?})");
 
         Some((macro_name, args))
     } else {
