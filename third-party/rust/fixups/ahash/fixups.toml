@@ -1,0 +1,4 @@
+extra_deps = [":once_cell"]
+
+[[buildscript]]
+[buildscript.build]

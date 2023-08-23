@@ -1,0 +1,24 @@
+[package]
+name = "rcc"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.75"
+derive_more = "0.99.11"
+getset = "0.1.2"
+logos = "0.13.0"
+num-derive = "0.4.0"
+num-traits = "0.2.16"
+pretty_assertions_sorted = "1.2.3"
+regex = "1.9.3"
+rstest = "0.18.2"
+smartstring = "1.0.1"
+strum = "0.25.0"
+strum_macros = "0.25.2"
+tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
+tracing = "0.1.27"
+typed-builder = "0.15.2"
+owo-colors = "3.5.0"

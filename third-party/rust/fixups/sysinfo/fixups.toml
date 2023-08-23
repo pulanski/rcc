@@ -1,0 +1,12 @@
+extra_srcs = ["README.md", "md_doc/**/*.md"]
+extra_deps = [":libc", ":core-foundation-sys"]
+buildscript = []
+
+[platform_fixup.'cfg(target_os = "macos")']
+buildscript = []
+rustc_flags = [
+  "-lframework=IOKit",
+  "-lframework=Foundation",
+  "-lframework=CoreFoundation",
+  "-lframework=DiskArbitration",
+]

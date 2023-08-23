@@ -1,0 +1,13 @@
+rust_binary(
+    name = "resilient_ll",
+    srcs = glob(["src/**/*.rs"]),
+    crate = "resilient_ll",
+    edition = "2021",
+    deps = [
+        "//third-party/rust:owo-colors",
+        "//third-party/rust:smartstring",
+        "//third-party/rust:tracing",
+        "//third-party/rust:tracing-subscriber",
+    ],
+    visibility = ["PUBLIC"],
+)

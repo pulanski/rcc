@@ -1,0 +1,22 @@
+omit_targets = []
+extra_srcs = []
+src_referenced_dirs = []
+rustc_flags = []
+cfgs = []
+features = []
+omit_features = []
+extra_deps = [":libc"]
+filter_deps = []
+cargo_env = false
+
+[env]
+
+[[buildscript]]
+[buildscript.build]
+
+[[buildscript]]
+unresolved = 'Unresolved build script at vendor/fst-0.4.7/build.rs. Dependencies:'
+
+[extra_mapped_srcs]
+
+[platform_fixup]

@@ -1,0 +1,2 @@
+features = ["rustc_private"]
+extra_deps = [":libc"]

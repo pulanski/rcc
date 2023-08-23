@@ -1,0 +1,19 @@
+# omit_targets = []
+# extra_srcs = []
+# src_referenced_dirs = []
+# rustc_flags = []
+# cfgs = []
+# features = ["rustc_private"]
+# omit_features = []
+# extra_deps = [":libc", ":linux-raw-sys"]
+# extra_deps = [":libc", ":errno", ":linux-raw-sys", ":libc_errno"]
+
+# reindeer cannot see through `cfg_proto!` macros and the like
+# extra_srcs = ["src/**/*.rs"]
+# filter_deps = []
+# cargo_env = false
+
+[env]
+
+[[buildscript]]
+[buildscript.rustc_flags]

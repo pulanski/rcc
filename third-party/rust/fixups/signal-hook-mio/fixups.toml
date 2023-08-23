@@ -1,0 +1,5 @@
+features = ["support-v0_7"]
+extra_deps = [":libc", ":signal-hook"]
+
+[[buildscript]]
+[buildscript.build]

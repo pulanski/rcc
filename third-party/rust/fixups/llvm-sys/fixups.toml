@@ -1,0 +1,27 @@
+omit_targets = []
+extra_srcs = []
+src_referenced_dirs = []
+rustc_flags = []
+cfgs = []
+features = []
+omit_features = []
+extra_deps = []
+filter_deps = []
+cargo_env = true
+
+[env]
+
+[[buildscript]]
+[buildscript.build]
+
+[[buildscript]]
+unresolved = '''
+Unresolved build script at vendor/llvm-sys-160.0.2/build.rs. Dependencies:
+    cc-1.0.79
+    lazy_static-1.4.0
+    regex-1.7.3
+    semver-1.0.17'''
+
+[extra_mapped_srcs]
+
+[platform_fixup]

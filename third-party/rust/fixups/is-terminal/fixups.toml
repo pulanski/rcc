@@ -1,0 +1,15 @@
+# omit_targets = []
+# extra_srcs = []
+# src_referenced_dirs = []
+# rustc_flags = []
+# cfgs = []
+# features = ["rustc_private"]
+# omit_features = []
+# extra_deps = [":rustix"]
+# filter_deps = []
+# cargo_env = false
+
+# [env]
+
+# [[buildscript]]
+# [buildscript.build]

@@ -1,0 +1,380 @@
+[workspace]
+[package]
+name = "third-party"
+version = "0.0.0"
+publish = false
+
+[lib]
+path = "/dev/null"
+
+[dependencies]
+# ahash = "0.8.3"
+allocative = "0.2.0"
+always-assert = "0.1.3"
+amplify = "3.14.1"
+annotate-snippets = { version = "0.9.0", features = ["color"] }
+anyhow = "1.0.70"
+anymap = "0.12.1"
+aquamarine = "0.3.0"
+arbitrary = "1.1.0"
+arc-swap = "1.6.0"
+argfile = "0.1.0"
+arrayvec = "0.7.2"
+assert_matches = "1.5"
+# atomic = "0.5"
+# async-compression = { version = "0.3.8", features = ["tokio", "gzip", "zstd"] }
+# async-condvar-fair = { version = "1.0.0", features = ["parking_lot_0_11"] }
+async-recursion = "1.0"
+async-stream = "0.3.2"
+async-trait = "0.1.24"
+autocfg = "1.1.0"
+backtrace = "0.3.67"
+# blake3 = { version = "1.3.3", features = [
+#     "default",
+#     "digest",
+#     "rayon",
+#     "std",
+#     "traits-preview",
+# ] }
+bincode = "1.3"
+bitflags = "2.1.0"
+bumpalo = "3.12.0"
+byteorder = "1.4.3"
+bytes = "1.4.0"
+cached = "0.43.0"
+cargo-emit = "0.2.1"
+cargo_metadata = "0.15.4"
+cargo_toml = "0.15.2"
+cfg-if = "1.0.0"
+chalk-solve = { version = "0.90.0", default-features = false }
+chalk-ir = "0.90.0"
+chalk-recursive = { version = "0.90.0", default-features = false }
+chrono = "=0.4.19"                                                 # Avoid a dependency iana-time-zone, which requires a fixup
+# clap = "4.0.7"
+clap = { version = "4", default-features = false, features = [
+    "error-context",
+    "help",
+    "std",
+    "usage",
+    "derive",
+] }
+clap_derive = "4.0.7"
+codespan = "0.11.1"
+codespan-reporting = "0.11.1"
+common-path = "1.0.0"
+# compact_str = "0.7.0"
+# comrak = "0.18.0"
+# config = "0.13.3"
+constant_time_eq = "0.2.4"
+convert_case = "0.6.0"
+core-foundation-sys = "0.8.4"
+# countme = { version = "3.0.1", features = ["enable"] }
+cov-mark = "1.1.0"
+# criterion = { version = "0.3.1", features = [] }
+crossbeam = "0.8.2"
+crossbeam-channel = "0.5.7"
+crossbeam-epoch = "0.9.14"
+crossterm = { version = "0.26.1", default-features = false, features = [
+    "event-stream",
+] }
+signal-hook-mio = { version = "0.2.3", features = ["support-v0_7"] }
+# signal-hook = { version = "0.3.9", features = ["extended-siginfo"] }
+signal-hook = "0.3.9"
+# cstree = "0.11.1"
+csv = "1.1"
+ctor = "0.2.0"
+# dashmap = { version = "5.4.0", features = ["serde", "rayon", "raw-api"] }
+# debugserver-types = "0.5.0"
+derivative = "2.2.0"
+derive_arbitrary = "1.1.0"
+derive_more = "0.99.17"
+derive-new = "0.5.9"
+# digest = "0.10"
+dirs-next = "2.0.0"
+dissimilar = "1.0.6"
+doc-comment = "0.3.3"
+downcast-rs = "1.2.0"
+dot = "0.1.4"
+drop_bomb = "0.1.5"
+dunce = "1.0.3"
+dyn-clone = "1.0.11"
+objekt-clonable = "0.2.2"
+either = "1.8"
+ena = "0.14.0"
+enum-iterator = "1.4.0"
+enum-map = "2.5.0"
+# env_logger = "0.9.0"
+erased-serde = "0.3.20"
+errno = "0.3.1"
+expect-test = "1.4.0"
+# faccess = "0.2.3"
+fancy-regex = "0.11.0"
+fern = "0.6.1"
+flate2 = "1.0.22"
+fnv = "1.0.7"
+fork = "0.1.21"
+# fs2 = "0.4.3"
+fsevent-sys = "4.1.0"
+# fst = { version = "0.4.7", default-features = false }
+futures = { version = "0.3.28", features = ["async-await", "compat"] }
+futures-core = "0.3.28"
+futures-intrusive = "0.5.0"
+fxhash = "0.2.1"
+gazebo = { version = "0.8.1", features = ["str_pattern_extensions"] }
+getrandom = "0.2.9"
+getset = "0.1.2"
+glob = "0.3.0"
+globset = "0.4.7"
+# hashbrown = "0.13.2"
+hex = "0.4.3"
+home = "0.5.3"
+# honggfuzz = "0.5.55"
+# hostname = "0.3.1"
+http = "0.2"
+httparse = "1.7.1"
+humantime = "2.1.0"
+humansize = "2.1.3"
+hyper = "0.14.15"
+indenter = "0.3.3"
+indent_write = "2.2.0"
+indexmap = { version = "1.9.2", features = ["serde-1"] }
+indicatif = "0.17.3"
+indoc = "2.0.0"
+# inferno = "0.11.11"
+inkwell = { version = "0.1.1", features = ["llvm15-0"] }
+insta = "1.29.0"
+# internment = { version = "0.7", features = ["arc"] }
+inventory = "0.3.5"
+is_proc_translated = "0.1.1"
+# is-terminal = "0.4.7"
+itertools = "0.10.5"
+itoa = "1.0.6"
+jemalloc-ctl = "0.5.0"
+jemallocator = { version = "0.5.0", features = ["profiling"] }
+krates = "0.13.0"
+# lalrpop = "0.19.9"
+lalrpop-util = "0.19.9"
+# lasso = "0.7.0"
+libc = { version = "0.2.141", features = ["extra_traits"] }
+# libloading = "0.7.3"
+lazy_static = "1.4.0"
+linked-hash-map = { version = "0.5", features = ["serde_impl"] }
+linux-raw-sys = "0.3.4"
+llvm-sys = "160.0.2"
+llvm-ir = { version = "0.8.2", features = ["llvm-14"] }
+load_file = "1.0.1"
+log = "0.4.17"
+logos = "0.13.0"
+logos-derive = "0.13.0"
+lsp-server = "0.7.0"
+lsp-types = "0.94.0"
+maplit = "1.0.2"
+memchr = "2.4.1"
+# memmap2 = "0.5.0"
+memoffset = "0.8.0"
+miette = "5.5.0"
+# miette = { version = "5.5.0", features = ["fancy"] }
+# miette = { version = "5.5.0", features = ["fancy"] } // TODO: try and get fancy working (currently having issues w/ gen_srcs)
+mimalloc = { version = "0.1.29", default-features = false }
+mime = "0.3.16"
+mio = { version = "0.8.6", features = ["os-ext"] }
+multimap = "0.9.0"
+# names = "0.14.0"
+# nanoid = "0.4.0"
+nix = "0.22"
+nom = "7.1.3"
+notify = "5.1.0"
+notify-debouncer-mini = "0.2.1"
+# num-complex = "0.4.3"
+num_cpus = "1.15.0"
+num_enum = "0.6.0"
+# num-bigint = "0.4.3"
+num-derive = "0.3.3"
+num-traits = "0.2.15"
+nu-ansi-term = "0.47.0"
+object = "0.30.3"
+once_cell = "1.17.1"
+ordered-float = "3.7.0"
+oorandom = "11.1.3"
+os_str_bytes = "6.0"
+owo-colors = "3.5.0"
+parking_lot = { version = "0.12.1", features = ["serde"] }
+paste = "1.0"
+path-clean = "1.0.1"
+pest = "2.5.7"
+petgraph = "0.6.3"
+pin-project = "1.0.12"
+plist = "1.4.3"
+prettyplease = "0.2.4"
+pretty_assertions = "1.2.1"
+pretty_assertions_sorted = "1.2.1"
+pretty-hex = "0.3.0"
+proc-macro2 = "1.0.51"
+progress = "0.2.0"
+prost = "0.11.6"
+# prost-build = "0.11.6"
+prost-derive = "0.11.6"
+prost-types = "0.11.6"
+# protoc-bin-vendored = "3.0.0"
+# psutil = "3.2"
+pulldown-cmark = { version = "0.9.2", default-features = false }
+pulldown-cmark-to-cmark = "10.0.4"
+quote = "1.0.23"
+rand = { version = "0.8.5", features = ["small_rng"] }
+radix_trie = "0.2.1"
+rand_chacha = "0.3"
+# rand_distr = "0.4"
+rand_regex = "0.15.1"
+rand_xorshift = "0.3.0"
+ref-cast = "1.0.0"
+rayon = "1.7.0"
+# reedline = { version = "0.18.0", features = ["sqlite"] }
+redis = "0.23.0"
+regex = "1.7.1"
+relative-path = { version = "1.7.0", features = ["serde"] }
+# reqwest = { version = "0.11.16", features = [
+#     "blocking",
+#     "json",
+# ], default-features = false }
+# rusqlite = { version = "0.28.0", features = ["bundled"] }
+# rustyline = "9.1"
+rowan = "0.15.10"
+rstest = "0.17.0"
+# rug = "1.19.1"
+# rustix = { version = "0.36.8", default-features = false, features = [
+#     # "default",
+#     # "fs",
+#     # "io-lifetimes",
+#     # "libc",
+#     # "std",
+#     # "termios",
+#     # "use-libc-auxv",
+# ] }
+rustc-hash = "1.1.0"
+libc_errno = { package = "errno", version = "0.3.1", default-features = false }
+# rusqlite = "0.29.0"rustc-serialize = "0.3.24"# rust-i18n = "1.1.1"
+salsa = { git = "https://github.com/salsa-rs/salsa", package = "salsa-2022" }
+# scip = "0.1.1"
+scoped-tls = "1.0.0"
+scopeguard = "1.1.0"
+# scru128 = "2.7.0"
+# self_update = "0.36.0"
+semver = "1.0.16"
+sequence_trie = "0.3.6"
+serde = { version = "1.0.158", features = ["derive", "rc"] }
+serde_bytes = "0.11.9"
+serde_json = "1.0.95"
+serde_repr = "0.1.12"
+# serde_yaml = "0.9.21"
+# sha1 = "0.10"
+# sha2 = "0.10"
+sharded-slab = "0.1.4"
+shlex = "1.0"
+shrinkwraprs = "0.3.0"
+slab = "0.4.7"
+slog = "2.7.0"
+signal-hook-registry = "1.4.1"
+siphasher = "0.3.3"
+smallvec = { version = "1.10", features = [
+    "const_generics",
+    "const_new",
+    "serde",
+    "specialization",
+    "union",
+    "write",
+] }
+smartstring = "1.0.1"
+smol_str = "0.1.24"
+socket2 = { version = "0.5.2", features = ["all"] }
+# snap = "1.1.0"
+# sorted_vector_map = "0.1"
+# starlark = "0.8.0"
+static_assertions = "1.1.0"
+strsim = "0.10.0"
+str_sim = "0.1.2"
+# structopt = "0.3.23"
+strum = "0.24.1"
+strum_macros = "0.24.3"
+# superconsole = "0.1.0"
+symlink = "0.1.0"
+syn = { version = "2.0.13", features = ["extra-traits", "full", "visit"] }
+sync_wrapper = "0.1.0"
+sys-info = "0.9.1"
+sysinfo = "0.28.4"
+sys-locale = "0.3.0"
+# tar = "0.4.38"
+take_mut = "0.2.2"
+# tempfile = "3.3.0"
+terminal-link = "0.1.0"
+termimad = "0.23.0"
+termios = "0.3"
+# termwiz = "0.20"
+test-case = "3.1.0"
+# test-context = "0.1.4"
+text-size = "1.1.0"
+textwrap = { version = "0.14.0", default-features = false, features = [
+    "unicode-width",
+] }
+# textwrap = { version = "0.11", features = ["term_size"] }
+# error[E0658]: use of unstable library feature 'rustc_private': this crate is being loaded from the sysroot, an unstable location; did you mean to load this crate from crates.io via `Cargo.toml` instead?
+#    --> third-party/vendor/term_size-0.3.2/src/platform/unix.rs:171:15
+#     |
+# 171 |         Some((w.ws_col as usize, w.ws_row as usize))
+#     |               ^^^^^^^^
+#     |
+#     = note: see issue #27812 <https://github.com/rust-lang/rust/issues/27812> for more information
+#     = help: add `#![feature(rustc_private)]` to the crate attributes to enable
+
+thiserror = "1.0.40"
+# threadpool = "1.8.1"
+tinyvec = "1.5.1"
+tokio = { version = "1.27.0", features = ["full"] }
+tokio-stream = { version = "0.1.4", features = [
+    "fs",
+    "io-util",
+    "net",
+    "sync",
+    "time",
+] }
+tokio-util = { version = "0.7.7", features = ["full"] }
+toml = "0.7.3"
+tonic = "0.9.2"
+tonic-web = "0.9.2"
+# tonic-build = { version = "0.8.4", features = ["prost", "cleanup-markdown"] }
+# tonic-build = "0.9.2"
+# ton0.9.2ild = { version = "0.8.4", features = ["prost", "cleanup-markdown"] }
+tower = "0.4"
+tower-layer = "0.3.2"
+tower-service = "0.3.2"
+tracing = "0.1.37"
+tracing-indicatif = "0.3.0"
+tracing-log = "0.1.3"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+# tracing-tree = "0.2.1"
+triomphe = "0.1.8"
+trybuild = "1.0.56"
+typed-arena = "2.0.2"
+typed-builder = "0.14.0"
+ulid = "1.0.0"
+ungrammar = "1.16.1"
+unicode-segmentation = "1.7"
+unicode-width = "0.1.9"
+unindent = "0.2.1"
+url = "2.3.1"
+uuid = { version = "1.3.0", features = [
+    "v4",                # Lets you generate random UUIDs
+    "fast-rng",          # Use a faster (but still sufficiently random) RNG
+    "macro-diagnostics", # Enable better diagnostics for compile-time UUIDs
+] }
+# validators = "0.24.3"
+walkdir = "2.3.2"
+# watchman_client = "0.8.0"
+wax = "0.5.0"
+which = "4.3.0"
+winapi = { version = "0.3.9", features = ["everything"] }
+whoami = "1.3.0"
+# xattr = "1.0.0"
+xflags = "0.3.1"
+xshell = "0.2.3"
+zip = "0.5"
+# zstd = "=0.11.1"

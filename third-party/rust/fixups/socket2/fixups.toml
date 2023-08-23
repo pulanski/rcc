@@ -1,0 +1,4 @@
+extra_deps = [":libc"]
+
+[[buildscript]]
+[buildscript.build]

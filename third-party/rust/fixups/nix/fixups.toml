@@ -1,0 +1,3 @@
+buildscript = []
+extra_srcs = ["src/**/*.rs"]
+extra_deps = [":memoffset"]

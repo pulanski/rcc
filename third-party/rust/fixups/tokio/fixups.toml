@@ -1,0 +1,8 @@
+extra_srcs = ["src/**/*.rs"]
+buildscript = []
+extra_deps = [
+    ":tracing",
+    ":libc",
+    ":socket2",
+    "//third-party/rust:signal-hook-registry",
+]
