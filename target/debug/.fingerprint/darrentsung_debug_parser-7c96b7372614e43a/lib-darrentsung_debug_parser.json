@@ -1,1 +1,24 @@
-{"rustc":7781137591320411828,"features":"[]","target":16525315241544736873,"profile":8987646332441898785,"path":14365109011290980112,"deps":[[1961652958923998717,"anyhow",false,7374168286313817617],[6954241390595330609,"nom",false,6337604270453639670],[11105537053212388747,"html_escape",false,2203117824460668829],[18379013398792121352,"ordered_float",false,4827335896433202945]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/darrentsung_debug_parser-7c96b7372614e43a/dep-lib-darrentsung_debug_parser"}}],"rustflags":[],"metadata":2972544525084907244,"config":2202906307356721367,"compile_kind":0}
+{
+  "rustc": 7781137591320411828,
+  "features": "[]",
+  "target": 16525315241544736873,
+  "profile": 8987646332441898785,
+  "path": 14365109011290980112,
+  "deps": [
+    [1961652958923998717, "anyhow", false, 7374168286313817617],
+    [6954241390595330609, "nom", false, 6337604270453639670],
+    [11105537053212388747, "html_escape", false, 2203117824460668829],
+    [18379013398792121352, "ordered_float", false, 4827335896433202945]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/darrentsung_debug_parser-7c96b7372614e43a/dep-lib-darrentsung_debug_parser"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 2972544525084907244,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

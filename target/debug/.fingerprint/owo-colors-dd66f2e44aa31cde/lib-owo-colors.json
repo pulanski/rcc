@@ -1,1 +1,19 @@
-{"rustc":7781137591320411828,"features":"[]","target":6664642345386990195,"profile":8987646332441898785,"path":17117524269423735567,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/owo-colors-dd66f2e44aa31cde/dep-lib-owo-colors"}}],"rustflags":[],"metadata":12739814832942918178,"config":2202906307356721367,"compile_kind":0}
+{
+  "rustc": 7781137591320411828,
+  "features": "[]",
+  "target": 6664642345386990195,
+  "profile": 8987646332441898785,
+  "path": 17117524269423735567,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/owo-colors-dd66f2e44aa31cde/dep-lib-owo-colors"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 12739814832942918178,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

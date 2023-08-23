@@ -3,9 +3,9 @@ use pretty_assertions_sorted::assert_eq;
 
 #[derive(Debug, Display, Clone)]
 enum Token {
-  Directive(String),
-  Identifier(String),
-  Text(String),
+    Directive(String),
+    Identifier(String),
+    Text(String),
 }
 
 // struct Preprocessor {
@@ -136,122 +136,126 @@ use std::path::PathBuf;
 use strum_macros::Display;
 
 struct Preprocessor {
-  macros: HashMap<String, String>,
-  include_paths: Vec<PathBuf>,
+    macros: HashMap<String, String>,
+    include_paths: Vec<PathBuf>,
 }
 
 impl Preprocessor {
-  fn new() -> Self {
-    Preprocessor {
-      macros: HashMap::new(),
-      include_paths: vec![PathBuf::from(".")],
+    fn new() -> Self {
+        Preprocessor {
+            macros: HashMap::new(),
+            include_paths: vec![PathBuf::from(".")],
+        }
     }
-  }
 
-  fn define_macro(&mut self, name: &str, value: &str) {
-    self.macros.insert(name.to_string(), value.to_string());
-  }
+    fn define_macro(&mut self, name: &str, value: &str) {
+        self.macros.insert(name.to_string(), value.to_string());
+    }
 
-  fn process_file(&self, filename: &str) -> Result<String> {
-    // let content = fs::read_to_string(filename)?;
+    fn process_file(&self, filename: &str) -> Result<String> {
+        // let content = fs::read_to_string(filename)?;
 
-    // TODO: Handle #include directives
-    // process_include_directives(&content);
-    // TODO: Handle #define directives
-    // process_define_directives(&content);
+        // TODO: Handle #include directives
+        // process_include_directives(&content);
+        // TODO: Handle #define directives
+        // process_define_directives(&content);
 
-    // Ok("".to_string())
+        // Ok("".to_string())
 
-    let content = fs::read_to_string(filename)?;
-    println!("Content: {content}");
+        let content = fs::read_to_string(filename)?;
+        println!("Content: {content}");
 
-    let tokens = self.tokenize(&content);
-    println!("Tokens: {tokens:?}");
+        let tokens = self.tokenize(&content);
+        println!("Tokens: {tokens:?}");
 
-    let processed_tokens = self.process(tokens);
-    println!("Processed tokens: {processed_tokens:?}");
+        let processed_tokens = self.process(tokens);
+        println!("Processed tokens: {processed_tokens:?}");
 
-    let result = processed_tokens.join("");
-    Ok(result)
-  }
+        let result = processed_tokens.join("");
+        Ok(result)
+    }
 
-  fn process(&self, tokens: Vec<Token>) -> Vec<String> {
-    // Implement this method to handle macro expansion and other processing.
-    // We'll add the logic for handling #include and #define directives here.
-    // For now, we'll return tokens as is.
-    // You'll need to expand macros and handle includes in this function.
-    tokens.iter().map(|t| t.to_string()).collect()
-  }
+    fn process(&self, tokens: Vec<Token>) -> Vec<String> {
+        // Implement this method to handle macro expansion and other processing.
+        // We'll add the logic for handling #include and #define directives here.
+        // For now, we'll return tokens as is.
+        // You'll need to expand macros and handle includes in this function.
+        tokens.iter().map(|t| t.to_string()).collect()
+    }
 
-  fn tokenize(&self, content: &str) -> Vec<Token> {
-    let mut tokens = Vec::new();
-    let mut buffer = String::new();
-    let mut in_directive = false;
-    let re = Regex::new(r"\s+").unwrap();
+    fn tokenize(&self, content: &str) -> Vec<Token> {
+        let mut tokens = Vec::new();
+        let mut buffer = String::new();
+        let mut in_directive = false;
+        let re = Regex::new(r"\s+").unwrap();
 
-    for c in content.chars() {
-      if c == '#' && !in_directive {
-        in_directive = true;
+        for c in content.chars() {
+            if c == '#' && !in_directive {
+                in_directive = true;
+                if !buffer.is_empty() {
+                    tokens.push(Token::Text(buffer.clone()));
+                    buffer.clear();
+                }
+            }
+
+            buffer.push(c);
+
+            if c.is_whitespace() {
+                if in_directive {
+                    if !buffer.trim().is_empty() {
+                        tokens.push(Token::Directive(
+                            buffer.clone(),
+                        ));
+                    }
+                } else if !buffer.trim().is_empty() {
+                    tokens.push(Token::Text(buffer.clone()));
+                }
+                buffer.clear();
+            }
+        }
+
         if !buffer.is_empty() {
-          tokens.push(Token::Text(buffer.clone()));
-          buffer.clear();
+            if in_directive {
+                tokens.push(Token::Directive(buffer));
+            } else {
+                tokens.push(Token::Text(buffer));
+            }
         }
-      }
 
-      buffer.push(c);
-
-      if c.is_whitespace() {
-        if in_directive {
-          if !buffer.trim().is_empty() {
-            tokens.push(Token::Directive(buffer.clone()));
-          }
-        } else if !buffer.trim().is_empty() {
-          tokens.push(Token::Text(buffer.clone()));
-        }
-        buffer.clear();
-      }
+        tokens
     }
 
-    if !buffer.is_empty() {
-      if in_directive {
-        tokens.push(Token::Directive(buffer));
-      } else {
-        tokens.push(Token::Text(buffer));
-      }
+    fn include_file(&self, filename: &str) -> Result<String> {
+        // Implement this method to handle file inclusion.
+        // You'll need to search for the file in include paths and process it.
+        Err(anyhow::anyhow!(
+            "Include file handling not implemented"
+        ))
     }
-
-    tokens
-  }
-
-  fn include_file(&self, filename: &str) -> Result<String> {
-    // Implement this method to handle file inclusion.
-    // You'll need to search for the file in include paths and process it.
-    Err(anyhow::anyhow!("Include file handling not implemented"))
-  }
 }
 
 pub(crate) fn preprocessor() {
-  let preprocessor = Preprocessor::new();
+    let preprocessor = Preprocessor::new();
 
-  // preprocessor.define_macro("PI", "3.14159");
-  // preprocessor.define_macro("RADTODEG(x)", "((x) * 57.29578)");
+    // preprocessor.define_macro("PI", "3.14159");
+    // preprocessor.define_macro("RADTODEG(x)", "((x) * 57.29578)");
 
-  if let Ok(processed_content) =
-    preprocessor.process_file("testdata/a.c")
-  {
-    println!("{processed_content}");
-  } else {
-    println!("Error processing file.");
-  }
+    if let Ok(processed_content) =
+        preprocessor.process_file("testdata/a.c")
+    {
+        println!("{processed_content}");
+    } else {
+        println!("Error processing file.");
+    }
 }
 
 fn process_str(
-  content: &str,
-  context: &mut Preprocessor,
+    content: &str,
+    context: &mut Preprocessor,
 ) -> Result<String> {
-  let tokens = context.tokenize(content);
-  let processed = context.process(tokens);
-  Ok(processed.join(""))
+    let tokens = context.tokenize(content);
+    let processed = context.process(tokens);
+    Ok(processed.join(""))
 }
 
 // #[test]

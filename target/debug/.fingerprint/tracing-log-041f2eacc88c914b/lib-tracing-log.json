@@ -1,1 +1,23 @@
-{"rustc":7781137591320411828,"features":"[\"log-tracer\", \"std\"]","target":7695030710348017979,"profile":8344124108420085910,"path":17085925063365748029,"deps":[[6685014296130524576,"lazy_static",false,400287765238102285],[7416334744765216273,"log",false,12313063468750167948],[17543605846053302056,"tracing_core",false,14018866908947101785]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/tracing-log-041f2eacc88c914b/dep-lib-tracing-log"}}],"rustflags":[],"metadata":5378351068212337060,"config":2202906307356721367,"compile_kind":0}
+{
+  "rustc": 7781137591320411828,
+  "features": "[\"log-tracer\", \"std\"]",
+  "target": 7695030710348017979,
+  "profile": 8344124108420085910,
+  "path": 17085925063365748029,
+  "deps": [
+    [6685014296130524576, "lazy_static", false, 400287765238102285],
+    [7416334744765216273, "log", false, 12313063468750167948],
+    [17543605846053302056, "tracing_core", false, 14018866908947101785]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/tracing-log-041f2eacc88c914b/dep-lib-tracing-log"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 5378351068212337060,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

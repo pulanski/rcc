@@ -1,1 +1,1572 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `parser` mod in crate `rcc`."><meta name="keywords" content="rust, rustlang, rust-lang, parser"><title>rcc::parser - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-1f7d512b176f0f72.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-124a1ca42af929b6.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-52c5db6f6f352e54.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../static.files/light-4743e13df3dfe8c4.css"><link rel="stylesheet" disabled href="../../static.files/dark-0e1b889528bd466b.css"><link rel="stylesheet" disabled href="../../static.files/ayu-65289d5d067c7c66.css"><script id="default-settings" ></script><script src="../../static.files/storage-d43fa987303ecbbb.js"></script><script defer src="../../static.files/main-d2686a620d99aad7.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../rcc/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../../rcc/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">Module parser</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#constants">Constants</a></li><li><a href="#statics">Statics</a></li><li><a href="#functions">Functions</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-5ec35bf9ca753509.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../index.html">rcc</a>::<wbr><a class="mod" href="#">parser</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="srclink" href="../../src/rcc/parser.rs.html#1-2772">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.MarkClosed.html" title="rcc::parser::MarkClosed struct">MarkClosed</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.MarkOpened.html" title="rcc::parser::MarkOpened struct">MarkOpened</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Parser.html" title="rcc::parser::Parser struct">Parser</a></div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.ParserCall.html" title="rcc::parser::ParserCall struct">ParserCall</a></div></div></div><h2 id="enums" class="small-section-header"><a href="#enums">Enums</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.Event.html" title="rcc::parser::Event enum">Event</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div></div><h2 id="constants" class="small-section-header"><a href="#constants">Constants</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.DECLARATION_LIST_FIRST.html" title="rcc::parser::DECLARATION_LIST_FIRST constant">DECLARATION_LIST_FIRST</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.FN_DEF_DECLARATION_SPECIFIERS_FIRST.html" title="rcc::parser::FN_DEF_DECLARATION_SPECIFIERS_FIRST constant">FN_DEF_DECLARATION_SPECIFIERS_FIRST</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.PARAMETER_TYPE_LIST_FIRST.html" title="rcc::parser::PARAMETER_TYPE_LIST_FIRST constant">PARAMETER_TYPE_LIST_FIRST</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.STATEMENT_LIST_FIRST.html" title="rcc::parser::STATEMENT_LIST_FIRST constant">STATEMENT_LIST_FIRST</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div></div><h2 id="statics" class="small-section-header"><a href="#statics">Statics</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="static" href="static.CALLSITE.html" title="rcc::parser::CALLSITE static">CALLSITE</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.CALLSITE.html" title="rcc::parser::CALLSITE static">CALLSITE</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.CALLSITE.html" title="rcc::parser::CALLSITE static">CALLSITE</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.CALLSITE.html" title="rcc::parser::CALLSITE static">CALLSITE</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.CALLSITE.html" title="rcc::parser::CALLSITE static">CALLSITE</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.CALLSITE.html" title="rcc::parser::CALLSITE static">CALLSITE</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.CALLSITE.html" title="rcc::parser::CALLSITE static">CALLSITE</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.CALLSITE.html" title="rcc::parser::CALLSITE static">CALLSITE</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.CALLSITE.html" title="rcc::parser::CALLSITE static">CALLSITE</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.CALLSITE.html" title="rcc::parser::CALLSITE static">CALLSITE</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.CALLSITE.html" title="rcc::parser::CALLSITE static">CALLSITE</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.CALLSITE.html" title="rcc::parser::CALLSITE static">CALLSITE</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.CALLSITE.html" title="rcc::parser::CALLSITE static">CALLSITE</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.CALLSITE.html" title="rcc::parser::CALLSITE static">CALLSITE</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.CALLSITE.html" title="rcc::parser::CALLSITE static">CALLSITE</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.CALLSITE.html" title="rcc::parser::CALLSITE static">CALLSITE</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.CALLSITE.html" title="rcc::parser::CALLSITE static">CALLSITE</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.META.html" title="rcc::parser::META static">META</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.META.html" title="rcc::parser::META static">META</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.META.html" title="rcc::parser::META static">META</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.META.html" title="rcc::parser::META static">META</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.META.html" title="rcc::parser::META static">META</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.META.html" title="rcc::parser::META static">META</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.META.html" title="rcc::parser::META static">META</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.META.html" title="rcc::parser::META static">META</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.META.html" title="rcc::parser::META static">META</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.META.html" title="rcc::parser::META static">META</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.META.html" title="rcc::parser::META static">META</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.META.html" title="rcc::parser::META static">META</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.META.html" title="rcc::parser::META static">META</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.META.html" title="rcc::parser::META static">META</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.META.html" title="rcc::parser::META static">META</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.META.html" title="rcc::parser::META static">META</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="static" href="static.META.html" title="rcc::parser::META static">META</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.abstract_declarator.html" title="rcc::parser::abstract_declarator fn">abstract_declarator</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.additive_expression.html" title="rcc::parser::additive_expression fn">additive_expression</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.alignment_specifier.html" title="rcc::parser::alignment_specifier fn">alignment_specifier</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.and_expression.html" title="rcc::parser::and_expression fn">and_expression</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.argument_expression_list.html" title="rcc::parser::argument_expression_list fn">argument_expression_list</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.assignment_expression.html" title="rcc::parser::assignment_expression fn">assignment_expression</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.assignment_operator.html" title="rcc::parser::assignment_operator fn">assignment_operator</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.cast_expression.html" title="rcc::parser::cast_expression fn">cast_expression</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.compound_statement.html" title="rcc::parser::compound_statement fn">compound_statement</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.conditional_expression.html" title="rcc::parser::conditional_expression fn">conditional_expression</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.constant_expression.html" title="rcc::parser::constant_expression fn">constant_expression</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.declaration.html" title="rcc::parser::declaration fn">declaration</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.declaration_list.html" title="rcc::parser::declaration_list fn">declaration_list</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.declaration_specifiers.html" title="rcc::parser::declaration_specifiers fn">declaration_specifiers</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.declarator.html" title="rcc::parser::declarator fn">declarator</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.direct_abstract_declarator.html" title="rcc::parser::direct_abstract_declarator fn">direct_abstract_declarator</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.direct_declarator.html" title="rcc::parser::direct_declarator fn">direct_declarator</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.enum_specifier.html" title="rcc::parser::enum_specifier fn">enum_specifier</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.enumerator.html" title="rcc::parser::enumerator fn">enumerator</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.enumerator_list.html" title="rcc::parser::enumerator_list fn">enumerator_list</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.equality_expression.html" title="rcc::parser::equality_expression fn">equality_expression</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.exclusive_or_expression.html" title="rcc::parser::exclusive_or_expression fn">exclusive_or_expression</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.expression.html" title="rcc::parser::expression fn">expression</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.expression_statement.html" title="rcc::parser::expression_statement fn">expression_statement</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.extern_decl.html" title="rcc::parser::extern_decl fn">extern_decl</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.format_call_stack.html" title="rcc::parser::format_call_stack fn">format_call_stack</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.function_def.html" title="rcc::parser::function_def fn">function_def</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.function_specifier.html" title="rcc::parser::function_specifier fn">function_specifier</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.identifier_list.html" title="rcc::parser::identifier_list fn">identifier_list</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.inclusive_or_expression.html" title="rcc::parser::inclusive_or_expression fn">inclusive_or_expression</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.init_declarator.html" title="rcc::parser::init_declarator fn">init_declarator</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.init_declarator_list.html" title="rcc::parser::init_declarator_list fn">init_declarator_list</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.initializer.html" title="rcc::parser::initializer fn">initializer</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.initializer_list.html" title="rcc::parser::initializer_list fn">initializer_list</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.iteration_statement.html" title="rcc::parser::iteration_statement fn">iteration_statement</a><span title="Restricted Visibility">&nbsp;🔒</span> </div><div class="item-right docblock-short">Parses an <strong>iteration statement</strong> as per the <a href="https://port70.net/~nsz/c/c11/n1570.html#6.8.5"><strong>C grammar</strong></a>.</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.jump_statement.html" title="rcc::parser::jump_statement fn">jump_statement</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.labeled_statement.html" title="rcc::parser::labeled_statement fn">labeled_statement</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.large_parser_prefix.html" title="rcc::parser::large_parser_prefix fn">large_parser_prefix</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.logical_and_expression.html" title="rcc::parser::logical_and_expression fn">logical_and_expression</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.logical_or_expression.html" title="rcc::parser::logical_or_expression fn">logical_or_expression</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.multiplicative_expression.html" title="rcc::parser::multiplicative_expression fn">multiplicative_expression</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parameter_declaration.html" title="rcc::parser::parameter_declaration fn">parameter_declaration</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parameter_list.html" title="rcc::parser::parameter_list fn">parameter_list</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parameter_type_list.html" title="rcc::parser::parameter_type_list fn">parameter_type_list</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.pointer.html" title="rcc::parser::pointer fn">pointer</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.postfix_expression.html" title="rcc::parser::postfix_expression fn">postfix_expression</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.primary_expression.html" title="rcc::parser::primary_expression fn">primary_expression</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.relational_expression.html" title="rcc::parser::relational_expression fn">relational_expression</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.selection_statement.html" title="rcc::parser::selection_statement fn">selection_statement</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.shift_expression.html" title="rcc::parser::shift_expression fn">shift_expression</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.small_parser_prefix.html" title="rcc::parser::small_parser_prefix fn">small_parser_prefix</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.specifier_qualifier_list.html" title="rcc::parser::specifier_qualifier_list fn">specifier_qualifier_list</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.statement.html" title="rcc::parser::statement fn">statement</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.statement_list.html" title="rcc::parser::statement_list fn">statement_list</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.storage_class_specifier.html" title="rcc::parser::storage_class_specifier fn">storage_class_specifier</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.struct_declaration.html" title="rcc::parser::struct_declaration fn">struct_declaration</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.struct_declaration_list.html" title="rcc::parser::struct_declaration_list fn">struct_declaration_list</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.struct_declarator.html" title="rcc::parser::struct_declarator fn">struct_declarator</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.struct_declarator_list.html" title="rcc::parser::struct_declarator_list fn">struct_declarator_list</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.struct_or_union_specifier.html" title="rcc::parser::struct_or_union_specifier fn">struct_or_union_specifier</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.translation_unit.html" title="rcc::parser::translation_unit fn">translation_unit</a></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.type_name.html" title="rcc::parser::type_name fn">type_name</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.type_qualifier.html" title="rcc::parser::type_qualifier fn">type_qualifier</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.type_qualifier_list.html" title="rcc::parser::type_qualifier_list fn">type_qualifier_list</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.type_specifier.html" title="rcc::parser::type_specifier fn">type_specifier</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.unary_expression.html" title="rcc::parser::unary_expression fn">unary_expression</a><span title="Restricted Visibility">&nbsp;🔒</span> </div><div class="item-right docblock-short"><strong>Yacc:</strong></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.unary_operator.html" title="rcc::parser::unary_operator fn">unary_operator</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="rcc" data-themes="" data-resource-suffix="" data-rustdoc-version="1.68.0-nightly (9e75dddf6 2023-01-15)" data-search-js="search-181581080540673f.js" data-settings-js="settings-a2afdefbb7c817f1.js" data-settings-css="settings-84508a86fe805444.css" ></div></body></html>
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="rustdoc" />
+        <meta
+            name="description"
+            content="API documentation for the Rust `parser` mod in crate `rcc`."
+        />
+        <meta name="keywords" content="rust, rustlang, rust-lang, parser" />
+        <title>rcc::parser - Rust</title>
+        <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            crossorigin
+            href="../../static.files/SourceSerif4-Regular-1f7d512b176f0f72.ttf.woff2"
+        />
+        <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            crossorigin
+            href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"
+        />
+        <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            crossorigin
+            href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"
+        />
+        <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            crossorigin
+            href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"
+        />
+        <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            crossorigin
+            href="../../static.files/SourceSerif4-Bold-124a1ca42af929b6.ttf.woff2"
+        />
+        <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            crossorigin
+            href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"
+        />
+        <link
+            rel="stylesheet"
+            href="../../static.files/normalize-76eba96aa4d2e634.css"
+        />
+        <link
+            rel="stylesheet"
+            href="../../static.files/rustdoc-52c5db6f6f352e54.css"
+            id="mainThemeStyle"
+        />
+        <link
+            rel="stylesheet"
+            id="themeStyle"
+            href="../../static.files/light-4743e13df3dfe8c4.css"
+        />
+        <link
+            rel="stylesheet"
+            disabled
+            href="../../static.files/dark-0e1b889528bd466b.css"
+        />
+        <link
+            rel="stylesheet"
+            disabled
+            href="../../static.files/ayu-65289d5d067c7c66.css"
+        />
+        <script id="default-settings"></script>
+        <script src="../../static.files/storage-d43fa987303ecbbb.js"></script>
+        <script
+            defer
+            src="../../static.files/main-d2686a620d99aad7.js"
+        ></script>
+        <noscript
+            ><link
+                rel="stylesheet"
+                href="../../static.files/noscript-13285aec31fa243e.css"
+        /></noscript>
+        <link
+            rel="alternate icon"
+            type="image/png"
+            href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"
+        />
+        <link
+            rel="alternate icon"
+            type="image/png"
+            href="../../static.files/favicon-32x32-422f7d1d52889060.png"
+        />
+        <link
+            rel="icon"
+            type="image/svg+xml"
+            href="../../static.files/favicon-2c020d218678b618.svg"
+        />
+    </head>
+    <body class="rustdoc mod">
+        <!--[if lte IE 11
+            ]><div class="warning">
+                This old browser is unsupported and will most likely display
+                funky things.
+            </div><!
+        [endif]-->
+        <nav class="mobile-topbar">
+            <button class="sidebar-menu-toggle">&#9776;</button
+            ><a class="logo-container" href="../../rcc/index.html"
+                ><img
+                    class="rust-logo"
+                    src="../../static.files/rust-logo-151179464ae7ed46.svg"
+                    alt="logo"
+            /></a>
+            <h2></h2>
+        </nav>
+        <nav class="sidebar">
+            <a class="logo-container" href="../../rcc/index.html"
+                ><img
+                    class="rust-logo"
+                    src="../../static.files/rust-logo-151179464ae7ed46.svg"
+                    alt="logo"
+            /></a>
+            <h2 class="location"><a href="#">Module parser</a></h2>
+            <div class="sidebar-elems">
+                <section>
+                    <ul class="block">
+                        <li><a href="#structs">Structs</a></li>
+                        <li><a href="#enums">Enums</a></li>
+                        <li><a href="#constants">Constants</a></li>
+                        <li><a href="#statics">Statics</a></li>
+                        <li><a href="#functions">Functions</a></li>
+                    </ul>
+                </section>
+            </div>
+        </nav>
+        <main>
+            <div class="width-limiter">
+                <nav class="sub">
+                    <form class="search-form">
+                        <span></span
+                        ><input
+                            class="search-input"
+                            name="search"
+                            aria-label="Run search in the documentation"
+                            autocomplete="off"
+                            spellcheck="false"
+                            placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                            type="search"
+                        />
+                        <div id="help-button" title="help" tabindex="-1">
+                            <a href="../../help.html">?</a>
+                        </div>
+                        <div id="settings-menu" tabindex="-1">
+                            <a href="../../settings.html" title="settings"
+                                ><img
+                                    width="22"
+                                    height="22"
+                                    alt="Change settings"
+                                    src="../../static.files/wheel-5ec35bf9ca753509.svg"
+                            /></a>
+                        </div>
+                    </form>
+                </nav>
+                <section id="main-content" class="content">
+                    <div class="main-heading">
+                        <h1>
+                            Module <a href="../index.html">rcc</a>::<wbr /><a
+                                class="mod"
+                                href="#"
+                                >parser</a
+                            ><button
+                                id="copy-path"
+                                onclick="copy_path(this)"
+                                title="Copy item path to clipboard"
+                            >
+                                <img
+                                    src="../../static.files/clipboard-7571035ce49a181d.svg"
+                                    width="19"
+                                    height="18"
+                                    alt="Copy item path"
+                                />
+                            </button>
+                        </h1>
+                        <span class="out-of-band"
+                            ><a
+                                class="srclink"
+                                href="../../src/rcc/parser.rs.html#1-2772"
+                                >source</a
+                            >
+                            ·
+                            <button
+                                id="toggle-all-docs"
+                                title="collapse all docs"
+                            >
+                                [<span>&#x2212;</span>]
+                            </button></span
+                        >
+                    </div>
+                    <h2 id="structs" class="small-section-header">
+                        <a href="#structs">Structs</a>
+                    </h2>
+                    <div class="item-table">
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="struct"
+                                    href="struct.MarkClosed.html"
+                                    title="rcc::parser::MarkClosed struct"
+                                    >MarkClosed</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="struct"
+                                    href="struct.MarkOpened.html"
+                                    title="rcc::parser::MarkOpened struct"
+                                    >MarkOpened</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="struct"
+                                    href="struct.Parser.html"
+                                    title="rcc::parser::Parser struct"
+                                    >Parser</a
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="struct"
+                                    href="struct.ParserCall.html"
+                                    title="rcc::parser::ParserCall struct"
+                                    >ParserCall</a
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <h2 id="enums" class="small-section-header">
+                        <a href="#enums">Enums</a>
+                    </h2>
+                    <div class="item-table">
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="enum"
+                                    href="enum.Event.html"
+                                    title="rcc::parser::Event enum"
+                                    >Event</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <h2 id="constants" class="small-section-header">
+                        <a href="#constants">Constants</a>
+                    </h2>
+                    <div class="item-table">
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="constant"
+                                    href="constant.DECLARATION_LIST_FIRST.html"
+                                    title="rcc::parser::DECLARATION_LIST_FIRST constant"
+                                    >DECLARATION_LIST_FIRST</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="constant"
+                                    href="constant.FN_DEF_DECLARATION_SPECIFIERS_FIRST.html"
+                                    title="rcc::parser::FN_DEF_DECLARATION_SPECIFIERS_FIRST constant"
+                                    >FN_DEF_DECLARATION_SPECIFIERS_FIRST</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="constant"
+                                    href="constant.PARAMETER_TYPE_LIST_FIRST.html"
+                                    title="rcc::parser::PARAMETER_TYPE_LIST_FIRST constant"
+                                    >PARAMETER_TYPE_LIST_FIRST</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="constant"
+                                    href="constant.STATEMENT_LIST_FIRST.html"
+                                    title="rcc::parser::STATEMENT_LIST_FIRST constant"
+                                    >STATEMENT_LIST_FIRST</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <h2 id="statics" class="small-section-header">
+                        <a href="#statics">Statics</a>
+                    </h2>
+                    <div class="item-table">
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.CALLSITE.html"
+                                    title="rcc::parser::CALLSITE static"
+                                    >CALLSITE</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.CALLSITE.html"
+                                    title="rcc::parser::CALLSITE static"
+                                    >CALLSITE</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.CALLSITE.html"
+                                    title="rcc::parser::CALLSITE static"
+                                    >CALLSITE</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.CALLSITE.html"
+                                    title="rcc::parser::CALLSITE static"
+                                    >CALLSITE</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.CALLSITE.html"
+                                    title="rcc::parser::CALLSITE static"
+                                    >CALLSITE</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.CALLSITE.html"
+                                    title="rcc::parser::CALLSITE static"
+                                    >CALLSITE</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.CALLSITE.html"
+                                    title="rcc::parser::CALLSITE static"
+                                    >CALLSITE</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.CALLSITE.html"
+                                    title="rcc::parser::CALLSITE static"
+                                    >CALLSITE</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.CALLSITE.html"
+                                    title="rcc::parser::CALLSITE static"
+                                    >CALLSITE</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.CALLSITE.html"
+                                    title="rcc::parser::CALLSITE static"
+                                    >CALLSITE</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.CALLSITE.html"
+                                    title="rcc::parser::CALLSITE static"
+                                    >CALLSITE</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.CALLSITE.html"
+                                    title="rcc::parser::CALLSITE static"
+                                    >CALLSITE</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.CALLSITE.html"
+                                    title="rcc::parser::CALLSITE static"
+                                    >CALLSITE</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.CALLSITE.html"
+                                    title="rcc::parser::CALLSITE static"
+                                    >CALLSITE</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.CALLSITE.html"
+                                    title="rcc::parser::CALLSITE static"
+                                    >CALLSITE</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.CALLSITE.html"
+                                    title="rcc::parser::CALLSITE static"
+                                    >CALLSITE</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.CALLSITE.html"
+                                    title="rcc::parser::CALLSITE static"
+                                    >CALLSITE</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.META.html"
+                                    title="rcc::parser::META static"
+                                    >META</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.META.html"
+                                    title="rcc::parser::META static"
+                                    >META</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.META.html"
+                                    title="rcc::parser::META static"
+                                    >META</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.META.html"
+                                    title="rcc::parser::META static"
+                                    >META</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.META.html"
+                                    title="rcc::parser::META static"
+                                    >META</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.META.html"
+                                    title="rcc::parser::META static"
+                                    >META</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.META.html"
+                                    title="rcc::parser::META static"
+                                    >META</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.META.html"
+                                    title="rcc::parser::META static"
+                                    >META</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.META.html"
+                                    title="rcc::parser::META static"
+                                    >META</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.META.html"
+                                    title="rcc::parser::META static"
+                                    >META</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.META.html"
+                                    title="rcc::parser::META static"
+                                    >META</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.META.html"
+                                    title="rcc::parser::META static"
+                                    >META</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.META.html"
+                                    title="rcc::parser::META static"
+                                    >META</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.META.html"
+                                    title="rcc::parser::META static"
+                                    >META</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.META.html"
+                                    title="rcc::parser::META static"
+                                    >META</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.META.html"
+                                    title="rcc::parser::META static"
+                                    >META</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="static"
+                                    href="static.META.html"
+                                    title="rcc::parser::META static"
+                                    >META</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <h2 id="functions" class="small-section-header">
+                        <a href="#functions">Functions</a>
+                    </h2>
+                    <div class="item-table">
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.abstract_declarator.html"
+                                    title="rcc::parser::abstract_declarator fn"
+                                    >abstract_declarator</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.additive_expression.html"
+                                    title="rcc::parser::additive_expression fn"
+                                    >additive_expression</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.alignment_specifier.html"
+                                    title="rcc::parser::alignment_specifier fn"
+                                    >alignment_specifier</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.and_expression.html"
+                                    title="rcc::parser::and_expression fn"
+                                    >and_expression</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.argument_expression_list.html"
+                                    title="rcc::parser::argument_expression_list fn"
+                                    >argument_expression_list</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.assignment_expression.html"
+                                    title="rcc::parser::assignment_expression fn"
+                                    >assignment_expression</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.assignment_operator.html"
+                                    title="rcc::parser::assignment_operator fn"
+                                    >assignment_operator</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.cast_expression.html"
+                                    title="rcc::parser::cast_expression fn"
+                                    >cast_expression</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.compound_statement.html"
+                                    title="rcc::parser::compound_statement fn"
+                                    >compound_statement</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.conditional_expression.html"
+                                    title="rcc::parser::conditional_expression fn"
+                                    >conditional_expression</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.constant_expression.html"
+                                    title="rcc::parser::constant_expression fn"
+                                    >constant_expression</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.declaration.html"
+                                    title="rcc::parser::declaration fn"
+                                    >declaration</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.declaration_list.html"
+                                    title="rcc::parser::declaration_list fn"
+                                    >declaration_list</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.declaration_specifiers.html"
+                                    title="rcc::parser::declaration_specifiers fn"
+                                    >declaration_specifiers</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.declarator.html"
+                                    title="rcc::parser::declarator fn"
+                                    >declarator</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.direct_abstract_declarator.html"
+                                    title="rcc::parser::direct_abstract_declarator fn"
+                                    >direct_abstract_declarator</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.direct_declarator.html"
+                                    title="rcc::parser::direct_declarator fn"
+                                    >direct_declarator</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.enum_specifier.html"
+                                    title="rcc::parser::enum_specifier fn"
+                                    >enum_specifier</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.enumerator.html"
+                                    title="rcc::parser::enumerator fn"
+                                    >enumerator</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.enumerator_list.html"
+                                    title="rcc::parser::enumerator_list fn"
+                                    >enumerator_list</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.equality_expression.html"
+                                    title="rcc::parser::equality_expression fn"
+                                    >equality_expression</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.exclusive_or_expression.html"
+                                    title="rcc::parser::exclusive_or_expression fn"
+                                    >exclusive_or_expression</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.expression.html"
+                                    title="rcc::parser::expression fn"
+                                    >expression</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.expression_statement.html"
+                                    title="rcc::parser::expression_statement fn"
+                                    >expression_statement</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.extern_decl.html"
+                                    title="rcc::parser::extern_decl fn"
+                                    >extern_decl</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.format_call_stack.html"
+                                    title="rcc::parser::format_call_stack fn"
+                                    >format_call_stack</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.function_def.html"
+                                    title="rcc::parser::function_def fn"
+                                    >function_def</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.function_specifier.html"
+                                    title="rcc::parser::function_specifier fn"
+                                    >function_specifier</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.identifier_list.html"
+                                    title="rcc::parser::identifier_list fn"
+                                    >identifier_list</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.inclusive_or_expression.html"
+                                    title="rcc::parser::inclusive_or_expression fn"
+                                    >inclusive_or_expression</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.init_declarator.html"
+                                    title="rcc::parser::init_declarator fn"
+                                    >init_declarator</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.init_declarator_list.html"
+                                    title="rcc::parser::init_declarator_list fn"
+                                    >init_declarator_list</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.initializer.html"
+                                    title="rcc::parser::initializer fn"
+                                    >initializer</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.initializer_list.html"
+                                    title="rcc::parser::initializer_list fn"
+                                    >initializer_list</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.iteration_statement.html"
+                                    title="rcc::parser::iteration_statement fn"
+                                    >iteration_statement</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                            <div class="item-right docblock-short">
+                                Parses an
+                                <strong>iteration statement</strong> as per the
+                                <a
+                                    href="https://port70.net/~nsz/c/c11/n1570.html#6.8.5"
+                                    ><strong>C grammar</strong></a
+                                >.
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.jump_statement.html"
+                                    title="rcc::parser::jump_statement fn"
+                                    >jump_statement</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.labeled_statement.html"
+                                    title="rcc::parser::labeled_statement fn"
+                                    >labeled_statement</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.large_parser_prefix.html"
+                                    title="rcc::parser::large_parser_prefix fn"
+                                    >large_parser_prefix</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.logical_and_expression.html"
+                                    title="rcc::parser::logical_and_expression fn"
+                                    >logical_and_expression</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.logical_or_expression.html"
+                                    title="rcc::parser::logical_or_expression fn"
+                                    >logical_or_expression</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.multiplicative_expression.html"
+                                    title="rcc::parser::multiplicative_expression fn"
+                                    >multiplicative_expression</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.parameter_declaration.html"
+                                    title="rcc::parser::parameter_declaration fn"
+                                    >parameter_declaration</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.parameter_list.html"
+                                    title="rcc::parser::parameter_list fn"
+                                    >parameter_list</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.parameter_type_list.html"
+                                    title="rcc::parser::parameter_type_list fn"
+                                    >parameter_type_list</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.pointer.html"
+                                    title="rcc::parser::pointer fn"
+                                    >pointer</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.postfix_expression.html"
+                                    title="rcc::parser::postfix_expression fn"
+                                    >postfix_expression</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.primary_expression.html"
+                                    title="rcc::parser::primary_expression fn"
+                                    >primary_expression</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.relational_expression.html"
+                                    title="rcc::parser::relational_expression fn"
+                                    >relational_expression</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.selection_statement.html"
+                                    title="rcc::parser::selection_statement fn"
+                                    >selection_statement</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.shift_expression.html"
+                                    title="rcc::parser::shift_expression fn"
+                                    >shift_expression</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.small_parser_prefix.html"
+                                    title="rcc::parser::small_parser_prefix fn"
+                                    >small_parser_prefix</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.specifier_qualifier_list.html"
+                                    title="rcc::parser::specifier_qualifier_list fn"
+                                    >specifier_qualifier_list</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.statement.html"
+                                    title="rcc::parser::statement fn"
+                                    >statement</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.statement_list.html"
+                                    title="rcc::parser::statement_list fn"
+                                    >statement_list</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.storage_class_specifier.html"
+                                    title="rcc::parser::storage_class_specifier fn"
+                                    >storage_class_specifier</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.struct_declaration.html"
+                                    title="rcc::parser::struct_declaration fn"
+                                    >struct_declaration</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.struct_declaration_list.html"
+                                    title="rcc::parser::struct_declaration_list fn"
+                                    >struct_declaration_list</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.struct_declarator.html"
+                                    title="rcc::parser::struct_declarator fn"
+                                    >struct_declarator</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.struct_declarator_list.html"
+                                    title="rcc::parser::struct_declarator_list fn"
+                                    >struct_declarator_list</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.struct_or_union_specifier.html"
+                                    title="rcc::parser::struct_or_union_specifier fn"
+                                    >struct_or_union_specifier</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.translation_unit.html"
+                                    title="rcc::parser::translation_unit fn"
+                                    >translation_unit</a
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.type_name.html"
+                                    title="rcc::parser::type_name fn"
+                                    >type_name</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.type_qualifier.html"
+                                    title="rcc::parser::type_qualifier fn"
+                                    >type_qualifier</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.type_qualifier_list.html"
+                                    title="rcc::parser::type_qualifier_list fn"
+                                    >type_qualifier_list</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.type_specifier.html"
+                                    title="rcc::parser::type_specifier fn"
+                                    >type_specifier</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.unary_expression.html"
+                                    title="rcc::parser::unary_expression fn"
+                                    >unary_expression</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                            <div class="item-right docblock-short">
+                                <strong>Yacc:</strong>
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.unary_operator.html"
+                                    title="rcc::parser::unary_operator fn"
+                                    >unary_operator</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+        <div
+            id="rustdoc-vars"
+            data-root-path="../../"
+            data-static-root-path="../../static.files/"
+            data-current-crate="rcc"
+            data-themes=""
+            data-resource-suffix=""
+            data-rustdoc-version="1.68.0-nightly (9e75dddf6 2023-01-15)"
+            data-search-js="search-181581080540673f.js"
+            data-settings-js="settings-a2afdefbb7c817f1.js"
+            data-settings-css="settings-84508a86fe805444.css"
+        ></div>
+    </body>
+</html>

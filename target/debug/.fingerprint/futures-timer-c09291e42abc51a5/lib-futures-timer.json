@@ -1,1 +1,19 @@
-{"rustc":7781137591320411828,"features":"[]","target":3485548775563430772,"profile":8987646332441898785,"path":7904473369514009836,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/futures-timer-c09291e42abc51a5/dep-lib-futures-timer"}}],"rustflags":[],"metadata":1848955865527672354,"config":2202906307356721367,"compile_kind":0}
+{
+  "rustc": 7781137591320411828,
+  "features": "[]",
+  "target": 3485548775563430772,
+  "profile": 8987646332441898785,
+  "path": 7904473369514009836,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/futures-timer-c09291e42abc51a5/dep-lib-futures-timer"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 1848955865527672354,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

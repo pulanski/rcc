@@ -1,1 +1,19 @@
-{"rustc":7781137591320411828,"features":"[]","target":13988420919824902104,"profile":8344124108420085910,"path":2718652033249334266,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/convert_case-3e34b674a3055f51/dep-lib-convert_case"}}],"rustflags":[],"metadata":8130279976740482636,"config":2202906307356721367,"compile_kind":0}
+{
+  "rustc": 7781137591320411828,
+  "features": "[]",
+  "target": 13988420919824902104,
+  "profile": 8344124108420085910,
+  "path": 2718652033249334266,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/convert_case-3e34b674a3055f51/dep-lib-convert_case"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 8130279976740482636,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

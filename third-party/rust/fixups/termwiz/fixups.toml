@@ -1,8 +1,8 @@
 cargo_env = true
 extra_srcs = ["src/**/*.pest"]
 extra_deps = [
-    ":nix",
-    ":termios",
-    # ":pest",
+  ":nix",
+  ":termios",
+  # ":pest",
 ]
 # ":signal-hook",

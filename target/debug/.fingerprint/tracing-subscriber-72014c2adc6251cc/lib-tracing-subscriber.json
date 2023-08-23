@@ -1,1 +1,26 @@
-{"rustc":7781137591320411828,"features":"[\"alloc\", \"ansi\", \"default\", \"fmt\", \"nu-ansi-term\", \"registry\", \"sharded-slab\", \"smallvec\", \"std\", \"thread_local\", \"tracing-log\"]","target":15106051666827458855,"profile":8987646332441898785,"path":7221143544279393061,"deps":[[2654797267717908768,"sharded_slab",false,13215011031708412406],[3306683577264615609,"tracing_log",false,7250470423652411171],[4442814512589358450,"thread_local",false,1592266586423940341],[11998755268370809021,"nu_ansi_term",false,4931057478083527220],[13327724608739232567,"smallvec",false,7616191145277312311],[17543605846053302056,"tracing_core",false,18097039800183715091]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/tracing-subscriber-72014c2adc6251cc/dep-lib-tracing-subscriber"}}],"rustflags":[],"metadata":12822423491602284083,"config":2202906307356721367,"compile_kind":0}
+{
+  "rustc": 7781137591320411828,
+  "features": "[\"alloc\", \"ansi\", \"default\", \"fmt\", \"nu-ansi-term\", \"registry\", \"sharded-slab\", \"smallvec\", \"std\", \"thread_local\", \"tracing-log\"]",
+  "target": 15106051666827458855,
+  "profile": 8987646332441898785,
+  "path": 7221143544279393061,
+  "deps": [
+    [2654797267717908768, "sharded_slab", false, 13215011031708412406],
+    [3306683577264615609, "tracing_log", false, 7250470423652411171],
+    [4442814512589358450, "thread_local", false, 1592266586423940341],
+    [11998755268370809021, "nu_ansi_term", false, 4931057478083527220],
+    [13327724608739232567, "smallvec", false, 7616191145277312311],
+    [17543605846053302056, "tracing_core", false, 18097039800183715091]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/tracing-subscriber-72014c2adc6251cc/dep-lib-tracing-subscriber"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 12822423491602284083,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

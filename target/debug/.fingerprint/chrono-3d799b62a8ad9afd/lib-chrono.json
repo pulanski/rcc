@@ -1,1 +1,22 @@
-{"rustc":7781137591320411828,"features":"[\"clock\", \"iana-time-zone\", \"std\", \"winapi\"]","target":11745563112108967737,"profile":8987646332441898785,"path":614451358415106580,"deps":[[2169378189951667729,"iana_time_zone",false,12036659656265920662],[10539592998943336449,"num_traits",false,6504126500111962233]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/chrono-3d799b62a8ad9afd/dep-lib-chrono"}}],"rustflags":[],"metadata":9803565982372010724,"config":2202906307356721367,"compile_kind":0}
+{
+  "rustc": 7781137591320411828,
+  "features": "[\"clock\", \"iana-time-zone\", \"std\", \"winapi\"]",
+  "target": 11745563112108967737,
+  "profile": 8987646332441898785,
+  "path": 614451358415106580,
+  "deps": [
+    [2169378189951667729, "iana_time_zone", false, 12036659656265920662],
+    [10539592998943336449, "num_traits", false, 6504126500111962233]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/chrono-3d799b62a8ad9afd/dep-lib-chrono"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 9803565982372010724,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

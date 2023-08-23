@@ -12,6 +12,7 @@ def key_value_arg(s):
         return (key_value[0], key_value[1])
     raise argparse.ArgumentTypeError(f"expected the form `key=value` for `{s}`")
 
+
 def arg_parse():
     # Command line is <action.py> [args] -- rustc command line
     parser = argparse.ArgumentParser()
@@ -26,8 +27,10 @@ def arg_parse():
     parser.add_argument("--target")
     return parser.parse_args()
 
+
 def mk_feature(x):
     return "CARGO_FEATURE_" + x.upper().replace("-", "_")
+
 
 def os_from_target(target):
     # `_mk_cmd` in `rust_third_party.bzl` passes the result of
@@ -37,6 +40,7 @@ def os_from_target(target):
     # the set "windows", "macos", "ios", "linux", "android", "freebsd",
     # "dragonfly", "openbsd", "netbsd".
     return "macos" if os == "darwin" else os
+
 
 def mk_env(args, parent):
     env = os.environ.copy()
@@ -57,17 +61,26 @@ def mk_env(args, parent):
         env[k] = v
     return env
 
+
 def run_args(args):
-    result = subprocess.run(args.buildscript, stdout=subprocess.PIPE, text=True, check=True, env=mk_env(args, True))
+    result = subprocess.run(
+        args.buildscript,
+        stdout=subprocess.PIPE,
+        text=True,
+        check=True,
+        env=mk_env(args, True),
+    )
     with open(args.output, "w") as file:
         for line in result.stdout.split("\n"):
             pre, _, post = line.partition("=")
             if pre == "cargo:rustc-cfg":
                 file.write("--cfg={}\n".format(post))
 
+
 def run_srcs(args):
     Path(args.output).mkdir(exist_ok=True)
     subprocess.run(args.buildscript, check=True, text=True, env=mk_env(args, False))
+
 
 def main():
     args = arg_parse()
@@ -78,5 +91,6 @@ def main():
         run_srcs(args)
     else:
         raise RuntimeError("Unknown mode: " + repr(args.mode))
+
 
 main()

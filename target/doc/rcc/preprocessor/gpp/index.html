@@ -1,65 +1,366 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="gpp is a Generic PreProcessor written in Rust."><meta name="keywords" content="rust, rustlang, rust-lang, gpp"><title>rcc::preprocessor::gpp - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-1f7d512b176f0f72.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-124a1ca42af929b6.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-52c5db6f6f352e54.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../../static.files/light-4743e13df3dfe8c4.css"><link rel="stylesheet" disabled href="../../../static.files/dark-0e1b889528bd466b.css"><link rel="stylesheet" disabled href="../../../static.files/ayu-65289d5d067c7c66.css"><script id="default-settings" ></script><script src="../../../static.files/storage-d43fa987303ecbbb.js"></script><script defer src="../../../static.files/main-d2686a620d99aad7.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../../rcc/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../../../rcc/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">Module gpp</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-5ec35bf9ca753509.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../../index.html">rcc</a>::<wbr><a href="../index.html">preprocessor</a>::<wbr><a class="mod" href="#">gpp</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="srclink" href="../../../src/rcc/preprocessor/gpp/mod.rs.html#1-678">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>gpp is a Generic PreProcessor written in Rust.</p>
-<p>It supports:</p>
-<ul>
-<li>Simple macros, no function macros</li>
-<li>#include</li>
-<li>#define and #undef</li>
-<li>#ifdef, #ifndef, #elifdef, #elifndef, #else and #endif</li>
-<li>#exec for running commands</li>
-<li>#in and #endin for giving input to commands</li>
-</ul>
-<p>#includes work differently from C, as they do not require (and do not work with) quotes or &lt;&gt;,
-so <code>#include file.txt</code> is the correct syntax. It does not support #if or #elif, and recursive
-macros will cause the library to get stuck.</p>
-<h2 id="about"><a href="#about">About</a></h2>
-<p>The hash in any command may be succeeded by optional whitespace, so for example <code># undef Macro</code>
-is valid, but <code> # undef Macro</code> is not.</p>
-<h3 id="define-and-undef"><a href="#define-and-undef">#define and #undef</a></h3>
-<p>#define works similar to C: <code>#define [name] [value]</code>, and #undef too: <code>#undef [name]</code>. Be
-careful though, because unlike C macro expansion is recursive: if you <code>#define A A</code> and then
-use A, gpp will run forever.
-If #define is not given a value, then it will default to an empty string.</p>
-<h3 id="include"><a href="#include">#include</a></h3>
-<p>Includes, unlike C, do not require quotes or angle brackets, so this: <code>#include &quot;file.txt&quot;</code> or
-this: <code>#include &lt;file.txt&gt;</code> will not work; you must write <code>#include file.txt</code>.</p>
-<p>Also, unlike C the directory does not change when you #include; otherwise, gpp would change its
-current directory and wouldn’t be thread safe. This means that if you <code>#include dir/file.txt</code>
-and in <code>dir/file.txt</code> it says <code>#include other_file.txt</code>, that would refer to <code>other_file.txt</code>,
-not <code>dir/other_file.txt</code>.</p>
-<h3 id="ifs"><a href="#ifs">Ifs</a></h3>
-<p>The #ifdef, #ifndef, #elifdef, #elifndef, #else and #endif commands work exactly as you expect.
-I did not add generic #if commands to gpp, as it would make it much more complex and require a
-lot of parsing, and most of the time these are all you need anyway.</p>
-<h3 id="exec-in-and-endin"><a href="#exec-in-and-endin">#exec, #in and #endin</a></h3>
-<p>The exec command executes the given command with <code>cmd /C</code> for Windows and <code>sh -c</code> for
-everything else, and captures the command’s standard output. For example, <code>#exec echo Hi!</code> will
-output <code>Hi!</code>. It does not capture the command’s standard error, and parsing stops if the
-command exits with a nonzero status.</p>
-<p>Due to the security risk enabling #exec causes, by default exec is disabled, however you can
-enable it by changing the <code>allow_exec</code> flag in your context. If the input tries to <code>#exec</code> when
-exec is disabled, it will cause an error.</p>
-<p>The in command is similar to exec, but all text until the endin command is passed into the
-program’s standard input. For example,</p>
-<div class="example-wrap"><pre class="language-text"><code>#in sed &#39;s/tree/three/g&#39;
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="rustdoc" />
+        <meta
+            name="description"
+            content="gpp is a Generic PreProcessor written in Rust."
+        />
+        <meta name="keywords" content="rust, rustlang, rust-lang, gpp" />
+        <title>rcc::preprocessor::gpp - Rust</title>
+        <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            crossorigin
+            href="../../../static.files/SourceSerif4-Regular-1f7d512b176f0f72.ttf.woff2"
+        />
+        <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            crossorigin
+            href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"
+        />
+        <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            crossorigin
+            href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"
+        />
+        <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            crossorigin
+            href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"
+        />
+        <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            crossorigin
+            href="../../../static.files/SourceSerif4-Bold-124a1ca42af929b6.ttf.woff2"
+        />
+        <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            crossorigin
+            href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"
+        />
+        <link
+            rel="stylesheet"
+            href="../../../static.files/normalize-76eba96aa4d2e634.css"
+        />
+        <link
+            rel="stylesheet"
+            href="../../../static.files/rustdoc-52c5db6f6f352e54.css"
+            id="mainThemeStyle"
+        />
+        <link
+            rel="stylesheet"
+            id="themeStyle"
+            href="../../../static.files/light-4743e13df3dfe8c4.css"
+        />
+        <link
+            rel="stylesheet"
+            disabled
+            href="../../../static.files/dark-0e1b889528bd466b.css"
+        />
+        <link
+            rel="stylesheet"
+            disabled
+            href="../../../static.files/ayu-65289d5d067c7c66.css"
+        />
+        <script id="default-settings"></script>
+        <script src="../../../static.files/storage-d43fa987303ecbbb.js"></script>
+        <script
+            defer
+            src="../../../static.files/main-d2686a620d99aad7.js"
+        ></script>
+        <noscript
+            ><link
+                rel="stylesheet"
+                href="../../../static.files/noscript-13285aec31fa243e.css"
+        /></noscript>
+        <link
+            rel="alternate icon"
+            type="image/png"
+            href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"
+        />
+        <link
+            rel="alternate icon"
+            type="image/png"
+            href="../../../static.files/favicon-32x32-422f7d1d52889060.png"
+        />
+        <link
+            rel="icon"
+            type="image/svg+xml"
+            href="../../../static.files/favicon-2c020d218678b618.svg"
+        />
+    </head>
+    <body class="rustdoc mod">
+        <!--[if lte IE 11
+            ]><div class="warning">
+                This old browser is unsupported and will most likely display
+                funky things.
+            </div><!
+        [endif]-->
+        <nav class="mobile-topbar">
+            <button class="sidebar-menu-toggle">&#9776;</button
+            ><a class="logo-container" href="../../../rcc/index.html"
+                ><img
+                    class="rust-logo"
+                    src="../../../static.files/rust-logo-151179464ae7ed46.svg"
+                    alt="logo"
+            /></a>
+            <h2></h2>
+        </nav>
+        <nav class="sidebar">
+            <a class="logo-container" href="../../../rcc/index.html"
+                ><img
+                    class="rust-logo"
+                    src="../../../static.files/rust-logo-151179464ae7ed46.svg"
+                    alt="logo"
+            /></a>
+            <h2 class="location"><a href="#">Module gpp</a></h2>
+            <div class="sidebar-elems">
+                <section>
+                    <ul class="block">
+                        <li><a href="#structs">Structs</a></li>
+                        <li><a href="#enums">Enums</a></li>
+                        <li><a href="#constants">Constants</a></li>
+                        <li><a href="#functions">Functions</a></li>
+                    </ul>
+                </section>
+            </div>
+        </nav>
+        <main>
+            <div class="width-limiter">
+                <nav class="sub">
+                    <form class="search-form">
+                        <span></span
+                        ><input
+                            class="search-input"
+                            name="search"
+                            aria-label="Run search in the documentation"
+                            autocomplete="off"
+                            spellcheck="false"
+                            placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                            type="search"
+                        />
+                        <div id="help-button" title="help" tabindex="-1">
+                            <a href="../../../help.html">?</a>
+                        </div>
+                        <div id="settings-menu" tabindex="-1">
+                            <a href="../../../settings.html" title="settings"
+                                ><img
+                                    width="22"
+                                    height="22"
+                                    alt="Change settings"
+                                    src="../../../static.files/wheel-5ec35bf9ca753509.svg"
+                            /></a>
+                        </div>
+                    </form>
+                </nav>
+                <section id="main-content" class="content">
+                    <div class="main-heading">
+                        <h1>
+                            Module <a href="../../index.html">rcc</a>::<wbr /><a
+                                href="../index.html"
+                                >preprocessor</a
+                            >::<wbr /><a class="mod" href="#">gpp</a
+                            ><button
+                                id="copy-path"
+                                onclick="copy_path(this)"
+                                title="Copy item path to clipboard"
+                            >
+                                <img
+                                    src="../../../static.files/clipboard-7571035ce49a181d.svg"
+                                    width="19"
+                                    height="18"
+                                    alt="Copy item path"
+                                />
+                            </button>
+                        </h1>
+                        <span class="out-of-band"
+                            ><a
+                                class="srclink"
+                                href="../../../src/rcc/preprocessor/gpp/mod.rs.html#1-678"
+                                >source</a
+                            >
+                            ·
+                            <button
+                                id="toggle-all-docs"
+                                title="collapse all docs"
+                            >
+                                [<span>&#x2212;</span>]
+                            </button></span
+                        >
+                    </div>
+                    <details class="toggle top-doc" open>
+                        <summary class="hideme">
+                            <span>Expand description</span>
+                        </summary>
+                        <div class="docblock">
+                            <p>
+                                gpp is a Generic PreProcessor written in Rust.
+                            </p>
+                            <p>It supports:</p>
+                            <ul>
+                                <li>Simple macros, no function macros</li>
+                                <li>#include</li>
+                                <li>#define and #undef</li>
+                                <li>
+                                    #ifdef, #ifndef, #elifdef, #elifndef, #else
+                                    and #endif
+                                </li>
+                                <li>#exec for running commands</li>
+                                <li>
+                                    #in and #endin for giving input to commands
+                                </li>
+                            </ul>
+                            <p>
+                                #includes work differently from C, as they do
+                                not require (and do not work with) quotes or
+                                &lt;&gt;, so <code>#include file.txt</code> is
+                                the correct syntax. It does not support #if or
+                                #elif, and recursive macros will cause the
+                                library to get stuck.
+                            </p>
+                            <h2 id="about"><a href="#about">About</a></h2>
+                            <p>
+                                The hash in any command may be succeeded by
+                                optional whitespace, so for example
+                                <code># undef Macro</code> is valid, but
+                                <code> # undef Macro</code> is not.
+                            </p>
+                            <h3 id="define-and-undef">
+                                <a href="#define-and-undef"
+                                    >#define and #undef</a
+                                >
+                            </h3>
+                            <p>
+                                #define works similar to C:
+                                <code>#define [name] [value]</code>, and #undef
+                                too: <code>#undef [name]</code>. Be careful
+                                though, because unlike C macro expansion is
+                                recursive: if you <code>#define A A</code> and
+                                then use A, gpp will run forever. If #define is
+                                not given a value, then it will default to an
+                                empty string.
+                            </p>
+                            <h3 id="include">
+                                <a href="#include">#include</a>
+                            </h3>
+                            <p>
+                                Includes, unlike C, do not require quotes or
+                                angle brackets, so this:
+                                <code>#include &quot;file.txt&quot;</code> or
+                                this:
+                                <code>#include &lt;file.txt&gt;</code> will not
+                                work; you must write
+                                <code>#include file.txt</code>.
+                            </p>
+                            <p>
+                                Also, unlike C the directory does not change
+                                when you #include; otherwise, gpp would change
+                                its current directory and wouldn’t be thread
+                                safe. This means that if you
+                                <code>#include dir/file.txt</code> and in
+                                <code>dir/file.txt</code> it says
+                                <code>#include other_file.txt</code>, that would
+                                refer to <code>other_file.txt</code>, not
+                                <code>dir/other_file.txt</code>.
+                            </p>
+                            <h3 id="ifs"><a href="#ifs">Ifs</a></h3>
+                            <p>
+                                The #ifdef, #ifndef, #elifdef, #elifndef, #else
+                                and #endif commands work exactly as you expect.
+                                I did not add generic #if commands to gpp, as it
+                                would make it much more complex and require a
+                                lot of parsing, and most of the time these are
+                                all you need anyway.
+                            </p>
+                            <h3 id="exec-in-and-endin">
+                                <a href="#exec-in-and-endin"
+                                    >#exec, #in and #endin</a
+                                >
+                            </h3>
+                            <p>
+                                The exec command executes the given command with
+                                <code>cmd /C</code> for Windows and
+                                <code>sh -c</code> for everything else, and
+                                captures the command’s standard output. For
+                                example, <code>#exec echo Hi!</code> will output
+                                <code>Hi!</code>. It does not capture the
+                                command’s standard error, and parsing stops if
+                                the command exits with a nonzero status.
+                            </p>
+                            <p>
+                                Due to the security risk enabling #exec causes,
+                                by default exec is disabled, however you can
+                                enable it by changing the
+                                <code>allow_exec</code> flag in your context. If
+                                the input tries to <code>#exec</code> when exec
+                                is disabled, it will cause an error.
+                            </p>
+                            <p>
+                                The in command is similar to exec, but all text
+                                until the endin command is passed into the
+                                program’s standard input. For example,
+                            </p>
+                            <div class="example-wrap">
+                                <pre
+                                    class="language-text"
+                                ><code>#in sed &#39;s/tree/three/g&#39;
 One, two, tree.
 #endin
-</code></pre></div>
-<p>Would output <code>One, two, three.</code>. Note that you shouldn’t do this, just using <code>#define tree three</code> would be much faster and less platform-dependent. You can also place more commands in
-the in block, including other in blocks. For a useful example:</p>
-<div class="example-wrap"><pre class="language-text"><code>&lt;style&gt;
+</code></pre>
+                            </div>
+                            <p>
+                                Would output <code>One, two, three.</code>. Note
+                                that you shouldn’t do this, just using
+                                <code>#define tree three</code> would be much
+                                faster and less platform-dependent. You can also
+                                place more commands in the in block, including
+                                other in blocks. For a useful example:
+                            </p>
+                            <div class="example-wrap">
+                                <pre class="language-text"><code>&lt;style&gt;
 #in sassc -s
 # include styles.scss
 #endin
 &lt;/style&gt;
-</code></pre></div>
-<p>This compiles your scss file into css using Sassc and includes in the HTML every time you
-generate your webpage with gpp.</p>
-<h3 id="literal-hashes"><a href="#literal-hashes">Literal hashes</a></h3>
-<p>In order to insert literal hash symbols at the start of the line, simply use two hashes.
-<code>##some text</code> will convert into <code>#some text</code>, while <code>#some text</code> will throw an error as <code>some</code>
-is not a command.</p>
-<h2 id="examples"><a href="#examples">Examples</a></h2>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="comment">// Create a context for preprocessing
+</code></pre>
+                            </div>
+                            <p>
+                                This compiles your scss file into css using
+                                Sassc and includes in the HTML every time you
+                                generate your webpage with gpp.
+                            </p>
+                            <h3 id="literal-hashes">
+                                <a href="#literal-hashes">Literal hashes</a>
+                            </h3>
+                            <p>
+                                In order to insert literal hash symbols at the
+                                start of the line, simply use two hashes.
+                                <code>##some text</code> will convert into
+                                <code>#some text</code>, while
+                                <code>#some text</code> will throw an error as
+                                <code>some</code> is not a command.
+                            </p>
+                            <h2 id="examples">
+                                <a href="#examples">Examples</a>
+                            </h2>
+                            <div class="example-wrap">
+                                <pre
+                                    class="rust rust-example-rendered"
+                                ><code><span class="comment">// Create a context for preprocessing
 </span><span class="kw">let </span><span class="kw-2">mut </span>context = gpp::Context::new();
 
 <span class="comment">// Add a macro to that context manually (context.macros is a HashMap)
@@ -91,6 +392,319 @@ Line Four
 Line Five&quot;</span>, <span class="kw-2">&amp;mut </span>context).unwrap(), <span class="string">&quot;
 Row Four
 Line Five
-&quot;</span>);</code></pre></div>
-</div></details><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Command.html" title="rcc::preprocessor::gpp::Command struct">Command</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Context.html" title="rcc::preprocessor::gpp::Context struct">Context</a></div><div class="item-right docblock-short">Context of the current processing.</div></div></div><h2 id="enums" class="small-section-header"><a href="#enums">Enums</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.Error.html" title="rcc::preprocessor::gpp::Error enum">Error</a></div><div class="item-right docblock-short">Error enum for parsing errors.</div></div><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.Line.html" title="rcc::preprocessor::gpp::Line enum">Line</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div></div><h2 id="constants" class="small-section-header"><a href="#constants">Constants</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.COMMANDS.html" title="rcc::preprocessor::gpp::COMMANDS constant">COMMANDS</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.is_word_char.html" title="rcc::preprocessor::gpp::is_word_char fn">is_word_char</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.process_buf.html" title="rcc::preprocessor::gpp::process_buf fn">process_buf</a></div><div class="item-right docblock-short">Process a generic BufRead.</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.process_define.html" title="rcc::preprocessor::gpp::process_define fn">process_define</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.process_elifdef.html" title="rcc::preprocessor::gpp::process_elifdef fn">process_elifdef</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.process_else.html" title="rcc::preprocessor::gpp::process_else fn">process_else</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.process_endif.html" title="rcc::preprocessor::gpp::process_endif fn">process_endif</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.process_endin.html" title="rcc::preprocessor::gpp::process_endin fn">process_endin</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.process_exec.html" title="rcc::preprocessor::gpp::process_exec fn">process_exec</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.process_file.html" title="rcc::preprocessor::gpp::process_file fn">process_file</a></div><div class="item-right docblock-short">Process a file.</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.process_ifdef.html" title="rcc::preprocessor::gpp::process_ifdef fn">process_ifdef</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.process_in.html" title="rcc::preprocessor::gpp::process_in fn">process_in</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.process_include.html" title="rcc::preprocessor::gpp::process_include fn">process_include</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.process_line.html" title="rcc::preprocessor::gpp::process_line fn">process_line</a></div><div class="item-right docblock-short">Process a string line of input.</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.process_str.html" title="rcc::preprocessor::gpp::process_str fn">process_str</a></div><div class="item-right docblock-short">Process a multi-line string of text.</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.process_undef.html" title="rcc::preprocessor::gpp::process_undef fn">process_undef</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.replace_next_macro.html" title="rcc::preprocessor::gpp::replace_next_macro fn">replace_next_macro</a><span title="Restricted Visibility">&nbsp;🔒</span> </div><div class="item-right docblock-short">Finds the next macro name word in the line, and replaces it with its value, returning None when
-it can’t find a macro.</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.shell.html" title="rcc::preprocessor::gpp::shell fn">shell</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="rcc" data-themes="" data-resource-suffix="" data-rustdoc-version="1.68.0-nightly (9e75dddf6 2023-01-15)" data-search-js="search-181581080540673f.js" data-settings-js="settings-a2afdefbb7c817f1.js" data-settings-css="settings-84508a86fe805444.css" ></div></body></html>
+&quot;</span>);</code></pre>
+                            </div>
+                        </div>
+                    </details>
+                    <h2 id="structs" class="small-section-header">
+                        <a href="#structs">Structs</a>
+                    </h2>
+                    <div class="item-table">
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="struct"
+                                    href="struct.Command.html"
+                                    title="rcc::preprocessor::gpp::Command struct"
+                                    >Command</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="struct"
+                                    href="struct.Context.html"
+                                    title="rcc::preprocessor::gpp::Context struct"
+                                    >Context</a
+                                >
+                            </div>
+                            <div class="item-right docblock-short">
+                                Context of the current processing.
+                            </div>
+                        </div>
+                    </div>
+                    <h2 id="enums" class="small-section-header">
+                        <a href="#enums">Enums</a>
+                    </h2>
+                    <div class="item-table">
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="enum"
+                                    href="enum.Error.html"
+                                    title="rcc::preprocessor::gpp::Error enum"
+                                    >Error</a
+                                >
+                            </div>
+                            <div class="item-right docblock-short">
+                                Error enum for parsing errors.
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="enum"
+                                    href="enum.Line.html"
+                                    title="rcc::preprocessor::gpp::Line enum"
+                                    >Line</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <h2 id="constants" class="small-section-header">
+                        <a href="#constants">Constants</a>
+                    </h2>
+                    <div class="item-table">
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="constant"
+                                    href="constant.COMMANDS.html"
+                                    title="rcc::preprocessor::gpp::COMMANDS constant"
+                                    >COMMANDS</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <h2 id="functions" class="small-section-header">
+                        <a href="#functions">Functions</a>
+                    </h2>
+                    <div class="item-table">
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.is_word_char.html"
+                                    title="rcc::preprocessor::gpp::is_word_char fn"
+                                    >is_word_char</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.process_buf.html"
+                                    title="rcc::preprocessor::gpp::process_buf fn"
+                                    >process_buf</a
+                                >
+                            </div>
+                            <div class="item-right docblock-short">
+                                Process a generic BufRead.
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.process_define.html"
+                                    title="rcc::preprocessor::gpp::process_define fn"
+                                    >process_define</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.process_elifdef.html"
+                                    title="rcc::preprocessor::gpp::process_elifdef fn"
+                                    >process_elifdef</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.process_else.html"
+                                    title="rcc::preprocessor::gpp::process_else fn"
+                                    >process_else</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.process_endif.html"
+                                    title="rcc::preprocessor::gpp::process_endif fn"
+                                    >process_endif</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.process_endin.html"
+                                    title="rcc::preprocessor::gpp::process_endin fn"
+                                    >process_endin</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.process_exec.html"
+                                    title="rcc::preprocessor::gpp::process_exec fn"
+                                    >process_exec</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.process_file.html"
+                                    title="rcc::preprocessor::gpp::process_file fn"
+                                    >process_file</a
+                                >
+                            </div>
+                            <div class="item-right docblock-short">
+                                Process a file.
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.process_ifdef.html"
+                                    title="rcc::preprocessor::gpp::process_ifdef fn"
+                                    >process_ifdef</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.process_in.html"
+                                    title="rcc::preprocessor::gpp::process_in fn"
+                                    >process_in</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.process_include.html"
+                                    title="rcc::preprocessor::gpp::process_include fn"
+                                    >process_include</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.process_line.html"
+                                    title="rcc::preprocessor::gpp::process_line fn"
+                                    >process_line</a
+                                >
+                            </div>
+                            <div class="item-right docblock-short">
+                                Process a string line of input.
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.process_str.html"
+                                    title="rcc::preprocessor::gpp::process_str fn"
+                                    >process_str</a
+                                >
+                            </div>
+                            <div class="item-right docblock-short">
+                                Process a multi-line string of text.
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.process_undef.html"
+                                    title="rcc::preprocessor::gpp::process_undef fn"
+                                    >process_undef</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.replace_next_macro.html"
+                                    title="rcc::preprocessor::gpp::replace_next_macro fn"
+                                    >replace_next_macro</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                            <div class="item-right docblock-short">
+                                Finds the next macro name word in the line, and
+                                replaces it with its value, returning None when
+                                it can’t find a macro.
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-left module-item">
+                                <a
+                                    class="fn"
+                                    href="fn.shell.html"
+                                    title="rcc::preprocessor::gpp::shell fn"
+                                    >shell</a
+                                ><span title="Restricted Visibility"
+                                    >&nbsp;🔒</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+        <div
+            id="rustdoc-vars"
+            data-root-path="../../../"
+            data-static-root-path="../../../static.files/"
+            data-current-crate="rcc"
+            data-themes=""
+            data-resource-suffix=""
+            data-rustdoc-version="1.68.0-nightly (9e75dddf6 2023-01-15)"
+            data-search-js="search-181581080540673f.js"
+            data-settings-js="settings-a2afdefbb7c817f1.js"
+            data-settings-css="settings-84508a86fe805444.css"
+        ></div>
+    </body>
+</html>

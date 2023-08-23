@@ -14,84 +14,84 @@ macro_rules! format_to {
 
 #[derive(Debug, Display)]
 pub enum TreeKind {
-  TranslationUnit,
-  ExpressionStatement,
-  IterationStatement,
-  InitializerList,
-  JumpStatement,
-  UnaryOperator,
-  ParameterList,
-  ParameterDeclaration,
-  Initializer,
-  StructDeclarator,
-  EnumSpecifier,
-  Enumerator,
-  Expression,
-  ConditionalExpression,
-  EnumeratorList,
-  StructOrUnionSpecifier,
-  PrimaryExpression,
-  StructDeclaratorList,
-  StructDeclaration,
-  StructDeclarationList,
-  ArgumentExpressionList,
-  TypeName,
-  SpecifierQualifierList,
-  DirectDeclarator,
-  ErrorTree,
-  CompoundStatement,
-  LogicalAndExpression,
-  ExternDecl,
-  File,
-  PostfixExpression,
-  InclusiveOrExpression,
-  ExclusiveOrExpression,
-  AndExpression,
-  EqualityExpression,
-  RelationalExpression,
-  ShiftExpression,
-  AdditiveExpression,
-  MultiplicativeExpression,
-  CastExpression,
-  UnaryExpression,
-  IdentifierList,
-  StatementList,
-  DirectAbstractDeclarator,
-  Fn,
-  TypeExpr,
-  ParamList,
-  LogicalOrExpression,
-  Pointer,
-  Declaration,
-  DeclarationList,
-  InitDeclaratorList,
-  TypeQualifierList,
-  InitDeclarator,
-  Declarator,
-  TypeSpecifier,
-  TypeQualifier,
-  Param,
-  Block,
-  StmtLet,
-  StorageClassSpecifier,
-  StmtReturn,
-  StmtExpr,
-  ExprLiteral,
-  ExprName,
-  ExprParen,
-  ExprBinary,
-  ExprCall,
-  ArgList,
-  Arg,
-  DeclarationSpecifiers,
-  FunctionDef,
-  Statement,
-  LabeledStatement,
-  SelectionStatement,
-  AssignmentExpression,
-  ConstantExpression,
-  FunctionSpecifier,
-  AlignmentSpecifier,
+    TranslationUnit,
+    ExpressionStatement,
+    IterationStatement,
+    InitializerList,
+    JumpStatement,
+    UnaryOperator,
+    ParameterList,
+    ParameterDeclaration,
+    Initializer,
+    StructDeclarator,
+    EnumSpecifier,
+    Enumerator,
+    Expression,
+    ConditionalExpression,
+    EnumeratorList,
+    StructOrUnionSpecifier,
+    PrimaryExpression,
+    StructDeclaratorList,
+    StructDeclaration,
+    StructDeclarationList,
+    ArgumentExpressionList,
+    TypeName,
+    SpecifierQualifierList,
+    DirectDeclarator,
+    ErrorTree,
+    CompoundStatement,
+    LogicalAndExpression,
+    ExternDecl,
+    File,
+    PostfixExpression,
+    InclusiveOrExpression,
+    ExclusiveOrExpression,
+    AndExpression,
+    EqualityExpression,
+    RelationalExpression,
+    ShiftExpression,
+    AdditiveExpression,
+    MultiplicativeExpression,
+    CastExpression,
+    UnaryExpression,
+    IdentifierList,
+    StatementList,
+    DirectAbstractDeclarator,
+    Fn,
+    TypeExpr,
+    ParamList,
+    LogicalOrExpression,
+    Pointer,
+    Declaration,
+    DeclarationList,
+    InitDeclaratorList,
+    TypeQualifierList,
+    InitDeclarator,
+    Declarator,
+    TypeSpecifier,
+    TypeQualifier,
+    Param,
+    Block,
+    StmtLet,
+    StorageClassSpecifier,
+    StmtReturn,
+    StmtExpr,
+    ExprLiteral,
+    ExprName,
+    ExprParen,
+    ExprBinary,
+    ExprCall,
+    ArgList,
+    Arg,
+    DeclarationSpecifiers,
+    FunctionDef,
+    Statement,
+    LabeledStatement,
+    SelectionStatement,
+    AssignmentExpression,
+    ConstantExpression,
+    FunctionSpecifier,
+    AlignmentSpecifier,
 }
 
 // impl Display for TreeKind {
@@ -167,36 +167,40 @@ pub enum TreeKind {
 
 #[derive(Debug)]
 pub struct Tree {
-  pub(crate) kind: TreeKind,
-  pub(crate) children: Vec<Child>,
+    pub(crate) kind: TreeKind,
+    pub(crate) children: Vec<Child>,
 }
 
 #[derive(Debug)]
 pub enum Child {
-  Token(Token),
-  Tree(Tree),
+    Token(Token),
+    Tree(Tree),
 }
 
 impl Tree {
-  pub fn print(&self, buf: &mut String, level: usize) {
-    let indent = "  ".repeat(level);
-    format_to!(buf, "{indent}{:?}\n", self.kind);
-    for child in &self.children {
-      match child {
-        Child::Token(token) => {
-          format_to!(buf, "{indent}  '{}'\n", token.lexeme)
+    pub fn print(&self, buf: &mut String, level: usize) {
+        let indent = "  ".repeat(level);
+        format_to!(buf, "{indent}{:?}\n", self.kind);
+        for child in &self.children {
+            match child {
+                Child::Token(token) => {
+                    format_to!(
+                        buf,
+                        "{indent}  '{}'\n",
+                        token.lexeme
+                    )
+                }
+                Child::Tree(tree) => tree.print(buf, level + 1),
+            }
         }
-        Child::Tree(tree) => tree.print(buf, level + 1),
-      }
+        assert!(buf.ends_with('\n'));
     }
-    assert!(buf.ends_with('\n'));
-  }
 }
 
 impl Display for Tree {
-  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-    let mut buf = String::new();
-    self.print(&mut buf, 0);
-    write!(f, "{buf}")
-  }
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut buf = String::new();
+        self.print(&mut buf, 0);
+        write!(f, "{buf}")
+    }
 }

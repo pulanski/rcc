@@ -1,12 +1,12 @@
 {
-    "buck.projectConfig": {
-        "projectPath": "/Users/jkersey/Desktop/dev/repos/personal/private/misc/resilient_ll/prelude",
-        "flavor": [],
-        "target": "",
-        "platform": "linux-x86_64"
-    },
-    "files.associations": {
-        "*.dockerfile.*": "dockerfile",
-        "bitset": "c"
-    }
+  "buck.projectConfig": {
+    "projectPath": "/Users/jkersey/Desktop/dev/repos/personal/private/misc/resilient_ll/prelude",
+    "flavor": [],
+    "target": "",
+    "platform": "linux-x86_64"
+  },
+  "files.associations": {
+    "*.dockerfile.*": "dockerfile",
+    "bitset": "c"
+  }
 }
