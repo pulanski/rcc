@@ -12,13 +12,13 @@ pub enum SyntaxKind {
     TOMBSTONE,
     #[doc(hidden)]
     EOF,
-    #[doc = "Literals (e.g. IDENTIFIER, INT, FLOAT, STRING, BYTES)"]
+    ///Literals (e.g. IDENTIFIER, INT, FLOAT, STRING, BYTES)
     IDENTIFIER,
     INT,
     FLOAT,
     STRING,
     BYTES,
-    #[doc = "Tokens (e.g. WHITESPACE, COMMENT, NEWLINE)"]
+    ///Tokens (e.g. WHITESPACE, COMMENT, NEWLINE)
     WHITESPACE,
     COMMENT,
     NEWLINE,
@@ -26,7 +26,7 @@ pub enum SyntaxKind {
     OUTDENT,
     UNKNOWN,
     CONSTANT,
-    #[doc = "Keywords (e.g. BREAK, IN, LET, LOOP, etc.)"]
+    ///Keywords (e.g. BREAK, IN, LET, LOOP, etc.)
     AND_KW,
     ELLIPSIS,
     AUTO_KW,
@@ -70,7 +70,7 @@ pub enum SyntaxKind {
     RETURN_KW,
     VOLATILE_KW,
     WHILE_KW,
-    #[doc = "Punctuation (e.g. DOT, COMMA, SEMICOLON, etc.)"]
+    ///Punctuation (e.g. DOT, COMMA, SEMICOLON, etc.)
     PLUS,
     MINUS,
     STAR,
@@ -119,7 +119,7 @@ pub enum SyntaxKind {
     PTR_OP,
     QUESTION,
     DSLASHEQ,
-    #[doc = "Nodes (e.g. FILE, MODULE, FUNCTION, etc.)"]
+    ///Nodes (e.g. FILE, MODULE, FUNCTION, etc.)
     FILE,
     STATEMENT,
     DEF_STMT,
@@ -176,6 +176,9 @@ pub enum SyntaxKind {
     NORETURN_KW,
     STATIC_ASSERT_KW,
     THREAD_LOCAL_KW,
+    INTEGER_CONSTANT,
+    FLOATING_CONSTANT,
+    FUNC_NAME_KW,
 }
 use self::SyntaxKind::*;
 impl SyntaxKind {

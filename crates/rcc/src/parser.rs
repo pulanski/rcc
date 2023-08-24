@@ -1,8 +1,16 @@
 use std::cell::Cell;
 
 use crate::{
-    ast::{Child, Tree, TreeKind},
-    lexer::{Token, TokenKind, TokenStream},
+    ast::{
+        Child,
+        Tree,
+        TreeKind,
+    },
+    lexer::{
+        Token,
+        TokenKind,
+        TokenStream,
+    },
     token_set::TokenSet,
 };
 use owo_colors::OwoColorize;
@@ -74,10 +82,10 @@ struct MarkClosed {
 }
 
 pub struct Parser {
-    tokens: TokenStream,
-    pos: usize,
-    fuel: Cell<u32>,
-    events: Vec<Event>,
+    tokens:     TokenStream,
+    pos:        usize,
+    fuel:       Cell<u32>,
+    events:     Vec<Event>,
     call_stack: Vec<ParserCall>,
 }
 
@@ -105,7 +113,8 @@ impl Parser {
 
         // Prints the node to the console
         // TODO: Make this a debug log
-        // e.g. [PARSER] (TYPEDEF_KW, 'typdef', 0..7) - Current Call Stack (<node> -> <node> -> <node>)
+        // e.g. [PARSER] (TYPEDEF_KW, 'typdef', 0..7) - Current Call Stack (<node> ->
+        // <node> -> <node>)
 
         let call_stack_nodes = self
             .call_stack
@@ -239,6 +248,27 @@ impl Parser {
             TokenKind::STRUCT_KW,
             TokenKind::UNION_KW,
             TokenKind::ENUM_KW,
+        ])
+    }
+
+    fn at_constant(&self) -> bool {
+        self.at_any(&[
+            TokenKind::INTEGER_CONSTANT,
+            TokenKind::FLOATING_CONSTANT,
+            TokenKind::IDENTIFIER,
+        ])
+    }
+
+    fn at_string(&self) -> bool {
+        self.at_any(&[TokenKind::STRING, TokenKind::FUNC_NAME_KW])
+    }
+
+    fn at_type_qualifier(&self) -> bool {
+        self.at_any(&[
+            TokenKind::CONST_KW,
+            TokenKind::RESTRICT_KW,
+            TokenKind::VOLATILE_KW,
+            TokenKind::ATOMIC_KW,
         ])
     }
 
@@ -431,6 +461,64 @@ impl Parser {
         );
     }
 
+    fn at_static_assert_declaration(&self) -> bool {
+        self.at(TokenKind::STATIC_ASSERT_KW)
+    }
+
+    fn at_declaration_specifier(&self) -> bool {
+        self.at_storage_class_specifier() ||
+            self.at_type_specifier() ||
+            self.at_type_qualifier() ||
+            self.at_function_specifier() ||
+            self.at_alignment_specifier()
+    }
+
+    fn at_alignment_specifier(&self) -> bool {
+        self.at(TokenKind::ALIGNAS_KW)
+    }
+
+    fn at_type_specifier(&self) -> bool {
+        self.at_any(&[
+            TokenKind::VOID_KW,
+            TokenKind::CHAR_KW,
+            TokenKind::SHORT_KW,
+            TokenKind::INT_KW,
+            TokenKind::LONG_KW,
+            TokenKind::FLOAT_KW,
+            TokenKind::DOUBLE_KW,
+            TokenKind::SIGNED_KW,
+            TokenKind::UNSIGNED_KW,
+            TokenKind::BOOL_KW,
+            TokenKind::COMPLEX_KW,
+            TokenKind::IMAGINARY_KW,
+            TokenKind::ENUM_KW,
+            TokenKind::ATOMIC_KW,
+            TokenKind::STRUCT_KW,
+            TokenKind::UNION_KW,
+            // TODO: figure out what these are and how to handle them
+            // TokenKind::TYPEDEF_NAME,
+        ])
+    }
+
+    fn at_generic_selection(&self) -> bool {
+        self.at(TokenKind::GENERIC_KW)
+    }
+
+    fn at_storage_class_specifier(&self) -> bool {
+        self.at_any(&[
+            TokenKind::TYPEDEF_KW,
+            TokenKind::EXTERN_KW,
+            TokenKind::STATIC_KW,
+            TokenKind::THREAD_LOCAL_KW,
+            TokenKind::AUTO_KW,
+            TokenKind::REGISTER_KW,
+        ])
+    }
+
+    fn at_function_specifier(&self) -> bool {
+        self.at_any(&[TokenKind::INLINE_KW, TokenKind::NORETURN_KW])
+    }
+
     fn add_leaf(&mut self, kind: TreeKind) {
         let m = self.open();
         self.advance();
@@ -483,10 +571,12 @@ impl Parser {
     fn at_primary_expression(&self) -> bool {
         self.at_any(&[
             TokenKind::IDENTIFIER,
-            TokenKind::CONSTANT,
+            // TokenKind::CONSTANT,
             TokenKind::STRING,
             TokenKind::LPAREN,
         ])
+        // TODO: update to 2011 standard
+        // || self.at_constant()
     }
 
     fn at_unary_operator(&self) -> bool {
@@ -595,30 +685,33 @@ fn extern_decl(p: &mut Parser) {
 // function_definition
 // 	: declaration_specifiers declarator declaration_list compound_statement
 // 	| declaration_specifiers declarator compound_statement
-// 	| declarator declaration_list compound_statement
-// 	| declarator compound_statement
 // 	;
 //
-// FunctionDef = DeclarationSpecifiers Declarator (DeclarationList)? CompoundStatement
-//            | Declarator (DeclarationList)? CompoundStatement
-fn function_def(p: &mut Parser) {
+// FunctionDef = DeclarationSpecifiers Declarator (DeclarationList)?
+// CompoundStatement
+// | DeclarationSpecifiers Declarator CompoundStatement
+pub(crate) fn function_def(p: &mut Parser) {
     p.enter(TreeKind::FunctionDef);
     let m = p.open();
 
-    if p.at_any(FN_DEF_DECLARATION_SPECIFIERS_FIRST) {
-        declaration_specifiers(p);
-    }
+    // Parse declaration specifiers
+    declaration_specifiers(p);
+
+    println!("parsing declarator in function_def {:?}", p.current_token());
 
     // Parse declarator
     declarator(p);
 
+    println!("finished parsing declarator in function_def {:?}", p.current_token());
+
     // Check if there's a declaration list
-    if p.at(TokenKind::LPAREN) {
+    if p.at_any(DECLARATION_LIST_FIRST) {
         // Parse the declaration list
         declaration_list(p);
     }
 
-    // TODO: complete this
+    // Parse the compound statement
+    compound_statement(p);
 
     p.close(m, TreeKind::FunctionDef);
     p.trace_exit();
@@ -716,8 +809,8 @@ pub(crate) fn statement(p: &mut Parser) {
 
     let m = p.open();
 
-    if p.at_any(&[TokenKind::CASE_KW, TokenKind::DEFAULT_KW])
-        || (p.at(TokenKind::IDENTIFIER) && p.nth(1) == TokenKind::COLON)
+    if p.at_any(&[TokenKind::CASE_KW, TokenKind::DEFAULT_KW]) ||
+        (p.at(TokenKind::IDENTIFIER) && p.nth(1) == TokenKind::COLON)
     {
         labeled_statement(p);
     } else if p.at(TokenKind::LBRACE) {
@@ -894,7 +987,8 @@ pub(crate) fn selection_statement(p: &mut Parser) {
 /// * `p` - A mutable reference to the parser.
 ///
 /// # Notes
-/// This function assumes that the parser is positioned at the start of an iteration statement.
+/// This function assumes that the parser is positioned at the start of an
+/// iteration statement.
 ///
 /// [1]: https://port70.net/~nsz/c/c11/n1570.html#6.8.5
 pub(crate) fn iteration_statement(p: &mut Parser) {
@@ -951,59 +1045,23 @@ pub(crate) fn iteration_statement(p: &mut Parser) {
     p.trace_exit();
 }
 
-// if p.at(TokenKind::WHILE_KW) {
-//   // Parse a while loop (e.g. "while (condition) statement"
-//   // WHILE '(' expression ')' statement
+// atomic_type_specifier
+// : ATOMIC_KW '(' type_name ')'
+// ;
+//
+// AtomicTypeSpecifier = ATOMIC_KW '(' TypeName ')'
+fn atomic_type_specifier(p: &mut Parser) {
+    p.enter(TreeKind::AtomicTypeSpecifier);
+    let m = p.open();
 
-//   p.advance();
-//   p.expect(TokenKind::LPAREN);
-//   expression(p);
-//   p.expect(TokenKind::RPAREN);
-//   statement(p);
-// } else if p.at(TokenKind::DO_KW) {
-//   // Parse a do...while loop (e.g. "do statement while (condition);"
-//   // DO statement WHILE '(' expression ')' ';'
+    p.expect(TokenKind::ATOMIC_KW);
+    p.expect(TokenKind::LPAREN);
+    type_name(p);
+    p.expect(TokenKind::RPAREN);
 
-//   p.advance();
-//   statement(p);
-//   p.expect(TokenKind::WHILE_KW);
-//   p.expect(TokenKind::LPAREN);
-//   expression(p);
-//   p.expect(TokenKind::RPAREN);
-//   p.expect(TokenKind::SEMICOLON); // Semicolon after "do...while" loop
-// } else if p.at(TokenKind::FOR_KW) {
-//   // Parse a for loop (e.g. "for (init; condition; increment) statement"
-
-//   p.advance();
-
-//   p.expect(TokenKind::LPAREN);
-
-//   // Parse the initialization statement
-//   if !p.at(TokenKind::SEMICOLON) {
-//     expression_statement(p);
-//   } else {
-//     p.advance();
-//   }
-
-//   // Parse the condition expression
-//   if !p.at(TokenKind::SEMICOLON) {
-//     expression(p);
-//   }
-
-//   p.expect(TokenKind::SEMICOLON);
-
-//   // Parse the increment expression
-//   if !p.at(TokenKind::RPAREN) {
-//     expression_statement(p);
-//   } else {
-//     p.advance();
-//   }
-
-//   p.expect(TokenKind::RPAREN);
-//   statement(p);
-// } else {
-//   p.advance_with_error("Expected WHILE_KW, DO_KW, or FOR_KW in iteration_statement");
-// }
+    p.close(m, TreeKind::AtomicTypeSpecifier);
+    p.trace_exit();
+}
 
 // jump_statement
 // : RETURN_KW expression? ';'
@@ -1044,33 +1102,64 @@ pub(crate) fn jump_statement(p: &mut Parser) {
 }
 
 // declaration
-// : declaration_specifiers init_declarator_list? ';'
-// ;
+// 	: declaration_specifiers ';'
+// 	| declaration_specifiers init_declarator_list ';'
+// 	| static_assert_declaration
+// 	;
 //
-// Declaration = DeclarationSpecifiers (InitDeclaratorList)? ';'
+// Declaration = DeclarationSpecifiers ';'
+// | DeclarationSpecifiers InitDeclaratorList ';'
+// | StaticAssertDeclaration
 pub(crate) fn declaration(p: &mut Parser) {
     p.enter(TreeKind::Declaration);
     let m = p.open();
 
     // println!("parsing declaration: {:?}", p.current_token());
-
-    declaration_specifiers(p);
-    if p.at(TokenKind::SEMICOLON) {
-        p.advance();
+    if p.at(TokenKind::STATIC_ASSERT_KW) {
+        static_assert_declaration(p);
     } else {
-        init_declarator_list(p);
-        p.expect(TokenKind::SEMICOLON);
+        declaration_specifiers(p);
+        if p.at(TokenKind::SEMICOLON) {
+            p.advance();
+        } else {
+            init_declarator_list(p);
+            p.expect(TokenKind::SEMICOLON);
+        }
     }
 
     p.close(m, TreeKind::Declaration);
     p.trace_exit();
 }
 
-// declarator
-// : pointer? direct_declarator
-// ;
+// static_assert_declaration
+// 	: STATIC_ASSERT '(' constant_expression ',' STRING_LITERAL ')' ';'
+// 	;
 //
-// Declarator = (Pointer)? DirectDeclarator
+// StaticAssertDeclaration = STATIC_ASSERT '(' ConstantExpression ','
+// STRING_LITERAL ')' ';'
+fn static_assert_declaration(p: &mut Parser) {
+    p.enter(TreeKind::StaticAssertDeclaration);
+    let m = p.open();
+
+    p.expect(TokenKind::STATIC_ASSERT_KW);
+    p.expect(TokenKind::LPAREN);
+    constant_expression(p);
+    p.expect(TokenKind::COMMA);
+    p.expect(TokenKind::STRING);
+    p.expect(TokenKind::RPAREN);
+    p.expect(TokenKind::SEMICOLON);
+
+    p.close(m, TreeKind::StaticAssertDeclaration);
+    p.trace_exit();
+}
+
+/// ```yacc
+/// declarator
+/// : pointer? direct_declarator
+/// ;
+///
+/// Declarator = (Pointer)? DirectDeclarator
+/// ```
 fn declarator(p: &mut Parser) {
     p.enter(TreeKind::Declarator);
     let m = p.open();
@@ -1101,50 +1190,69 @@ const PARAMETER_TYPE_LIST_FIRST: &[TokenKind] = &[
 ];
 
 // direct_declarator
-// : IDENTIFIER
-// | '(' declarator ')'
-// | direct_declarator '[' constant_expression? ']'
-// | direct_declarator '(' parameter_type_list ')'
-// | direct_declarator '(' identifier_list? ')'
-// ;
+// 	: IDENTIFIER
+// 	| '(' declarator ')'
+// 	| direct_declarator '[' ']'
+// 	| direct_declarator '[' '*' ']'
+// 	| direct_declarator '[' STATIC type_qualifier_list assignment_expression ']'
+// 	| direct_declarator '[' STATIC assignment_expression ']'
+// 	| direct_declarator '[' type_qualifier_list '*' ']'
+// 	| direct_declarator '[' type_qualifier_list STATIC assignment_expression ']'
+// 	| direct_declarator '[' type_qualifier_list assignment_expression ']'
+// 	| direct_declarator '[' type_qualifier_list ']'
+// 	| direct_declarator '[' assignment_expression ']'
+// 	| direct_declarator '(' parameter_type_list ')'
+// 	| direct_declarator '(' ')'
+// 	| direct_declarator '(' identifier_list ')'
+// 	;
 //
 // DirectDeclarator = IDENTIFIER
 // | '(' Declarator ')'
-// | DirectDeclarator '[' (ConstantExpression)? ']'
+// | DirectDeclarator '[' '*'? ']'
+// | DirectDeclarator '[' STATIC TypeQualifierList AssignmentExpression ']'
+// | DirectDeclarator '[' STATIC AssignmentExpression ']'
+// | DirectDeclarator '[' TypeQualifierList '*'? ']'
+// | DirectDeclarator '[' TypeQualifierList STATIC? AssignmentExpression ']'
+// | DirectDeclarator '[' AssignmentExpression ']'
 // | DirectDeclarator '(' ParameterTypeList ')'
-// | DirectDeclarator '(' (IdentifierList)? ')'
-fn direct_declarator(p: &mut Parser) {
+// | DirectDeclarator '(' ')'
+// | DirectDeclarator '(' IdentifierList ')'
+pub(crate) fn direct_declarator(p: &mut Parser) {
+    // TODO: need to come back to this and update potentially
     p.enter(TreeKind::DirectDeclarator);
     let m = p.open();
 
-    match p.current() {
-        TokenKind::IDENTIFIER => {
-            p.advance(); // Consume the IDENTIFIER token
-        }
-        TokenKind::LPAREN => {
-            p.advance(); // Consume the LPAREN token
-            declarator(p);
-            p.expect(TokenKind::RPAREN); // Consume the RPAREN token
-        }
-        _ => {
-            // Handle other cases or report an error
-            // For example, you might want to report an error here
-            p.advance_with_error("Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator");
-        }
-    }
+    println!("parsing direct_declarator: {:?}", p.current_token());
 
-    while p.at(TokenKind::LBRACKET) || p.at(TokenKind::LPAREN) {
-        if p.at(TokenKind::LBRACKET) {
-            p.advance(); // Consume the LBRACKET token
+    // Try to match the various production rules for direct_declarator
+    if p.at(TokenKind::IDENTIFIER) {
+        p.advance(); // Consume IDENTIFIER
 
-            // Check if there's a constant_expression
-            if p.at_constant_expression() {
-                constant_expression(p); // Parse the constant_expression
+        // Check if it's a function call
+        if p.at(TokenKind::LPAREN) {
+            p.advance(); // Consume '('
+
+            // Check if it's a parameter_type_list or identifier_list
+            if p.at_any(PARAMETER_TYPE_LIST_FIRST) {
+                parameter_type_list(p);
+            } else if p.at(TokenKind::IDENTIFIER) {
+                identifier_list(p);
             }
 
-            p.expect(TokenKind::RBRACKET); // Consume the RBRACKET token
-        } else if p.at(TokenKind::LPAREN) {
-            p.advance(); // Consume the LPAREN token
+            p.expect(TokenKind::RPAREN); // Consume ')'
+        }
+    } else if p.at(TokenKind::LPAREN) {
+        p.advance(); // Consume '('
+        declarator(p);
+        p.expect(TokenKind::RPAREN);
+    } else {
+        // Recursively parse the direct_declarator until we reach the base case
+        direct_declarator(p);
+
+        // p.expect(TokenKind::LBRACKET);
+
+        if p.at(TokenKind::LPAREN) {
+            p.advance(); // Consume '('
 
             if p.at_any(PARAMETER_TYPE_LIST_FIRST) {
                 parameter_type_list(p);
@@ -1152,42 +1260,74 @@ fn direct_declarator(p: &mut Parser) {
                 identifier_list(p);
             }
 
-            p.expect(TokenKind::RPAREN); // Consume the RPAREN token
+            p.expect(TokenKind::RPAREN); // Consume ')'
+        } else if p.at(TokenKind::LBRACKET) {
+            if p.at(TokenKind::STAR) {
+                p.advance(); // Consume '*'
+                p.expect(TokenKind::RBRACKET);
+            } else if p.at(TokenKind::STATIC_KW) {
+                p.advance(); // Consume STATIC
+
+                if p.at_type_qualifier() {
+                    type_qualifier_list(p);
+                } else if p.at_assignment_operator() {
+                    assignment_expression(p);
+                } else {
+                    // TODO: error handling
+                    p.advance_with_error(&format!(
+                        "Expected type_qualifier_list or assignment_expression in \
+                         direct_declarator, but instead found `{:?}`",
+                        p.current_token().lexeme()
+                    ));
+                }
+            }
+
+            // if p.at(TokenKind::STATIC_KW) {
+            //     p.advance(); // Consume STATIC
+            // }
+        } else {
+            // TODO: error handling
+            p.advance_with_error(&format!(
+                "Expected LPAREN or LBRACKET in direct_declarator, but instead found {:?}",
+                p.current_token()
+            ));
         }
+
+        p.expect(TokenKind::RBRACKET);
     }
 
     p.close(m, TreeKind::DirectDeclarator);
     p.trace_exit();
-
-    // p.trace_enter("direct_declarator");
-    // let m = p.open();
-
-    // if p.at(TokenKind::IDENTIFIER) {
-    //   p.advance(); // Consume the IDENTIFIER token
-    // } else if p.at(TokenKind::LPAREN) {
-    //   p.advance(); // Consume the LPAREN token
-
-    //   // Check if it's a parameter_type_list or identifier_list
-    //   if p.at_any(PARAMETER_TYPE_LIST_FIRST) {
-    //     parameter_type_list(p);
-    //   } else {
-    //     identifier_list(p);
-    //   }
-
-    //   p.expect(TokenKind::RPAREN); // Consume the RPAREN token
-    // } else if p.at(TokenKind::LBRACKET) {
-    //   p.advance(); // Consume the LBRACKET token
-    //   constant_expression(p); // Parse the constant_expression if present
-    //   p.expect(TokenKind::RBRACKET); // Consume the RBRACKET token
-    // } else {
-    //   // Handle other cases or report an error
-    //   // For example, you might want to report an error here
-    //   p.advance_with_error("Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator");
-    // }
-
-    // p.close(m, TreeKind::DirectDeclarator);
-    // p.trace_exit();
 }
+
+// p.trace_enter("direct_declarator");
+// let m = p.open();
+
+// if p.at(TokenKind::IDENTIFIER) {
+//   p.advance(); // Consume the IDENTIFIER token
+// } else if p.at(TokenKind::LPAREN) {
+//   p.advance(); // Consume the LPAREN token
+
+//   // Check if it's a parameter_type_list or identifier_list
+//   if p.at_any(PARAMETER_TYPE_LIST_FIRST) {
+//     parameter_type_list(p);
+//   } else {
+//     identifier_list(p);
+//   }
+
+//   p.expect(TokenKind::RPAREN); // Consume the RPAREN token
+// } else if p.at(TokenKind::LBRACKET) {
+//   p.advance(); // Consume the LBRACKET token
+//   constant_expression(p); // Parse the constant_expression if present
+//   p.expect(TokenKind::RBRACKET); // Consume the RBRACKET token
+// } else {
+//   // Handle other cases or report an error
+//   // For example, you might want to report an error here
+//   p.advance_with_error("Expected IDENTIFIER, LPAREN, or LBRACKET in
+// direct_declarator"); }
+
+// p.close(m, TreeKind::DirectDeclarator);
+// p.trace_exit();
 
 // identifier_list
 // : IDENTIFIER
@@ -1687,18 +1827,14 @@ pub(crate) fn unary_expression(p: &mut Parser) {
 fn unary_operator(p: &mut Parser) {
     p.enter(TreeKind::UnaryOperator);
     let m = p.open();
-    if p.at(TokenKind::AMP)
-        || p.at(TokenKind::STAR)
-        || p.at(TokenKind::PLUS)
-        || p.at(TokenKind::MINUS)
-        || p.at(TokenKind::TILDE)
-        || p.at(TokenKind::BANG)
-    {
+    if p.at_unary_operator() {
         p.advance();
     } else {
         // TODO: error reporting
-        // p.error("unary operator expected");
-        p.advance_with_error("unary operator expected");
+        p.advance_with_error(&format!(
+            "unary operator expected (e.g. '&', '*', '+', '-', '~', '!'). Instead found {:?}",
+            p.current(),
+        ));
     }
 
     p.close(m, TreeKind::UnaryOperator);
@@ -1727,12 +1863,12 @@ fn unary_operator(p: &mut Parser) {
 fn postfix_expression(p: &mut Parser) {
     let m = p.open();
     primary_expression(p);
-    while p.at(TokenKind::LBRACKET)
-        || p.at(TokenKind::LPAREN)
-        || p.at(TokenKind::DOT)
-        || p.at(TokenKind::PTR_OP)
-        || p.at(TokenKind::INC_OP)
-        || p.at(TokenKind::DEC_OP)
+    while p.at(TokenKind::LBRACKET) ||
+        p.at(TokenKind::LPAREN) ||
+        p.at(TokenKind::DOT) ||
+        p.at(TokenKind::PTR_OP) ||
+        p.at(TokenKind::INC_OP) ||
+        p.at(TokenKind::DEC_OP)
     {
         if p.at(TokenKind::LBRACKET) {
             p.advance();
@@ -1774,39 +1910,156 @@ fn argument_expression_list(p: &mut Parser) {
 }
 
 // primary_expression
-// : IDENTIFIER
-// | CONSTANT
-// | STRING_LITERAL
-// | '(' expression ')'
-// ;
+// 	: IDENTIFIER
+// 	| constant
+// 	| string
+// 	| '(' expression ')'
+// 	| generic_selection
+// 	;
 //
 // PrimaryExpression = IDENTIFIER
-// | CONSTANT
-// | STRING_LITERAL
+// | Constant
+// | String
 // | '(' Expression ')'
+// | GenericSelection
 pub(crate) fn primary_expression(p: &mut Parser) {
     p.enter(TreeKind::PrimaryExpression);
     let m = p.open();
 
-    // println!(
-    //   "primary_expression: {:?} {:?}",
-    //   p.current_token().kind(),
-    //   p.current_token().lexeme()
-    // );
+    println!("primary_expression: {:?} {:?}", p.current_token().kind(), p.current_token().lexeme());
 
-    if p.at_any(&[TokenKind::IDENTIFIER, TokenKind::CONSTANT, TokenKind::STRING]) {
+    if p.at(TokenKind::IDENTIFIER) {
         p.advance();
+    } else if p.at_constant() {
+        constant(p);
+    } else if p.at_string() {
+        string(p);
     } else if p.at(TokenKind::LPAREN) {
         p.advance();
         expression(p);
         p.expect(TokenKind::RPAREN);
+    } else if p.at_generic_selection() {
+        generic_selection(p);
     } else {
         // TODO: error reporting
-        // p.error("primary expression expected");
-        p.advance_with_error("primary expression expected");
+        p.advance_with_error(&format!(
+            "primary expression expected (identifier, constant, string, or generic selection). \
+             Instead found {:?}",
+            p.current()
+        ));
     }
 
     p.close(m, TreeKind::PrimaryExpression);
+    p.trace_exit();
+}
+
+pub(crate) fn generic_selection(p: &mut Parser) {
+    p.enter(TreeKind::GenericSelection);
+    let m = p.open();
+
+    p.expect(TokenKind::GENERIC_KW);
+    p.expect(TokenKind::LPAREN);
+    assignment_expression(p);
+    p.expect(TokenKind::COMMA);
+    generic_assoc_list(p);
+    p.expect(TokenKind::RPAREN);
+
+    p.close(m, TreeKind::GenericSelection);
+    p.trace_exit();
+}
+
+pub(crate) fn generic_assoc_list(p: &mut Parser) {
+    p.enter(TreeKind::GenericAssocList);
+    let m = p.open();
+
+    generic_association(p);
+
+    while p.at(TokenKind::COMMA) {
+        p.advance();
+        generic_association(p);
+    }
+
+    p.close(m, TreeKind::GenericAssocList);
+    p.trace_exit();
+}
+
+// generic_association
+// 	: type_name ':' assignment_expression
+// 	| DEFAULT ':' assignment_expression
+// 	;
+//
+// GenericAssociation = TypeName ':' AssignmentExpression
+// | DEFAULT ':' AssignmentExpression
+pub(crate) fn generic_association(p: &mut Parser) {
+    p.enter(TreeKind::GenericAssociation);
+    let m = p.open();
+
+    if p.at(TokenKind::DEFAULT_KW) {
+        p.advance();
+        p.expect(TokenKind::COLON);
+        assignment_expression(p);
+    } else {
+        type_name(p);
+        p.expect(TokenKind::COLON);
+        assignment_expression(p);
+    }
+
+    p.close(m, TreeKind::GenericAssociation);
+    p.trace_exit();
+}
+
+// constant
+// : INTEGER_CONSTANT
+// | FLOATING_CONSTANT
+// | ENUMERATION_CONSTANT
+// ;
+//
+// Constant = INTEGER_CONSTANT
+// | FLOATING_CONSTANT
+// | ENUMERATION_CONSTANT
+pub(crate) fn constant(p: &mut Parser) {
+    p.enter(TreeKind::Constant);
+    let m = p.open();
+
+    if p.at(TokenKind::INTEGER_CONSTANT) ||
+        p.at(TokenKind::FLOATING_CONSTANT) ||
+        p.at(TokenKind::IDENTIFIER)
+    // ENUMERATION_CONSTANT
+    {
+        p.advance();
+    } else {
+        p.advance_with_error(
+            "Expected a constant (integer, floating, or enumeration)\nExamples of constants:\n  \
+             1\n  1.0\n  ONE",
+        );
+    }
+
+    p.close(m, TreeKind::Constant);
+    p.trace_exit();
+}
+
+// string
+// : STRING_LITERAL
+// | FUNC_NAME
+// ;
+//
+// String = STRING_LITERAL
+// | FUNC_NAME
+pub(crate) fn string(p: &mut Parser) {
+    p.enter(TreeKind::String);
+    let m = p.open();
+
+    if p.at(TokenKind::STRING) || p.at(TokenKind::FUNC_NAME_KW) {
+        p.advance();
+    } else {
+        p.advance_with_error(&format!(
+            "Expected a string or function name literal (e.g. \"hello\", __func__), but instead
+                found {:?}",
+            p.current()
+        ));
+    }
+
+    p.close(m, TreeKind::String);
     p.trace_exit();
 }
 
@@ -1816,11 +2069,17 @@ pub(crate) fn primary_expression(p: &mut Parser) {
 //
 // ParameterTypeList = ParameterList (',' ELLIPSIS)?
 fn parameter_type_list(p: &mut Parser) {
+    p.enter(TreeKind::ParameterTypeList);
+    let m = p.open();
+
     parameter_list(p);
     if p.at(TokenKind::COMMA) {
         p.advance();
         p.expect(TokenKind::ELLIPSIS);
     }
+
+    p.close(m, TreeKind::ParameterTypeList);
+    p.trace_exit();
 }
 
 // parameter_list
@@ -1850,106 +2109,188 @@ fn parameter_list(p: &mut Parser) {
 // ParameterDeclaration = DeclarationSpecifiers Declarator
 // | DeclarationSpecifiers (AbstractDeclarator)?
 fn parameter_declaration(p: &mut Parser) {
+    // Useful for reference:
+    //
+    // declarator
+    // 	: pointer direct_declarator
+    // 	| direct_declarator
+    // 	;
+
+    // abstract_declarator
+    // 	: pointer direct_abstract_declarator
+    // 	| pointer
+    // 	| direct_abstract_declarator
+    // 	;
+
     p.enter(TreeKind::ParameterDeclaration);
     let m = p.open();
 
     declaration_specifiers(p);
+
     if p.at(TokenKind::STAR) {
-        abstract_declarator(p);
+        // We have a pointer, so could either be one of three cases:
+        // 1. pointer direct_declarator
+        // 2. pointer abstract_declarator
+        // 3. pointer
+        // abstract_declarator(p);
+
+        // First, we need to check if we have a pointer or not.
+        pointer(p);
+
+        // Now, we need to check if we have a direct_declarator or
+        // abstract_declarator.
+        if p.at(TokenKind::LPAREN) {
+            // We have an abstract_declarator
+            direct_abstract_declarator(p);
+        } else {
+            // We have a direct_declarator
+            direct_declarator(p);
+        }
     } else {
-        declarator(p);
+        direct_declarator(p);
     }
+
+    // abstract_declarator(p);
+    // declarator(p);
 
     p.close(m, TreeKind::ParameterDeclaration);
     p.trace_exit();
 }
 
-// abstract_declarator
-// : pointer
-// | pointer? direct_abstract_declarator
-// ;
-//
-// AbstractDeclarator = Pointer
-// | (Pointer)? DirectAbstractDeclarator
+/// # [Yacc](http://www.quut.com/c/ANSI-C-grammar-y.html#abstract_declarator)
+///
+/// ```yacc
+/// abstract_declarator
+/// : pointer
+/// | pointer? direct_abstract_declarator
+/// ;
+/// ```
+///
+/// # [Ungrammar](https://rust-analyzer.github.io//blog/2020/10/24/introducing-ungrammar.html)
+///
+/// ```ungrammar
+/// AbstractDeclarator = Pointer
+/// | (Pointer)? DirectAbstractDeclarator
+/// ```
 fn abstract_declarator(p: &mut Parser) {
+    p.enter(TreeKind::AbstractDeclarator);
+    let m = p.open();
+
+    // TODO: make more rigorous (i.e. if we don't see either, emit an error and
+    // advance letting the user know we expected either a pointer or
+    // direct_abstract_declarator)
     if p.at(TokenKind::STAR) {
         pointer(p);
     }
     if p.at(TokenKind::LPAREN) {
         direct_abstract_declarator(p);
     }
+
+    p.close(m, TreeKind::AbstractDeclarator);
+    p.trace_exit();
 }
 
-// direct_abstract_declarator
-// : '(' abstract_declarator ')'
-// | '[' ']'
-// | '[' constant_expression? ']'
-// | direct_abstract_declarator '[' ']'
-// | direct_abstract_declarator '[' constant_expression? ']'
-// | '(' ')'
-// | '(' parameter_type_list? ')'
-// | direct_abstract_declarator '(' ')'
-// | direct_abstract_declarator '(' parameter_type_list? ')'
-// ;
-//
-// DirectAbstractDeclarator = '(' AbstractDeclarator ')'
-// | '[' ']'
-// | '[' (ConstantExpression)? ']'
-// | DirectAbstractDeclarator '[' ']'
-// | DirectAbstractDeclarator '[' (ConstantExpression)? ']'
-// | '(' ')'
-// | '(' (ParameterTypeList)? ')'
-// | DirectAbstractDeclarator '(' ')'
-// | DirectAbstractDeclarator '(' (ParameterTypeList)? ')'
+/// # [Yacc](http://www.quut.com/c/ANSI-C-grammar-y.html#direct_abstract_declarator)
+///
+/// ```yacc
+/// direct_abstract_declarator
+///  : '(' abstract_declarator ')'
+///  | '[' ']'
+///  | '[' '*' ']'
+///  | '[' STATIC type_qualifier_list assignment_expression ']'
+///  | '[' STATIC assignment_expression ']'
+///  | '[' type_qualifier_list STATIC assignment_expression ']'
+///  | '[' type_qualifier_list assignment_expression ']'
+///  | '[' type_qualifier_list ']'
+///  | '[' assignment_expression ']'
+///  | direct_abstract_declarator '[' ']'
+///  | direct_abstract_declarator '[' '*' ']'
+///  | direct_abstract_declarator '[' STATIC type_qualifier_list
+/// assignment_expression ']'
+/// | direct_abstract_declarator '[' STATIC
+/// assignment_expression ']'
+/// | direct_abstract_declarator '['
+/// type_qualifier_list assignment_expression ']'
+/// | direct_abstract_declarator
+/// '[' type_qualifier_list STATIC assignment_expression ']'
+///  | direct_abstract_declarator '[' type_qualifier_list ']'
+///  | direct_abstract_declarator '[' assignment_expression ']'
+///  | '(' ')'
+///  | '(' parameter_type_list ')'
+///  | direct_abstract_declarator '(' ')'
+///  | direct_abstract_declarator '(' parameter_type_list ')'
+///  ;
+/// ```
 fn direct_abstract_declarator(p: &mut Parser) {
-    tracing::debug!(
-        "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "direct_abstract_declarator".green()
-        )
-    );
-
+    p.enter(TreeKind::DirectAbstractDeclarator);
     let m = p.open();
 
-    if p.at(TokenKind::LPAREN) {
-        p.advance();
-        abstract_declarator(p);
-        p.expect(TokenKind::RPAREN);
-    } else if p.at(TokenKind::LBRACKET) {
-        p.advance();
-        if !p.at(TokenKind::RBRACKET) {
-            constant_expression(p);
-        }
-        p.expect(TokenKind::RBRACKET);
-    } else {
-        direct_abstract_declarator(p);
-        if p.at(TokenKind::LBRACKET) {
-            p.advance();
-            if !p.at(TokenKind::RBRACKET) {
-                constant_expression(p);
-            }
-            p.expect(TokenKind::RBRACKET);
-        } else if p.at(TokenKind::LPAREN) {
-            p.advance();
-            if !p.at(TokenKind::RPAREN) {
-                parameter_type_list(p);
-            }
-            p.expect(TokenKind::RPAREN);
-        } else {
-            p.expect(TokenKind::LPAREN);
-            if !p.at(TokenKind::RPAREN) {
-                parameter_type_list(p);
-            }
-            p.expect(TokenKind::RPAREN);
-        }
-    }
+    // TODO: implement
 
     p.close(m, TreeKind::DirectAbstractDeclarator);
+    p.trace_exit();
 }
+
+// // direct_abstract_declarator
+// // : '(' abstract_declarator ')'
+// // | '[' ']'
+// // | '[' constant_expression? ']'
+// // | direct_abstract_declarator '[' ']'
+// // | direct_abstract_declarator '[' constant_expression? ']'
+// // | '(' ')'
+// // | '(' parameter_type_list? ')'
+// // | direct_abstract_declarator '(' ')'
+// // | direct_abstract_declarator '(' parameter_type_list? ')'
+// // ;
+// //
+// // DirectAbstractDeclarator = '(' AbstractDeclarator ')'
+// // | '[' ']'
+// // | '[' (ConstantExpression)? ']'
+// // | DirectAbstractDeclarator '[' ']'
+// // | DirectAbstractDeclarator '[' (ConstantExpression)? ']'
+// // | '(' ')'
+// // | '(' (ParameterTypeList)? ')'
+// // | DirectAbstractDeclarator '(' ')'
+// // | DirectAbstractDeclarator '(' (ParameterTypeList)? ')'
+// fn direct_abstract_declarator(p: &mut Parser) {
+//     p.enter(TreeKind::DirectAbstractDeclarator);
+//     let m = p.open();
+
+//     if p.at(TokenKind::LPAREN) {
+//         p.advance();
+//         abstract_declarator(p);
+//         p.expect(TokenKind::RPAREN);
+//     } else if p.at(TokenKind::LBRACKET) {
+//         p.advance();
+//         if !p.at(TokenKind::RBRACKET) {
+//             constant_expression(p);
+//         }
+//         p.expect(TokenKind::RBRACKET);
+//     } else {
+//         direct_abstract_declarator(p);
+//         if p.at(TokenKind::LBRACKET) {
+//             p.advance();
+//             if !p.at(TokenKind::RBRACKET) {
+//                 constant_expression(p);
+//             }
+//             p.expect(TokenKind::RBRACKET);
+//         } else if p.at(TokenKind::LPAREN) {
+//             p.advance();
+//             if !p.at(TokenKind::RPAREN) {
+//                 parameter_type_list(p);
+//             }
+//             p.expect(TokenKind::RPAREN);
+//         } else {
+//             p.expect(TokenKind::LPAREN);
+//             if !p.at(TokenKind::RPAREN) {
+//                 parameter_type_list(p);
+//             }
+//             p.expect(TokenKind::RPAREN);
+//         }
+//     }
+
+//     p.close(m, TreeKind::DirectAbstractDeclarator);
+// }
 
 // pointer
 // : '*'
@@ -1958,16 +2299,14 @@ fn direct_abstract_declarator(p: &mut Parser) {
 // | '*' type_qualifier_list pointer
 // ;
 //
-// Pointer = '*'
-// | '*' TypeQualifierList
-// | '*' Pointer
-// | '*' TypeQualifierList Pointer
+// Pointer = '*' Pointer?
+// | '*' TypeQualifierList Pointer?
 fn pointer(p: &mut Parser) {
     p.enter(TreeKind::Pointer);
     let m = p.open();
 
     p.expect(TokenKind::STAR);
-    if p.at(TokenKind::CONST_KW) || p.at(TokenKind::VOLATILE_KW) {
+    if p.at_type_qualifier() {
         type_qualifier_list(p);
     }
     if p.at(TokenKind::STAR) {
@@ -1988,7 +2327,7 @@ fn type_qualifier_list(p: &mut Parser) {
     p.enter(TreeKind::TypeQualifierList);
     let m = p.open();
 
-    while p.at(TokenKind::CONST_KW) || p.at(TokenKind::VOLATILE_KW) {
+    while p.at_type_qualifier() {
         type_qualifier(p);
     }
 
@@ -2005,6 +2344,8 @@ fn type_qualifier_list(p: &mut Parser) {
 fn declaration_list(p: &mut Parser) {
     p.enter(TreeKind::DeclarationList);
     let m = p.open();
+
+    // TODO: make this logic more robust
 
     while !p.eof() && !p.at(TokenKind::RBRACE) {
         declaration(p);
@@ -2121,67 +2462,49 @@ fn declaration_specifiers(p: &mut Parser) {
     p.enter(TreeKind::DeclarationSpecifiers);
     let m = p.open();
 
-    if p.at_any(&[
-        TokenKind::AUTO_KW,
-        TokenKind::REGISTER_KW,
-        TokenKind::STATIC_KW,
-        TokenKind::EXTERN_KW,
-        TokenKind::TYPEDEF_KW,
-    ]) {
+    println!(
+        "declaration_specifiers: {:?} {:?}",
+        p.current_token().kind(),
+        p.current_token().lexeme()
+    );
+
+    if p.at_storage_class_specifier() {
         storage_class_specifier(p);
-        if p.at_any(&[
-            TokenKind::AUTO_KW,
-            TokenKind::REGISTER_KW,
-            TokenKind::STATIC_KW,
-            TokenKind::EXTERN_KW,
-            TokenKind::TYPEDEF_KW,
-        ]) {
+        if p.at_declaration_specifier() {
             declaration_specifiers(p);
         }
-    } else if p.at_any(&[
-        TokenKind::VOID_KW,
-        TokenKind::CHAR_KW,
-        TokenKind::SHORT_KW,
-        TokenKind::INT_KW,
-        TokenKind::LONG_KW,
-        TokenKind::FLOAT_KW,
-        TokenKind::DOUBLE_KW,
-        TokenKind::SIGNED_KW,
-        TokenKind::UNSIGNED_KW,
-    ]) {
+    } else if p.at_type_specifier() {
         type_specifier(p);
-        if p.at_any(&[
-            TokenKind::VOID_KW,
-            TokenKind::CHAR_KW,
-            TokenKind::SHORT_KW,
-            TokenKind::INT_KW,
-            TokenKind::LONG_KW,
-            TokenKind::FLOAT_KW,
-            TokenKind::DOUBLE_KW,
-            TokenKind::SIGNED_KW,
-            TokenKind::UNSIGNED_KW,
-        ]) {
+        if p.at_declaration_specifier() {
             declaration_specifiers(p);
         }
-    } else if p.at_any(&[TokenKind::CONST_KW, TokenKind::RESTRICT_KW, TokenKind::VOLATILE_KW]) {
+    } else if p.at_type_qualifier() {
         type_qualifier(p);
-        if p.at_any(&[TokenKind::CONST_KW, TokenKind::RESTRICT_KW, TokenKind::VOLATILE_KW]) {
+        if p.at_declaration_specifier() {
             declaration_specifiers(p);
         }
-    } else if p.at_any(&[TokenKind::INLINE_KW, TokenKind::NORETURN_KW]) {
+    } else if p.at_function_specifier() {
         function_specifier(p);
-        if p.at_any(&[TokenKind::INLINE_KW, TokenKind::NORETURN_KW]) {
+        if p.at_declaration_specifier() {
             declaration_specifiers(p);
         }
-    } else if p.at(TokenKind::ALIGNAS_KW) {
+    } else if p.at_alignment_specifier() {
         alignment_specifier(p);
-        if p.at(TokenKind::ALIGNAS_KW) {
+        if p.at_declaration_specifier() {
             declaration_specifiers(p);
         }
     } else {
         // TODO: error reporting
-        // p.error("declaration specifier expected");
-        p.advance_with_error("declaration specifier expected");
+        p.advance_with_error(&format!(
+            "declaration specifier expected (storage class, type, function or alignment \
+             specifier). Instead found {:?} {:?}\n\nHint: If you are trying to declare a \
+             variable, make sure you have a type specifier before the variable name. For example, \
+             `int x = 0;`.\n\nExamples of declaration specificies are `int`, `char`, `short`,  \
+             `float`, `signed`, `const`, `volatile`, `inline`, `noreturn`, `struct`, `union`, \
+             `enum`, etc.\n",
+            p.current(),
+            p.current_token().lexeme()
+        ));
     }
 
     p.close(m, TreeKind::DeclarationSpecifiers);
@@ -2199,12 +2522,14 @@ fn function_specifier(p: &mut Parser) {
     p.enter(TreeKind::FunctionSpecifier);
     let m = p.open();
 
-    if p.at_any(&[TokenKind::INLINE_KW, TokenKind::NORETURN_KW]) {
+    if p.at_function_specifier() {
         p.advance();
     } else {
         // TODO: error reporting
-        // p.error("function specifier expected");
-        p.advance_with_error("function specifier expected");
+        p.advance_with_error(&format!(
+            "expected function specifier (`inline` or `noreturn`), but found {}",
+            p.nth(0),
+        ));
     }
 
     p.close(m, TreeKind::FunctionSpecifier);
@@ -2224,7 +2549,8 @@ fn alignment_specifier(p: &mut Parser) {
 
     p.expect(TokenKind::ALIGNAS_KW);
     p.expect(TokenKind::LPAREN);
-    if p.at(TokenKind::CONSTANT) {
+
+    if p.at_constant_expression() {
         constant_expression(p);
     } else {
         type_name(p);
@@ -2341,18 +2667,10 @@ fn storage_class_specifier(p: &mut Parser) {
 // | TYPE_NAME
 // ;
 //
-// TypeSpecifier = Void | Char | Short | Int | Long | Float | Double | Signed | Unsigned | StructOrUnionSpecifier | EnumSpecifier | TypeName
+// TypeSpecifier = Void | Char | Short | Int | Long | Float | Double | Signed |
+// Unsigned | StructOrUnionSpecifier | EnumSpecifier | TypeName
 fn type_specifier(p: &mut Parser) {
-    tracing::debug!(
-        "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "type_specifier".green()
-        )
-    );
+    p.enter(TreeKind::TypeSpecifier);
     let m = p.open();
 
     if p.at_any(&[
@@ -2386,18 +2704,10 @@ fn type_specifier(p: &mut Parser) {
 // | ENUM IDENTIFIER
 // ;
 //
-// EnumSpecifier = Enum LBrace EnumeratorList RBrace | Enum Ident LBrace EnumeratorList RBrace | Enum Ident
+// EnumSpecifier = Enum LBrace EnumeratorList RBrace | Enum Ident LBrace
+// EnumeratorList RBrace | Enum Ident
 fn enum_specifier(p: &mut Parser) {
-    tracing::debug!(
-        "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "enum_specifier".green()
-        )
-    );
+    p.enter(TreeKind::EnumSpecifier);
     let m = p.open();
 
     if p.at(TokenKind::ENUM_KW) {
@@ -2429,16 +2739,7 @@ fn enum_specifier(p: &mut Parser) {
 //
 // EnumeratorList = Enumerator (Comma Enumerator)*
 fn enumerator_list(p: &mut Parser) {
-    tracing::debug!(
-        "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "enumerator_list".green()
-        )
-    );
+    p.enter(TreeKind::EnumeratorList);
     let m = p.open();
 
     enumerator(p);
@@ -2457,10 +2758,7 @@ fn enumerator_list(p: &mut Parser) {
 //
 // Enumerator = Ident (Assign ConstantExpression)?
 fn enumerator(p: &mut Parser) {
-    tracing::debug!(
-        "{}",
-        &format!("{} {:?} {} {}", "PARSER".yellow(), p.nth(0), "->".yellow(), "enumerator".green())
-    );
+    p.enter(TreeKind::Enumerator);
     let m = p.open();
 
     if p.at(TokenKind::IDENTIFIER) {
@@ -2478,29 +2776,17 @@ fn enumerator(p: &mut Parser) {
 }
 
 // struct_or_union_specifier
-// : struct_or_union IDENTIFIER? LBRACE struct_declaration_list? RBRACE
-// | struct_or_union IDENTIFIER
-// ;
+// 	: struct_or_union '{' struct_declaration_list '}'
+// 	| struct_or_union IDENTIFIER '{' struct_declaration_list '}'
+// 	| struct_or_union IDENTIFIER
+// 	;
 //
-// StructOrUnionSpecifier = StructOrUnion Ident? LBrace StructDeclarationList? RBrace | StructOrUnion Ident
+// StructOrUnionSpecifier = StructOrUnion LBrace StructDeclarationList RBrace
 fn struct_or_union_specifier(p: &mut Parser) {
-    tracing::debug!(
-        "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "struct_or_union_specifier".green()
-        )
-    );
+    p.enter(TreeKind::StructOrUnionSpecifier);
     let m = p.open();
 
-    if p.at(TokenKind::STRUCT_KW) | p.at(TokenKind::UNION_KW) {
-        p.advance();
-    } else {
-        // TODO: Error reporting.
-    }
+    struct_or_union(p);
 
     if p.at(TokenKind::IDENTIFIER) {
         p.advance();
@@ -2510,28 +2796,70 @@ fn struct_or_union_specifier(p: &mut Parser) {
         p.advance();
         struct_declaration_list(p);
         p.expect(TokenKind::RBRACE);
+    } else {
+        p.advance_with_error(&format!(
+            "expected struct or union specifier, but instead found {}",
+            p.nth(0),
+        ));
     }
 
     p.close(m, TreeKind::StructOrUnionSpecifier);
+    p.trace_exit();
 }
+
+// struct_or_union
+// : STRUCT_KW
+// | UNION_KW
+// ;
+fn struct_or_union(p: &mut Parser) {
+    p.enter(TreeKind::StructOrUnion);
+    let m = p.open();
+
+    if p.at_any(&[TokenKind::STRUCT_KW, TokenKind::UNION_KW]) {
+        p.advance();
+    } else {
+        // TODO: Error reporting.
+        p.advance_with_error(&format!(
+            "expected struct or union specifier, but instead found {}",
+            p.nth(0),
+        ));
+    }
+
+    p.close(m, TreeKind::StructOrUnion);
+    p.trace_exit();
+}
+
+// FIXME: OLD
+//  p.enter(TreeKind::StructOrUnionSpecifier);
+//     let m = p.open();
+
+//     if p.at(TokenKind::STRUCT_KW) | p.at(TokenKind::UNION_KW) {
+//         p.advance();
+//     } else {
+//         // TODO: Error reporting.
+//     }
+
+//     if p.at(TokenKind::IDENTIFIER) {
+//         p.advance();
+//     }
+
+//     if p.at(TokenKind::LBRACE) {
+//         p.advance();
+//         struct_declaration_list(p);
+//         p.expect(TokenKind::RBRACE);
+//     }
+
+//     p.close(m, TreeKind::StructOrUnionSpecifier);
 
 // struct_declaration_list
 // : struct_declaration
 // | struct_declaration_list struct_declaration
 // ;
 //
-// StructDeclarationList = StructDeclaration | StructDeclarationList StructDeclaration
+// StructDeclarationList = StructDeclaration | StructDeclarationList
+// StructDeclaration
 fn struct_declaration_list(p: &mut Parser) {
-    tracing::debug!(
-        "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "struct_declaration_list".green()
-        )
-    );
+    p.enter(TreeKind::StructDeclarationList);
     let m = p.open();
 
     struct_declaration(p);
@@ -2564,16 +2892,7 @@ fn struct_declaration_list(p: &mut Parser) {
 //
 // StructDeclaration = SpecifierQualifierList StructDeclaratorList? Semicolon
 fn struct_declaration(p: &mut Parser) {
-    tracing::debug!(
-        "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "struct_declaration".green()
-        )
-    );
+    p.enter(TreeKind::StructDeclaration);
     let m = p.open();
 
     specifier_qualifier_list(p);
@@ -2592,18 +2911,10 @@ fn struct_declaration(p: &mut Parser) {
 // | struct_declarator_list COMMA struct_declarator
 // ;
 //
-// StructDeclaratorList = StructDeclarator | StructDeclaratorList Comma StructDeclarator
+// StructDeclaratorList = StructDeclarator | StructDeclaratorList Comma
+// StructDeclarator
 fn struct_declarator_list(p: &mut Parser) {
-    tracing::debug!(
-        "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "struct_declarator_list".green()
-        )
-    );
+    p.enter(TreeKind::StructDeclaratorList);
     let m = p.open();
 
     struct_declarator(p);
@@ -2622,18 +2933,10 @@ fn struct_declarator_list(p: &mut Parser) {
 // | declarator COLON constant_expression
 // ;
 //
-// StructDeclarator = Declarator | Colon ConstantExpression | Declarator Colon ConstantExpression
+// StructDeclarator = Declarator | Colon ConstantExpression | Declarator Colon
+// ConstantExpression
 fn struct_declarator(p: &mut Parser) {
-    tracing::debug!(
-        "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "struct_declarator".green()
-        )
-    );
+    p.enter(TreeKind::StructDeclarator);
     let m = p.open();
 
     if p.at(TokenKind::COLON) {
@@ -2654,26 +2957,19 @@ fn struct_declarator(p: &mut Parser) {
 // type_qualifier
 // : CONST_KW
 // | VOLATILE_KW
+// | RESTRICT_KW
+// | ATOMIC_KW
 // ;
 //
-// TypeQualifier = Const | Volatile
+// TypeQualifier = Const | Volatile | Restrict | Atomic
 fn type_qualifier(p: &mut Parser) {
-    tracing::debug!(
-        "{}",
-        &format!(
-            "{} {:?} {} {}",
-            "PARSER".yellow(),
-            p.nth(0),
-            "->".yellow(),
-            "type_qualifier".green()
-        )
-    );
     let m = p.open();
 
-    if p.at(TokenKind::CONST_KW) | p.at(TokenKind::VOLATILE_KW) {
+    if p.at_type_qualifier() {
         p.advance();
     } else {
         // TODO: Error reporting.
+        p.error("expected type qualifier (const, volatile, restrict, or atomic)");
     }
 
     p.close(m, TreeKind::TypeQualifier);
@@ -2681,7 +2977,8 @@ fn type_qualifier(p: &mut Parser) {
 
 // Current log behavior:
 // DEBUG rcc::parser: PARSER (TYPEDEF_KW, 'typedef', 0..7) -> translation_unit
-// DEBUG rcc::parser: PARSER (TYPEDEF_KW, 'typedef', 0..7) -> external_declaration
+// DEBUG rcc::parser: PARSER (TYPEDEF_KW, 'typedef', 0..7) ->
+// external_declaration
 //
 // Desired log behavior: (Includes call stack information)
 // DEBUG rcc::parser: PARSER TYPEDEF_KW 0..7 -> translation_unit

@@ -1,0 +1,1129 @@
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m0[39m int [33m->[39m [34mINT_KW[39m int [3m[30m128..131[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m1[39m factorial [33m->[39m [34mIDENTIFIER[39m factorial [3m[30m132..141[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m2[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m141..142[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m3[39m int [33m->[39m [34mINT_KW[39m int [3m[30m142..145[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m4[39m n [33m->[39m [34mIDENTIFIER[39m n [3m[30m146..147[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m5[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m147..148[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m6[39m { [33m->[39m [34mLBRACE[39m { [3m[30m149..150[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m7[39m if [33m->[39m [34mIF_KW[39m if [3m[30m155..157[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m8[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m158..159[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m9[39m n [33m->[39m [34mIDENTIFIER[39m n [3m[30m159..160[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m10[39m <= [33m->[39m [34mLE[39m <= [3m[30m161..163[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m11[39m 1 [33m->[39m [34mCONSTANT[39m 1 [3m[30m164..165[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m12[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m165..166[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m13[39m { [33m->[39m [34mLBRACE[39m { [3m[30m167..168[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m14[39m return [33m->[39m [34mRETURN_KW[39m return [3m[30m177..183[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m15[39m 1 [33m->[39m [34mCONSTANT[39m 1 [3m[30m184..185[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m16[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m185..186[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m17[39m } [33m->[39m [34mRBRACE[39m } [3m[30m191..192[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m18[39m else [33m->[39m [34mELSE_KW[39m else [3m[30m193..197[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m19[39m { [33m->[39m [34mLBRACE[39m { [3m[30m198..199[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m20[39m return [33m->[39m [34mRETURN_KW[39m return [3m[30m208..214[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m21[39m n [33m->[39m [34mIDENTIFIER[39m n [3m[30m215..216[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m22[39m * [33m->[39m [34mSTAR[39m * [3m[30m217..218[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m23[39m factorial [33m->[39m [34mIDENTIFIER[39m factorial [3m[30m219..228[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m24[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m228..229[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m25[39m n [33m->[39m [34mIDENTIFIER[39m n [3m[30m229..230[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m26[39m - [33m->[39m [34mMINUS[39m - [3m[30m231..232[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m27[39m 1 [33m->[39m [34mCONSTANT[39m 1 [3m[30m233..234[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m28[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m234..235[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m29[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m235..236[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m30[39m } [33m->[39m [34mRBRACE[39m } [3m[30m241..242[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m31[39m } [33m->[39m [34mRBRACE[39m } [3m[30m243..244[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m32[39m int [33m->[39m [34mINT_KW[39m int [3m[30m313..316[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m33[39m fibonacci [33m->[39m [34mIDENTIFIER[39m fibonacci [3m[30m317..326[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m34[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m326..327[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m35[39m int [33m->[39m [34mINT_KW[39m int [3m[30m327..330[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m36[39m n [33m->[39m [34mIDENTIFIER[39m n [3m[30m331..332[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m37[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m332..333[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m38[39m { [33m->[39m [34mLBRACE[39m { [3m[30m334..335[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m39[39m if [33m->[39m [34mIF_KW[39m if [3m[30m340..342[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m40[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m343..344[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m41[39m n [33m->[39m [34mIDENTIFIER[39m n [3m[30m344..345[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m42[39m <= [33m->[39m [34mLE[39m <= [3m[30m346..348[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m43[39m 0 [33m->[39m [34mCONSTANT[39m 0 [3m[30m349..350[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m44[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m350..351[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m45[39m { [33m->[39m [34mLBRACE[39m { [3m[30m352..353[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m46[39m return [33m->[39m [34mRETURN_KW[39m return [3m[30m362..368[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m47[39m 0 [33m->[39m [34mCONSTANT[39m 0 [3m[30m369..370[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m48[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m370..371[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m49[39m } [33m->[39m [34mRBRACE[39m } [3m[30m376..377[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m50[39m else [33m->[39m [34mELSE_KW[39m else [3m[30m378..382[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m51[39m if [33m->[39m [34mIF_KW[39m if [3m[30m383..385[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m52[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m386..387[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m53[39m n [33m->[39m [34mIDENTIFIER[39m n [3m[30m387..388[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m54[39m == [33m->[39m [34mEQEQ[39m == [3m[30m389..391[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m55[39m 1 [33m->[39m [34mCONSTANT[39m 1 [3m[30m392..393[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m56[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m393..394[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m57[39m { [33m->[39m [34mLBRACE[39m { [3m[30m395..396[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m58[39m return [33m->[39m [34mRETURN_KW[39m return [3m[30m405..411[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m59[39m 1 [33m->[39m [34mCONSTANT[39m 1 [3m[30m412..413[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m60[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m413..414[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m61[39m } [33m->[39m [34mRBRACE[39m } [3m[30m419..420[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m62[39m else [33m->[39m [34mELSE_KW[39m else [3m[30m421..425[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m63[39m { [33m->[39m [34mLBRACE[39m { [3m[30m426..427[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m64[39m return [33m->[39m [34mRETURN_KW[39m return [3m[30m436..442[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m65[39m fibonacci [33m->[39m [34mIDENTIFIER[39m fibonacci [3m[30m443..452[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m66[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m452..453[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m67[39m n [33m->[39m [34mIDENTIFIER[39m n [3m[30m453..454[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m68[39m - [33m->[39m [34mMINUS[39m - [3m[30m455..456[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m69[39m 1 [33m->[39m [34mCONSTANT[39m 1 [3m[30m457..458[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m70[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m458..459[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m71[39m + [33m->[39m [34mPLUS[39m + [3m[30m460..461[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m72[39m fibonacci [33m->[39m [34mIDENTIFIER[39m fibonacci [3m[30m462..471[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m73[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m471..472[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m74[39m n [33m->[39m [34mIDENTIFIER[39m n [3m[30m472..473[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m75[39m - [33m->[39m [34mMINUS[39m - [3m[30m474..475[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m76[39m 2 [33m->[39m [34mCONSTANT[39m 2 [3m[30m476..477[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m77[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m477..478[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m78[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m478..479[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m79[39m } [33m->[39m [34mRBRACE[39m } [3m[30m484..485[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m80[39m } [33m->[39m [34mRBRACE[39m } [3m[30m486..487[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m81[39m struct [33m->[39m [34mSTRUCT_KW[39m struct [3m[30m536..542[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m82[39m Point [33m->[39m [34mIDENTIFIER[39m Point [3m[30m543..548[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m83[39m { [33m->[39m [34mLBRACE[39m { [3m[30m549..550[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m84[39m float [33m->[39m [34mFLOAT_KW[39m float [3m[30m555..560[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m85[39m x [33m->[39m [34mIDENTIFIER[39m x [3m[30m561..562[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m86[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m562..563[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m87[39m float [33m->[39m [34mFLOAT_KW[39m float [3m[30m568..573[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m88[39m y [33m->[39m [34mIDENTIFIER[39m y [3m[30m574..575[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m89[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m575..576[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m90[39m } [33m->[39m [34mRBRACE[39m } [3m[30m577..578[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m91[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m578..579[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m92[39m enum [33m->[39m [34mENUM_KW[39m enum [3m[30m624..628[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m93[39m Day [33m->[39m [34mIDENTIFIER[39m Day [3m[30m629..632[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m94[39m { [33m->[39m [34mLBRACE[39m { [3m[30m633..634[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m95[39m SUNDAY [33m->[39m [34mIDENTIFIER[39m SUNDAY [3m[30m639..645[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m96[39m , [33m->[39m [34mCOMMA[39m , [3m[30m645..646[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m97[39m MONDAY [33m->[39m [34mIDENTIFIER[39m MONDAY [3m[30m651..657[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m98[39m , [33m->[39m [34mCOMMA[39m , [3m[30m657..658[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m99[39m TUESDAY [33m->[39m [34mIDENTIFIER[39m TUESDAY [3m[30m663..670[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m100[39m , [33m->[39m [34mCOMMA[39m , [3m[30m670..671[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m101[39m WEDNESDAY [33m->[39m [34mIDENTIFIER[39m WEDNESDAY [3m[30m676..685[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m102[39m , [33m->[39m [34mCOMMA[39m , [3m[30m685..686[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m103[39m THURSDAY [33m->[39m [34mIDENTIFIER[39m THURSDAY [3m[30m691..699[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m104[39m , [33m->[39m [34mCOMMA[39m , [3m[30m699..700[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m105[39m FRIDAY [33m->[39m [34mIDENTIFIER[39m FRIDAY [3m[30m705..711[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m106[39m , [33m->[39m [34mCOMMA[39m , [3m[30m711..712[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m107[39m SATURDAY [33m->[39m [34mIDENTIFIER[39m SATURDAY [3m[30m717..725[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m108[39m } [33m->[39m [34mRBRACE[39m } [3m[30m726..727[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m109[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m727..728[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m110[39m int [33m->[39m [34mINT_KW[39m int [3m[30m730..733[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m111[39m main [33m->[39m [34mIDENTIFIER[39m main [3m[30m734..738[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m112[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m738..739[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m113[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m739..740[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m114[39m { [33m->[39m [34mLBRACE[39m { [3m[30m741..742[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m115[39m int [33m->[39m [34mINT_KW[39m int [3m[30m805..808[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m116[39m integerVar [33m->[39m [34mIDENTIFIER[39m integerVar [3m[30m809..819[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m117[39m = [33m->[39m [34mEQ[39m = [3m[30m820..821[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m118[39m 42 [33m->[39m [34mCONSTANT[39m 42 [3m[30m822..824[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m119[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m824..825[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m120[39m float [33m->[39m [34mFLOAT_KW[39m float [3m[30m830..835[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m121[39m floatVar [33m->[39m [34mIDENTIFIER[39m floatVar [3m[30m836..844[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m122[39m = [33m->[39m [34mEQ[39m = [3m[30m845..846[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m123[39m 3.14 [33m->[39m [34mCONSTANT[39m 3.14 [3m[30m847..851[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m124[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m851..852[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m125[39m char [33m->[39m [34mCHAR_KW[39m char [3m[30m857..861[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m126[39m charVar [33m->[39m [34mIDENTIFIER[39m charVar [3m[30m862..869[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m127[39m = [33m->[39m [34mEQ[39m = [3m[30m870..871[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m128[39m 'A' [33m->[39m [34mCONSTANT[39m 'A' [3m[30m872..875[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m129[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m875..876[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m130[39m double [33m->[39m [34mDOUBLE_KW[39m double [3m[30m881..887[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m131[39m doubleVar [33m->[39m [34mIDENTIFIER[39m doubleVar [3m[30m888..897[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m132[39m = [33m->[39m [34mEQ[39m = [3m[30m898..899[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m133[39m 2.71828 [33m->[39m [34mCONSTANT[39m 2.71828 [3m[30m900..907[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m134[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m907..908[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m135[39m if [33m->[39m [34mIF_KW[39m if [3m[30m944..946[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m136[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m947..948[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m137[39m integerVar [33m->[39m [34mIDENTIFIER[39m integerVar [3m[30m948..958[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m138[39m > [33m->[39m [34mGT[39m > [3m[30m959..960[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m139[39m 0 [33m->[39m [34mCONSTANT[39m 0 [3m[30m961..962[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m140[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m962..963[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m141[39m { [33m->[39m [34mLBRACE[39m { [3m[30m964..965[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m142[39m printf [33m->[39m [34mIDENTIFIER[39m printf [3m[30m974..980[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m143[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m980..981[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m144[39m "integerVar is positive.\n" [33m->[39m [34mSTRING[39m "integerVar is positive.\n" [3m[30m981..1008[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m145[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m1008..1009[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m146[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m1009..1010[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m147[39m } [33m->[39m [34mRBRACE[39m } [3m[30m1015..1016[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m148[39m else [33m->[39m [34mELSE_KW[39m else [3m[30m1017..1021[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m149[39m { [33m->[39m [34mLBRACE[39m { [3m[30m1022..1023[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m150[39m printf [33m->[39m [34mIDENTIFIER[39m printf [3m[30m1032..1038[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m151[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m1038..1039[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m152[39m "integerVar is non-positive.\n" [33m->[39m [34mSTRING[39m "integerVar is non-positive.\n" [3m[30m1039..1070[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m153[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m1070..1071[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m154[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m1071..1072[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m155[39m } [33m->[39m [34mRBRACE[39m } [3m[30m1077..1078[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m156[39m for [33m->[39m [34mFOR_KW[39m for [3m[30m1111..1114[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m157[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m1115..1116[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m158[39m int [33m->[39m [34mINT_KW[39m int [3m[30m1116..1119[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m159[39m i [33m->[39m [34mIDENTIFIER[39m i [3m[30m1120..1121[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m160[39m = [33m->[39m [34mEQ[39m = [3m[30m1122..1123[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m161[39m 0 [33m->[39m [34mCONSTANT[39m 0 [3m[30m1124..1125[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m162[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m1125..1126[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m163[39m i [33m->[39m [34mIDENTIFIER[39m i [3m[30m1127..1128[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m164[39m < [33m->[39m [34mLT[39m < [3m[30m1129..1130[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m165[39m 5 [33m->[39m [34mCONSTANT[39m 5 [3m[30m1131..1132[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m166[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m1132..1133[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m167[39m i [33m->[39m [34mIDENTIFIER[39m i [3m[30m1134..1135[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m168[39m ++ [33m->[39m [34mINC_OP[39m ++ [3m[30m1135..1137[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m169[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m1137..1138[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m170[39m { [33m->[39m [34mLBRACE[39m { [3m[30m1139..1140[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m171[39m printf [33m->[39m [34mIDENTIFIER[39m printf [3m[30m1149..1155[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m172[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m1155..1156[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m173[39m "Iteration %d\n" [33m->[39m [34mSTRING[39m "Iteration %d\n" [3m[30m1156..1172[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m174[39m , [33m->[39m [34mCOMMA[39m , [3m[30m1172..1173[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m175[39m i [33m->[39m [34mIDENTIFIER[39m i [3m[30m1174..1175[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m176[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m1175..1176[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m177[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m1176..1177[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m178[39m } [33m->[39m [34mRBRACE[39m } [3m[30m1182..1183[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m179[39m int [33m->[39m [34mINT_KW[39m int [3m[30m1228..1231[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m180[39m factResult [33m->[39m [34mIDENTIFIER[39m factResult [3m[30m1232..1242[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m181[39m = [33m->[39m [34mEQ[39m = [3m[30m1243..1244[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m182[39m factorial [33m->[39m [34mIDENTIFIER[39m factorial [3m[30m1245..1254[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m183[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m1254..1255[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m184[39m 5 [33m->[39m [34mCONSTANT[39m 5 [3m[30m1255..1256[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m185[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m1256..1257[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m186[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m1257..1258[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m187[39m int [33m->[39m [34mINT_KW[39m int [3m[30m1263..1266[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m188[39m fibResult [33m->[39m [34mIDENTIFIER[39m fibResult [3m[30m1267..1276[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m189[39m = [33m->[39m [34mEQ[39m = [3m[30m1277..1278[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m190[39m fibonacci [33m->[39m [34mIDENTIFIER[39m fibonacci [3m[30m1279..1288[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m191[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m1288..1289[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m192[39m 6 [33m->[39m [34mCONSTANT[39m 6 [3m[30m1289..1290[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m193[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m1290..1291[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m194[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m1291..1292[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m195[39m printf [33m->[39m [34mIDENTIFIER[39m printf [3m[30m1298..1304[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m196[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m1304..1305[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m197[39m "Factorial of 5 is %d\n" [33m->[39m [34mSTRING[39m "Factorial of 5 is %d\n" [3m[30m1305..1329[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m198[39m , [33m->[39m [34mCOMMA[39m , [3m[30m1329..1330[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m199[39m factResult [33m->[39m [34mIDENTIFIER[39m factResult [3m[30m1331..1341[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m200[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m1341..1342[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m201[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m1342..1343[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m202[39m printf [33m->[39m [34mIDENTIFIER[39m printf [3m[30m1348..1354[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m203[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m1354..1355[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m204[39m "Fibonacci(6) is %d\n" [33m->[39m [34mSTRING[39m "Fibonacci(6) is %d\n" [3m[30m1355..1377[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m205[39m , [33m->[39m [34mCOMMA[39m , [3m[30m1377..1378[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m206[39m fibResult [33m->[39m [34mIDENTIFIER[39m fibResult [3m[30m1379..1388[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m207[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m1388..1389[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m208[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m1389..1390[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m209[39m struct [33m->[39m [34mSTRUCT_KW[39m struct [3m[30m1422..1428[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m210[39m Point [33m->[39m [34mIDENTIFIER[39m Point [3m[30m1429..1434[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m211[39m point1 [33m->[39m [34mIDENTIFIER[39m point1 [3m[30m1435..1441[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m212[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m1441..1442[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m213[39m point1 [33m->[39m [34mIDENTIFIER[39m point1 [3m[30m1447..1453[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m214[39m . [33m->[39m [34mDOT[39m . [3m[30m1453..1454[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m215[39m x [33m->[39m [34mIDENTIFIER[39m x [3m[30m1454..1455[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m216[39m = [33m->[39m [34mEQ[39m = [3m[30m1456..1457[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m217[39m 1.0 [33m->[39m [34mCONSTANT[39m 1.0 [3m[30m1458..1461[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m218[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m1461..1462[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m219[39m point1 [33m->[39m [34mIDENTIFIER[39m point1 [3m[30m1467..1473[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m220[39m . [33m->[39m [34mDOT[39m . [3m[30m1473..1474[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m221[39m y [33m->[39m [34mIDENTIFIER[39m y [3m[30m1474..1475[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m222[39m = [33m->[39m [34mEQ[39m = [3m[30m1476..1477[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m223[39m 2.0 [33m->[39m [34mCONSTANT[39m 2.0 [3m[30m1478..1481[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m224[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m1481..1482[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m225[39m printf [33m->[39m [34mIDENTIFIER[39m printf [3m[30m1488..1494[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m226[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m1494..1495[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m227[39m "Point1: (%.2f, %.2f)\n" [33m->[39m [34mSTRING[39m "Point1: (%.2f, %.2f)\n" [3m[30m1495..1519[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m228[39m , [33m->[39m [34mCOMMA[39m , [3m[30m1519..1520[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m229[39m point1 [33m->[39m [34mIDENTIFIER[39m point1 [3m[30m1521..1527[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m230[39m . [33m->[39m [34mDOT[39m . [3m[30m1527..1528[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m231[39m x [33m->[39m [34mIDENTIFIER[39m x [3m[30m1528..1529[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m232[39m , [33m->[39m [34mCOMMA[39m , [3m[30m1529..1530[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m233[39m point1 [33m->[39m [34mIDENTIFIER[39m point1 [3m[30m1531..1537[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m234[39m . [33m->[39m [34mDOT[39m . [3m[30m1537..1538[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m235[39m y [33m->[39m [34mIDENTIFIER[39m y [3m[30m1538..1539[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m236[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m1539..1540[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m237[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m1540..1541[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m238[39m enum [33m->[39m [34mENUM_KW[39m enum [3m[30m1569..1573[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m239[39m Day [33m->[39m [34mIDENTIFIER[39m Day [3m[30m1574..1577[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m240[39m today [33m->[39m [34mIDENTIFIER[39m today [3m[30m1578..1583[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m241[39m = [33m->[39m [34mEQ[39m = [3m[30m1584..1585[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m242[39m MONDAY [33m->[39m [34mIDENTIFIER[39m MONDAY [3m[30m1586..1592[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m243[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m1592..1593[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m244[39m printf [33m->[39m [34mIDENTIFIER[39m printf [3m[30m1598..1604[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m245[39m ( [33m->[39m [34mLPAREN[39m ( [3m[30m1604..1605[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m246[39m "Today is Monday (Enum Value: %d)\n" [33m->[39m [34mSTRING[39m "Today is Monday (Enum Value: %d)\n" [3m[30m1605..1641[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m247[39m , [33m->[39m [34mCOMMA[39m , [3m[30m1641..1642[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m248[39m today [33m->[39m [34mIDENTIFIER[39m today [3m[30m1643..1648[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m249[39m ) [33m->[39m [34mRPAREN[39m ) [3m[30m1648..1649[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m250[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m1649..1650[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m251[39m return [33m->[39m [34mRETURN_KW[39m return [3m[30m1656..1662[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m252[39m 0 [33m->[39m [34mCONSTANT[39m 0 [3m[30m1663..1664[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m253[39m ; [33m->[39m [34mSEMICOLON[39m ; [3m[30m1664..1665[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m254[39m } [33m->[39m [34mRBRACE[39m } [3m[30m1666..1667[39m[0m
+[34mDEBUG[0m [2mrcc[0m[2m:[0m  [32mLEXER[39m  [31m255[39m  [33m->[39m [34mEOF[39m  [3m[30m1668..1668[39m[0m
+[32m INFO[0m [2mrcc[0m[2m:[0m  [33mLEXER[39m   [30;42m SUCCESS [0m [3mLexical analysis complete[0m[30m in [39m[36m2.548375ms[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mTranslationUnit[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mDeclarationSpecifiers[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mtype_specifier[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mParameterList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mParameterDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mDeclarationSpecifiers[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mtype_specifier[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IF_KW [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IF_KW [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IF_KW [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IF_KW [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mParameterList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mParameterDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LE [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LE [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mRPAREN[39m[30m,[39m but instead found [31mCONSTANT[39m[30m.[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mCONSTANT[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mLBRACE[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mCONSTANT[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ELSE_KW [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ELSE_KW [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ELSE_KW [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ELSE_KW [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mLBRACE[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mIDENTIFIER[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STAR [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STAR [33m->[39m [32mPointer[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mParameterList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mParameterDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m MINUS [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m MINUS [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mRPAREN[39m[30m,[39m but instead found [31mCONSTANT[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mINT_KW[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mDeclarationSpecifiers[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mtype_specifier[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mParameterList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mParameterDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mDeclarationSpecifiers[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mtype_specifier[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IF_KW [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IF_KW [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IF_KW [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IF_KW [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mParameterList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mParameterDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LE [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LE [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mRPAREN[39m[30m,[39m but instead found [31mCONSTANT[39m[30m.[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mCONSTANT[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mLBRACE[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mCONSTANT[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ELSE_KW [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ELSE_KW [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ELSE_KW [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ELSE_KW [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mIF_KW[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IF_KW [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IF_KW [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IF_KW [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mRPAREN[39m[30m,[39m but instead found [31mEQEQ[39m[30m.[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mEQEQ[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQEQ [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQEQ [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQEQ [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mRPAREN[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mRETURN_KW[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ELSE_KW [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ELSE_KW [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ELSE_KW [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ELSE_KW [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mLBRACE[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mIDENTIFIER[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mRPAREN[39m[30m,[39m but instead found [31mMINUS[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m MINUS [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m MINUS [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m MINUS [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mRPAREN[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m PLUS [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m PLUS [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m PLUS [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m PLUS [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mIDENTIFIER[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mRPAREN[39m[30m,[39m but instead found [31mMINUS[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m MINUS [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m MINUS [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m MINUS [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mRPAREN[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mSTRUCT_KW[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRUCT_KW [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRUCT_KW [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRUCT_KW [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m FLOAT_KW [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m FLOAT_KW [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m FLOAT_KW [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m FLOAT_KW [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mIDENTIFIER[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m FLOAT_KW [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m FLOAT_KW [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m FLOAT_KW [33m->[39m [32mDeclarationSpecifiers[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m FLOAT_KW [33m->[39m [32mtype_specifier[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ENUM_KW [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ENUM_KW [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ENUM_KW [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mRBRACE[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mDeclarationSpecifiers[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mtype_specifier[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mIDENTIFIER[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m FLOAT_KW [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m FLOAT_KW [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m FLOAT_KW [33m->[39m [32mDeclarationSpecifiers[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m FLOAT_KW [33m->[39m [32mtype_specifier[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CHAR_KW [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CHAR_KW [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CHAR_KW [33m->[39m [32mDeclarationSpecifiers[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CHAR_KW [33m->[39m [32mtype_specifier[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m DOUBLE_KW [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m DOUBLE_KW [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m DOUBLE_KW [33m->[39m [32mDeclarationSpecifiers[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m DOUBLE_KW [33m->[39m [32mtype_specifier[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IF_KW [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IF_KW [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IF_KW [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mRPAREN[39m[30m,[39m but instead found [31mGT[39m[30m.[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mGT[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m GT [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m GT [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m GT [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mRPAREN[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mIDENTIFIER[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRING [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRING [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mELSE_KW[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ELSE_KW [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ELSE_KW [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ELSE_KW [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mIDENTIFIER[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRING [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRING [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mFOR_KW[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m FOR_KW [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m FOR_KW [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m FOR_KW [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mRPAREN[39m[30m,[39m but instead found [31mIDENTIFIER[39m[30m.[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mIDENTIFIER[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LT [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LT [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INC_OP [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INC_OP [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LBRACE [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mIDENTIFIER[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRING [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRING [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mRPAREN[39m[30m,[39m but instead found [31mCOMMA[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m COMMA [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m COMMA [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m COMMA [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mRPAREN[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mIDENTIFIER[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m INT_KW [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mIDENTIFIER[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mRPAREN[39m[30m,[39m but instead found [31mSTRING[39m[30m.[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mSTRING[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRING [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRING [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRING [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m COMMA [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m COMMA [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m COMMA [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m COMMA [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mIDENTIFIER[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mRPAREN[39m[30m,[39m but instead found [31mSTRING[39m[30m.[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mSTRING[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRING [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRING [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRING [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m COMMA [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m COMMA [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m COMMA [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m COMMA [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mIDENTIFIER[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRUCT_KW [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRUCT_KW [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRUCT_KW [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRUCT_KW [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mIDENTIFIER[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mDOT[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m DOT [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m DOT [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m DOT [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitializer[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mAssignmentExpression[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mConditionalExpression[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mLogicalOrExpression[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mLogicalAndExpression[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInclusiveOrExpression[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mExclusiveOrExpression[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mAndExpression[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mEqualityExpression[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mCastExpression[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mUnaryExpression[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mPrimaryExpression[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m DOT [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m DOT [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRING [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRING [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mRPAREN[39m[30m,[39m but instead found [31mCOMMA[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m COMMA [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m COMMA [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m COMMA [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mDOT[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m DOT [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m DOT [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m DOT [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mDOT[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m DOT [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m DOT [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m DOT [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mRPAREN[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ENUM_KW [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ENUM_KW [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m ENUM_KW [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EQ [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m SEMICOLON [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mFunctionDef[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m LPAREN [33m->[39m [32mDirectDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRING [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m STRING [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mRPAREN[39m[30m,[39m but instead found [31mCOMMA[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m COMMA [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m COMMA [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m COMMA [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m IDENTIFIER [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected [33mSEMICOLON[39m[30m,[39m but instead found [31mRPAREN[39m[30m.[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RPAREN [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RETURN_KW [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m CONSTANT [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mExternDecl[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclaration[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m RBRACE [33m->[39m [32mDeclarationSpecifiers[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m declaration specifier expected
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EOF [33m->[39m [32mInitDeclaratorList[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EOF [33m->[39m [32mInitDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EOF [33m->[39m [32mDeclarator[39m
+[34mDEBUG[0m [2mrcc::parser[0m[2m:[0m [33mPARSER[39m EOF [33m->[39m [32mDirectDeclarator[39m
+[31mERROR[0m [2mrcc::parser[0m[2m:[0m Expected IDENTIFIER, LPAREN, or LBRACKET in direct_declarator

@@ -117,15 +117,56 @@ pub enum TokenKind {
     #[token("...")]
     ELLIPSIS,
 
-    // Constants
-    #[regex("0[xX][0-9a-fA-F]+")] // Hex Constant
-    #[regex("0[0-7]+(u|U|l|L)*")] // Octal Constant
-    #[regex("[0-9]+(u|U|l|L)*")] // Decimal Constant
-    #[regex("[0-9]*\\.[0-9]+([eE][+-]?[0-9]+)?(f|F|l|L)*")]
-    // Floating Constant
-    #[regex("'[^']*'")] // Character Constant
-    CONSTANT,
+    // // Constants
+    // #[regex("0[xX][0-9a-fA-F]+")] // Hex Constant
+    // #[regex("0[0-7]+(u|U|l|L)*")] // Octal Constant
+    // #[regex("[0-9]+(u|U|l|L)*")] // Decimal Constant
+    // #[regex("[0-9]*\\.[0-9]+([eE][+-]?[0-9]+)?(f|F|l|L)*")]
+    // // Floating Constant
+    // #[regex("'[^']*'")] // Character Constant
+    // CONSTANT,
 
+    // Integer constants
+    // O   [0-7]
+    // D   [0-9]
+    // NZ  [1-9]
+    // L   [a-zA-Z_]
+    // A   [a-zA-Z_0-9]
+    // H   [a-fA-F0-9]
+    // HP  (0[xX])
+    // E   ([Ee][+-]?{D}+)
+    // P   ([Pp][+-]?{D}+)
+    // FS  (f|F|l|L)
+    // IS  (((u|U)(l|L|ll|LL)?)|((l|L|ll|LL)(u|U)?))
+    // CP  (u|U|L)
+    // SP  (u8|u|U|L)
+    // ES  (\\(['"\?\\abfnrtv]|[0-7]{1,3}|x[a-fA-F0-9]+))
+    // WS  [ \t\v\n\f]
+    //
+    // {HP}{H}+{IS}?				{ return I_CONSTANT; }
+    // {NZ}{D}*{IS}?				{ return I_CONSTANT; }
+    // "0"{O}*{IS}?				{ return I_CONSTANT; }
+    // {CP}?"'"([^'\\\n]|{ES})+"'"		{ return I_CONSTANT; }
+    #[regex("[xX][0-9a-fA-F]+(((u|U)(l|L|ll|LL)?)|((l|L|ll|LL)(u|U)?))?")]
+    #[regex("[1-9][0-9]*(((u|U)(l|L|ll|LL)?)|((l|L|ll|LL)(u|U)?))?")]
+    #[regex("0[0-7]*(((u|U)(l|L|ll|LL)?)|((l|L|ll|LL)(u|U)?))?")]
+    // TODO: may need to come back to this
+    // #[regex("(u|U|L)?'([^'\\\n]|(\\(['\"\\?\\abfnrtv]|[0-7]{1,3}|x[a-fA-F0-9]+)))*'")]
+    INTEGER_CONSTANT,
+
+    // {D}+{E}{FS}?				{ return F_CONSTANT; }
+    // {D}*"."{D}+{E}?{FS}?			{ return F_CONSTANT; }
+    // {D}+"."{E}?{FS}?			{ return F_CONSTANT; }
+    // {HP}{H}+{P}{FS}?			{ return F_CONSTANT; }
+    // {HP}{H}*"."{H}+{P}{FS}?			{ return F_CONSTANT; }
+    // {HP}{H}+"."{P}{FS}?			{ return F_CONSTANT; }
+    #[regex("[0-9]+[eE][+-]?[0-9]+(f|F|l|L)?")]
+    #[regex("[0-9]*\\.[0-9]+([eE][+-]?[0-9]+)?(f|F|l|L)?")]
+    #[regex("[0-9]+\\.([eE][+-]?[0-9]+)?(f|F|l|L)?")]
+    #[regex("[xX][0-9a-fA-F]+[pP][+-]?[0-9]+(f|F|l|L)?")]
+    #[regex("[xX][0-9a-fA-F]*\\.[0-9a-fA-F]+[pP][+-]?[0-9]+(f|F|l|L)?")]
+    #[regex("[xX][0-9a-fA-F]+\\.[pP][+-]?[0-9]+(f|F|l|L)?")]
+    FLOATING_CONSTANT,
     // Keywords
     // #[token("and")]
     // AND_KW,
@@ -217,6 +258,8 @@ pub enum TokenKind {
     STATIC_ASSERT_KW,
     #[token("_Thread_local")]
     THREAD_LOCAL_KW,
+    #[token("__func__")]
+    FUNC_NAME_KW,
 
     // 0[xX]{H}+{IS}?		{ count(); return(CONSTANT); }
     // 0{D}+{IS}?		{ count(); return(CONSTANT); }
@@ -384,7 +427,7 @@ impl TokenKind {
             TokenKind::NEWLINE => SyntaxKind::NEWLINE,
             TokenKind::UNKNOWN => SyntaxKind::UNKNOWN,
             TokenKind::EOF => SyntaxKind::EOF,
-            TokenKind::CONSTANT => SyntaxKind::CONSTANT,
+            // TokenKind::CONSTANT => SyntaxKind::CONSTANT,
             TokenKind::WHILE_KW => SyntaxKind::WHILE_KW,
             TokenKind::INLINE_KW => SyntaxKind::INLINE_KW,
             TokenKind::RESTRICT_KW => SyntaxKind::RESTRICT_KW,
@@ -398,6 +441,9 @@ impl TokenKind {
             TokenKind::NORETURN_KW => SyntaxKind::NORETURN_KW,
             TokenKind::STATIC_ASSERT_KW => SyntaxKind::STATIC_ASSERT_KW,
             TokenKind::THREAD_LOCAL_KW => SyntaxKind::THREAD_LOCAL_KW,
+            TokenKind::INTEGER_CONSTANT => SyntaxKind::INTEGER_CONSTANT,
+            TokenKind::FLOATING_CONSTANT => SyntaxKind::FLOATING_CONSTANT,
+            TokenKind::FUNC_NAME_KW => SyntaxKind::FUNC_NAME_KW,
         }
     }
 }

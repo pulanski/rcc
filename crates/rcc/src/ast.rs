@@ -15,6 +15,8 @@ macro_rules! format_to {
 #[derive(Debug, Display)]
 pub enum TreeKind {
     TranslationUnit,
+    StaticAssertDeclaration,
+    AtomicTypeSpecifier,
     ExpressionStatement,
     IterationStatement,
     InitializerList,
@@ -92,6 +94,14 @@ pub enum TreeKind {
     ConstantExpression,
     FunctionSpecifier,
     AlignmentSpecifier,
+    Constant,
+    String,
+    GenericSelection,
+    GenericAssocList,
+    GenericAssociation,
+    ParameterTypeList,
+    StructOrUnion,
+    AbstractDeclarator,
 }
 
 // impl Display for TreeKind {

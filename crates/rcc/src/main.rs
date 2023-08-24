@@ -5,8 +5,6 @@ mod parser;
 mod preprocessor;
 mod token_set;
 
-use std::fs::read_to_string;
-
 use ast::{Tree, TreeKind};
 use lexer::{Token, TokenKind, TokenSink};
 use logos::Logos;
@@ -51,7 +49,7 @@ pub fn parse_tree(text: &str, tree_kind: TreeKind) -> Tree {
         TreeKind::ArgumentExpressionList => todo!(),
         TreeKind::TypeName => todo!(),
         TreeKind::SpecifierQualifierList => todo!(),
-        TreeKind::DirectDeclarator => todo!(),
+        TreeKind::DirectDeclarator => parser::direct_declarator(&mut p),
         TreeKind::ErrorTree => todo!(),
         TreeKind::CompoundStatement => parser::compound_statement(&mut p),
         TreeKind::LogicalAndExpression => todo!(),
@@ -98,7 +96,7 @@ pub fn parse_tree(text: &str, tree_kind: TreeKind) -> Tree {
         TreeKind::ArgList => todo!(),
         TreeKind::Arg => todo!(),
         TreeKind::DeclarationSpecifiers => todo!(),
-        TreeKind::FunctionDef => todo!(),
+        TreeKind::FunctionDef => parser::function_def(&mut p),
         TreeKind::UnaryOperator => todo!(),
         TreeKind::Statement => parser::statement(&mut p),
         TreeKind::LabeledStatement => todo!(),
@@ -110,6 +108,16 @@ pub fn parse_tree(text: &str, tree_kind: TreeKind) -> Tree {
         TreeKind::ConstantExpression => todo!(),
         TreeKind::FunctionSpecifier => todo!(),
         TreeKind::AlignmentSpecifier => todo!(),
+        TreeKind::StaticAssertDeclaration => todo!(),
+        TreeKind::AtomicTypeSpecifier => todo!(),
+        TreeKind::Constant => todo!(),
+        TreeKind::String => todo!(),
+        TreeKind::GenericSelection => todo!(),
+        TreeKind::GenericAssocList => todo!(),
+        TreeKind::GenericAssociation => todo!(),
+        TreeKind::ParameterTypeList => todo!(),
+        TreeKind::StructOrUnion => todo!(),
+        TreeKind::AbstractDeclarator => todo!(),
     }
 
     let elapsed = start.elapsed();
@@ -165,6 +173,32 @@ pub fn lex(input: &str) -> TokenSink {
                     token.yellow(),
                     lexer.span().black().italic()
                 );
+
+                // If the token is a double star, we want to convert it to two single stars and
+                // add them to the token sink.
+
+                if token == TokenKind::DSTAR {
+                    tracing::trace!(
+                        " {}  Creating token {} at {:?}",
+                        "LEXER".green(),
+                        TokenKind::STAR.yellow(),
+                        lexer.span().black().italic()
+                    );
+
+                    token_sink.tokens.push(Token::new(
+                        TokenKind::STAR,
+                        "*".to_string().into(),
+                        (lexer.span().start..lexer.span().start + 1).into(),
+                    ));
+
+                    token_sink.tokens.push(Token::new(
+                        TokenKind::STAR,
+                        "*".to_string().into(),
+                        (lexer.span().start + 1..lexer.span().end).into(),
+                    ));
+
+                    continue;
+                }
 
                 token_sink.tokens.push(Token::new(
                     token,
@@ -256,9 +290,9 @@ fn main() {
     tracing::subscriber::set_global_default(subscriber).expect("failed to set subscriber");
 
     // let input = &read_to_string("testdata/a.c").unwrap();
-    let input = "#include <stdio.h>\nint main() { printf(\"Hello, World!\"); return 0; }";
-    let tree = parse(input);
-    println!("{tree:?}");
+    // let input = "#include <stdio.h>\nint main() { printf(\"Hello, World!\");
+    // return 0; }"; let tree = parse(input);
+    // println!("{tree:?}");
 
     // preprocessor::preprocessor();
 
@@ -285,8 +319,8 @@ fn main() {
         "enum Color { RED, GREEN, BLUE };", // Enum declaration
         // Initializer tests
         "int x = 42;", // Declaration with initialization
-        "int x[] = {1, 2, 3};", // Array initialization
-                       // "struct Point p = {.x = 10, .y = 20};", // Struct initialization
+        "int x[] = {1, 2, 3};", /* Array initialization
+                        * "struct Point p = {.x = 10, .y = 20};", // Struct initialization */
     ];
 
     // for input in decl_test_cases {
@@ -297,32 +331,66 @@ fn main() {
 
     // fire emoji 🔥
 
-    let statement_test_cases = [
-        // Statement tests
-        "goto label;",      // Goto statement
-        "label: return 0;", // Labeled statement
-        "x = 42;",          // Expression statement
-        // Selection statement tests
-        "if (x > 0) { return x; }",                     // If statement
-        "if (x > 0) { return x; } else { return -x; }", // If-Else statement
-        // Iteration statement tests
-        "while (x > 0) { x--; }", // While loop
-        "for (int i = 0; i < 10; i++) { printf(\"%d\\n\", i); }", // For loop
-        "do { x--; } while (x > 0);", // Do-While loop
-                                  // Jump statement tests
-
-                                  //
-                                  // "goto label; label: return 0;", // Goto statement
-                                  // "switch (x) { case 1: y = 42; break; default: y = 0; }", // Switch statement
-                                  // "while (x > 0) { x--; }", // While loop
-                                  // "for (int i = 0; i < 10; i++) { printf(\"%d\\n\", i); }", // For loop
-                                  // "do { x--; } while (x > 0);", // Do-While loop
-                                  // "if (x > 0) { return x; }", // If statement with return
-    ];
+    // let statement_test_cases = [
+    //     // Statement tests
+    //     "goto label;",      // Goto statement
+    //     "label: return 0;", // Labeled statement
+    //     "x = 42;",          // Expression statement
+    //     // Selection statement tests
+    //     "if (x > 0) { return x; }",                     // If statement
+    //     "if (x > 0) { return x; } else { return -x; }", // If-Else statement
+    //     // Iteration statement tests
+    //     "while (x > 0) { x--; }", // While loop
+    //     "for (int i = 0; i < 10; i++) { printf(\"%d\\n\", i); }", // For loop
+    //     "do { x--; } while (x > 0);", // Do-While loop
+    //     // Jump statement tests
+    //     "goto label;", /* Goto statement */
+    //     "continue;",   /* Continue statement */
+    //     "break;",      /* Break statement */
+    //     "return 0;",   /* Return statement */
+    //     "return;",     /* Return statement without expression */
+    //     // Compound statement tests
+    //     "{ int x = 42; return x; }", // Compound statement
+    // ];
 
     // for input in statement_test_cases {
-    //   let cst = parse_tree(input, TreeKind::Statement);
-    //   println!("Parsing:\n\n{input}");
-    //   println!("\nTree:\n\n{cst}");
+    //     let cst = parse_tree(input, TreeKind::Statement);
+    //     println!("Parsing:\n\n{input}");
+    //     println!("\nTree:\n\n{cst}");
     // }
+
+    // parse the input file
+    // let input =
+    // &read_to_string("testdata/parse/translation_unit.c").unwrap();
+    // let tree = parse(input);
+    // println!("{tree:?}");
+
+    // Direct declarator tests
+    let fn_def_test_cases = [
+        "int main() { return 0; }",
+        "int main(int argc, char** argv) { return 0; }",
+        "double add(double x, double y) { return x + y; }",
+    ];
+
+    for input in fn_def_test_cases {
+        let cst = parse_tree(input, TreeKind::FunctionDef);
+        println!("Parsing:\n\n{input}");
+        println!("\nTree:\n\n{cst}");
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // TODO: Refactor to test all trees
+    // #[rstest]
+    // #[case("x", "Identifier")]
+    // #[case("42", "Constant")]
+    // #[case("\"hello\"", "String Literal")]
+    // #[case("(a + b)", "Expression in parentheses")]
+    // fn primary_expr_tests(input: &str, expected_result: &str) {
+    //     let cst = parse_tree(input, TreeKind::PrimaryExpression);
+    //     assert_eq!(cst, format!("Parsed PrimaryExpression:\n\n{}",
+    // expected_result)); }
 }
