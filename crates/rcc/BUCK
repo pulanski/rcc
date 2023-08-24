@@ -15,6 +15,7 @@ rust_binary(
         "//third-party/rust:regex",
         "//third-party/rust:rstest",
         "//third-party/rust:smartstring",
+        "//third-party/rust:syntect",
         "//third-party/rust:strum",
         "//third-party/rust:strum_macros",
         "//third-party/rust:tracing",

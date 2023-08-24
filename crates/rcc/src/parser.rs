@@ -1,5 +1,3 @@
-use std::cell::Cell;
-
 use crate::{
     ast::{
         Child,
@@ -7,14 +5,208 @@ use crate::{
         TreeKind,
     },
     lexer::{
+        self,
+        Span,
         Token,
         TokenKind,
+        TokenSink,
         TokenStream,
     },
     token_set::TokenSet,
 };
+use anyhow::Result;
 use owo_colors::OwoColorize;
 use smartstring::alias::String;
+use std::{
+    cell::Cell,
+    fs,
+};
+
+// Function to parse a single file
+pub(crate) fn parse_file(file_path: &str) -> Result<String> {
+    let input = fs::read_to_string(file_path)?;
+    let tree = parse(&input);
+    Ok(format!("{tree}").into())
+}
+
+// Function to recursively parse all files in a directory
+pub(crate) fn parse_directory(dir_path: &str) -> Result<Vec<String>> {
+    let mut results = Vec::new();
+
+    for entry in fs::read_dir(dir_path)? {
+        let entry = entry?;
+        let path = entry.path();
+
+        if path.is_file() {
+            if let Some(path) = path.to_str() {
+                if let Ok(parsed_tree) = parse_file(path) {
+                    results.push(parsed_tree);
+                }
+            }
+        } else if path.is_dir() {
+            if let Ok(mut dir_results) =
+                parse_directory(path.to_string_lossy().to_string().as_str())
+            {
+                results.append(&mut dir_results);
+            }
+        }
+    }
+
+    Ok(results)
+}
+
+// Function to parse the current working directory
+pub(crate) fn parse_cwd() -> Result<Vec<String>> {
+    let cwd = std::env::current_dir()?;
+    parse_directory(cwd.as_os_str().to_string_lossy().to_string().as_str())
+}
+
+pub fn parse(text: &str) -> Tree {
+    let token_sink: TokenSink = lexer::lex(text);
+    let token_stream = token_sink.tokens;
+
+    let mut p = Parser::new(token_stream);
+    translation_unit(&mut p);
+    p.build_tree()
+}
+
+pub fn parse_tree(text: &str, tree_kind: TreeKind) -> Tree {
+    tracing::info!(
+        " {}  {} {}{}{} into a {}{}",
+        "PARSER".yellow(),
+        " START ".black().on_yellow(),
+        "Parsing".italic(),
+        " ".black(),
+        tree_kind.green(),
+        "CST".blue(),
+        "...".black()
+    );
+    let token_sink: TokenSink = lexer::lex(text);
+    let token_stream = token_sink.tokens;
+
+    let start = std::time::Instant::now();
+
+    let mut p = Parser::new(token_stream);
+
+    match tree_kind {
+        TreeKind::TranslationUnit => translation_unit(&mut p),
+        TreeKind::InitializerList => todo!(),
+        TreeKind::ParameterList => todo!(),
+        TreeKind::ParameterDeclaration => todo!(),
+        TreeKind::Initializer => todo!(),
+        TreeKind::StructDeclarator => todo!(),
+        TreeKind::EnumSpecifier => todo!(),
+        TreeKind::Enumerator => todo!(),
+        TreeKind::Expression => todo!(),
+        TreeKind::ConditionalExpression => todo!(),
+        TreeKind::EnumeratorList => todo!(),
+        TreeKind::StructOrUnionSpecifier => todo!(),
+        TreeKind::PrimaryExpression => primary_expression(&mut p),
+        TreeKind::StructDeclaratorList => todo!(),
+        TreeKind::StructDeclaration => todo!(),
+        TreeKind::StructDeclarationList => todo!(),
+        TreeKind::ArgumentExpressionList => todo!(),
+        TreeKind::TypeName => todo!(),
+        TreeKind::SpecifierQualifierList => todo!(),
+        TreeKind::DirectDeclarator => direct_declarator(&mut p),
+        TreeKind::ErrorTree => todo!(),
+        TreeKind::CompoundStatement => compound_statement(&mut p),
+        TreeKind::LogicalAndExpression => todo!(),
+        TreeKind::ExternDecl => todo!(),
+        TreeKind::File => todo!(),
+        TreeKind::PostfixExpression => todo!(),
+        TreeKind::InclusiveOrExpression => todo!(),
+        TreeKind::ExclusiveOrExpression => todo!(),
+        TreeKind::AndExpression => todo!(),
+        TreeKind::EqualityExpression => todo!(),
+        TreeKind::RelationalExpression => todo!(),
+        TreeKind::ShiftExpression => todo!(),
+        TreeKind::AdditiveExpression => todo!(),
+        TreeKind::MultiplicativeExpression => todo!(),
+        TreeKind::CastExpression => todo!(),
+        TreeKind::UnaryExpression => unary_expression(&mut p),
+        TreeKind::IdentifierList => todo!(),
+        TreeKind::StatementList => todo!(),
+        TreeKind::DirectAbstractDeclarator => todo!(),
+        TreeKind::Fn => todo!(),
+        TreeKind::TypeExpr => todo!(),
+        TreeKind::ParamList => todo!(),
+        TreeKind::LogicalOrExpression => todo!(),
+        TreeKind::Pointer => todo!(),
+        TreeKind::Declaration => declaration(&mut p),
+        TreeKind::DeclarationList => todo!(),
+        TreeKind::InitDeclaratorList => todo!(),
+        TreeKind::TypeQualifierList => todo!(),
+        TreeKind::InitDeclarator => todo!(),
+        TreeKind::Declarator => todo!(),
+        TreeKind::TypeSpecifier => todo!(),
+        TreeKind::TypeQualifier => todo!(),
+        TreeKind::Param => todo!(),
+        TreeKind::Block => todo!(),
+        TreeKind::StmtLet => todo!(),
+        TreeKind::StorageClassSpecifier => todo!(),
+        TreeKind::StmtReturn => todo!(),
+        TreeKind::StmtExpr => todo!(),
+        TreeKind::ExprLiteral => todo!(),
+        TreeKind::ExprName => todo!(),
+        TreeKind::ExprParen => todo!(),
+        TreeKind::ExprBinary => todo!(),
+        TreeKind::ExprCall => todo!(),
+        TreeKind::ArgList => todo!(),
+        TreeKind::Arg => todo!(),
+        TreeKind::DeclarationSpecifiers => todo!(),
+        TreeKind::FunctionDef => function_def(&mut p),
+        TreeKind::UnaryOperator => todo!(),
+        TreeKind::Statement => statement(&mut p),
+        TreeKind::LabeledStatement => todo!(),
+        TreeKind::ExpressionStatement => todo!(),
+        TreeKind::IterationStatement => todo!(),
+        TreeKind::JumpStatement => jump_statement(&mut p),
+        TreeKind::SelectionStatement => todo!(),
+        TreeKind::AssignmentExpression => todo!(),
+        TreeKind::ConstantExpression => todo!(),
+        TreeKind::FunctionSpecifier => todo!(),
+        TreeKind::AlignmentSpecifier => todo!(),
+        TreeKind::StaticAssertDeclaration => todo!(),
+        TreeKind::AtomicTypeSpecifier => todo!(),
+        TreeKind::Constant => todo!(),
+        TreeKind::String => todo!(),
+        TreeKind::GenericSelection => todo!(),
+        TreeKind::GenericAssocList => todo!(),
+        TreeKind::GenericAssociation => todo!(),
+        TreeKind::ParameterTypeList => todo!(),
+        TreeKind::StructOrUnion => todo!(),
+        TreeKind::AbstractDeclarator => todo!(),
+    }
+
+    let tree = p.build_tree();
+    let elapsed = start.elapsed();
+    tracing::debug!(" {}\n\n  {}{}\n\n{}", "PARSER".green(), "CST".blue(), ":".black(), tree);
+
+    if !tree.contains_errors() {
+        tracing::info!(
+            " {}  {} {} constructed{}{}{}",
+            "PARSER".yellow(),
+            " SUCCESS ".black().on_green(),
+            "CST".blue(),
+            " in ".black(),
+            format!("{elapsed:?}").cyan(),
+            ".".black()
+        );
+    } else {
+        tracing::info!(
+            " {}  {} {} constructed{}{} with errors{}",
+            "PARSER".yellow(),
+            " FAILURE ".black().on_red(),
+            "CST".blue(),
+            " in ".black(),
+            format!("{elapsed:?}").cyan(),
+            ".".black()
+        );
+    }
+
+    tree
+}
 
 fn large_parser_prefix() -> String {
     format!(
@@ -61,9 +253,19 @@ fn format_call_stack(call_stack: &[String]) -> String {
 
 #[derive(Debug)]
 enum Event {
-    Open { kind: TreeKind },
+    Open { kind: TreeKind, range: Span },
     Close,
     Advance,
+}
+
+impl Event {
+    fn get_range(&self) -> Span {
+        match self {
+            Event::Open { range, .. } => range.clone(),
+            Event::Close => panic!("Attempted to get range from a Close event."),
+            Event::Advance => panic!("Attempted to get range from an Advance event."),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -190,7 +392,7 @@ impl Parser {
         //   // call_stack_lines,
         // );
 
-        tracing::debug!(
+        tracing::trace!(
             "{}",
             &format!(
                 "{} {:?} {} {}",
@@ -316,20 +518,20 @@ impl Parser {
         let mut events = self.events;
         let mut stack = Vec::new();
 
-        // println!("events: {:?}", events);
-        // println!("tokens: {:?}", tokens);
-
         // Special case: pop the last `Close` event to ensure
         // that the stack is non-empty inside the loop.
         assert!(matches!(events.pop(), Some(Event::Close)));
 
-        // println!("events: {:?}", events);
+        // println!("events: {events:#?}");
 
         for event in events {
             // println!("event: {:?}", event);
             match event {
                 // Starting a new node; just push an empty tree to the stack.
-                Event::Open { kind } => stack.push(Tree { kind, children: Vec::new() }),
+                Event::Open { range, kind } => {
+                    // let range = current_range.clone(); // Clone the current range.
+                    stack.push(Tree { kind, children: Vec::new(), range })
+                }
 
                 // A tree is done.
                 // Pop it off the stack and append to a new current tree.
@@ -341,13 +543,12 @@ impl Parser {
                 // Consume a token and append it to the current tree.
                 Event::Advance => {
                     let token = tokens.next().unwrap();
-                    // println!("token: {:?}", token);
                     stack.last_mut().unwrap().children.push(Child::Token(token));
                 }
             }
         }
 
-        let tree = stack.pop().unwrap();
+        let mut tree = stack.pop().unwrap();
 
         // Bump over the EOF token if it exists (it should) in the token stream.
         let eof_token = tokens.next();
@@ -359,6 +560,42 @@ impl Parser {
         //   "EOF not found"
         // );
 
+        // Traverse the tree and update the ranges for interior nodes to merge
+        // the ranges of their children's tokens.
+        fn update_ranges(tree: &mut Tree) {
+            let mut start = usize::MAX;
+            let mut end = usize::MIN;
+
+            for child in &mut tree.children {
+                match child {
+                    Child::Tree(child_tree) => {
+                        update_ranges(child_tree);
+                        // Update the start and end based on child_tree's range.
+                        if child_tree.range.start() < &start {
+                            start = *child_tree.range.start();
+                        }
+                        if child_tree.range.end() > &end {
+                            end = *child_tree.range.end();
+                        }
+                    }
+                    Child::Token(token) => {
+                        // Update the start and end based on token's range.
+                        if token.span().start() < &start {
+                            start = *token.span().start();
+                        }
+                        if token.span().end() > &end {
+                            end = *token.span().end();
+                        }
+                    }
+                }
+            }
+
+            // Update the tree's range with the merged range of its children.
+            tree.range = Span::from(start..end);
+        }
+
+        update_ranges(&mut tree);
+
         // Our parser will guarantee that all the trees are closed
         // and cover the entirety of tokens.
         assert!(stack.is_empty());
@@ -368,18 +605,20 @@ impl Parser {
 
     fn open(&mut self) -> MarkOpened {
         let mark = MarkOpened { index: self.events.len() };
-        self.events.push(Event::Open { kind: TreeKind::ErrorTree });
+        self.events.push(Event::Open { kind: TreeKind::ErrorTree, range: Span::default() });
         mark
     }
 
     fn open_before(&mut self, m: MarkClosed) -> MarkOpened {
         let mark = MarkOpened { index: m.index };
-        self.events.insert(m.index, Event::Open { kind: TreeKind::ErrorTree });
+        self.events
+            .insert(m.index, Event::Open { kind: TreeKind::ErrorTree, range: Span::default() });
         mark
     }
 
     fn close(&mut self, m: MarkOpened, kind: TreeKind) -> MarkClosed {
-        self.events[m.index] = Event::Open { kind };
+        let range = self.events[m.index].get_range(); // Get the range from the opened event.
+        self.events[m.index] = Event::Open { kind, range }; // Replace the opened event with a closed event.
         self.events.push(Event::Close);
         MarkClosed { index: m.index }
     }
@@ -405,10 +644,31 @@ impl Parser {
 
     fn nth(&self, lookahead: usize) -> TokenKind {
         if self.fuel.get() == 0 {
-            panic!("parser is stuck")
+            panic!(
+                "Parser ran out of fuel at {:?}. This is likely a bug in the parser related to \
+                 either error recovery or left recursion. Please report this issue to \
+                 https://github.com/pulanski/rcc/issues/new",
+                self.current_token()
+            );
         }
         self.fuel.set(self.fuel.get() - 1);
         self.tokens.get(self.pos + lookahead).map_or(TokenKind::EOF, |it| it.kind)
+    }
+
+    fn nth_token(&self, lookahead: usize) -> Token {
+        if self.fuel.get() == 0 {
+            panic!(
+                "Parser ran out of fuel at {:?}. This is likely a bug in the parser related to \
+                 either error recovery or left recursion. Please report this issue to \
+                 https://github.com/pulanski/rcc/issues/new",
+                self.current_token()
+            );
+        }
+
+        self.fuel.set(self.fuel.get() - 1);
+        self.tokens
+            .get(self.pos + lookahead)
+            .map_or(Token::new(TokenKind::EOF, "".into(), Span::default()), |it| it.clone())
     }
 
     fn at(&self, kind: TokenKind) -> bool {
@@ -477,6 +737,10 @@ impl Parser {
         self.at(TokenKind::ALIGNAS_KW)
     }
 
+    fn at_declaration_list(&self) -> bool {
+        self.at_declaration()
+    }
+
     fn at_type_specifier(&self) -> bool {
         self.at_any(&[
             TokenKind::VOID_KW,
@@ -515,6 +779,10 @@ impl Parser {
         ])
     }
 
+    fn at_compound_statement(&self) -> bool {
+        self.at(TokenKind::LBRACE)
+    }
+
     fn at_function_specifier(&self) -> bool {
         self.at_any(&[TokenKind::INLINE_KW, TokenKind::NORETURN_KW])
     }
@@ -523,6 +791,10 @@ impl Parser {
         let m = self.open();
         self.advance();
         self.close(m, kind);
+    }
+
+    fn at_statement(&self) -> bool {
+        self.at_any(STATEMENT_LIST_FIRST)
     }
 
     fn expect_any(&mut self, kinds: &[TokenKind]) {
@@ -560,9 +832,9 @@ impl Parser {
         ])
     }
 
-    fn at_statement(&self) -> bool {
-        self.at_any(STATEMENT_LIST_FIRST)
-    }
+    // fn at_statement(&self) -> bool {
+    //     self.at_any(STATEMENT_LIST_FIRST)
+    // }
 
     fn at_constant_expression(&self) -> bool {
         self.at_primary_expression()
@@ -593,6 +865,10 @@ impl Parser {
     fn peek(&mut self) -> Option<Token> {
         self.tokens.get(self.pos)
     }
+
+    fn at_declarator(&self) -> bool {
+        self.at_any(&[TokenKind::IDENTIFIER, TokenKind::STAR, TokenKind::LPAREN])
+    }
 }
 
 // translation_unit
@@ -604,41 +880,40 @@ impl Parser {
 pub fn translation_unit(p: &mut Parser) {
     p.enter(TreeKind::TranslationUnit);
     let m = p.open();
-
-    // // flag to indicate whether we are parsing the first declaration
-    // // let mut first = true;
-
-    // // parse all external declarations
-    // while !p.eof() {
-    //   // TODO: Error recovery.
-    //   // if first {
-    //   //   first = false;
-    //   // } else {
-    //   //   p.expect(TokenKind::SEMI);
-    //   // }
-
-    //   extern_decl(p);
-    // }
-
     let mut seen_extern = false;
 
-    loop {
-        // If there are no more tokens, break
-        if p.peek().is_none() {
-            if !seen_extern {
-                p.advance_with_error("expected 'main' function");
-            }
-            break;
-        }
+    // parse all external declarations
+    while !p.eof() {
+        // TODO: Error recovery.
 
-        // Parse an external declaration
         extern_decl(p);
 
-        // If flag isn't set, set it
         if !seen_extern {
             seen_extern = true;
         }
     }
+
+    if !seen_extern {
+        p.advance_with_error("expected 'main' function");
+    }
+
+    // loop {
+    //     // If there are no more tokens, break
+    //     if p.peek().is_none() {
+    //         if !seen_extern {
+    //             p.advance_with_error("expected 'main' function");
+    //         }
+    //         break;
+    //     }
+
+    //     // Parse an external declaration
+    //     extern_decl(p);
+
+    //     // If flag isn't set, set it
+    //     if !seen_extern {
+    //         seen_extern = true;
+    //     }
+    // }
 
     p.close(m, TreeKind::TranslationUnit);
     p.trace_exit()
@@ -659,6 +934,15 @@ const FN_DEF_DECLARATION_SPECIFIERS_FIRST: &[TokenKind] = &[
     TokenKind::ENUM_KW,
     TokenKind::IDENTIFIER,
 ];
+
+fn display(token_set: &[TokenKind]) -> String {
+    token_set
+        .iter()
+        .map(|it| format!("{}{}{}", "'".magenta(), it.to_string().green(), "'".magenta()))
+        .collect::<Vec<_>>()
+        .join(&format!("{}", ", ".black()))
+        .into()
+}
 // FN_DEF_FIRST = FN_DEF_DECLARATION_SPECIFIERS_FIRST | FN_DEF_DECLARATOR_FIRST
 // const FN_DEF_FIRST: &[TokenKind] = // TODO:
 
@@ -669,27 +953,139 @@ const FN_DEF_DECLARATION_SPECIFIERS_FIRST: &[TokenKind] = &[
 //
 // ExternDecl = FunctionDef | Declaration
 fn extern_decl(p: &mut Parser) {
+    // For reference:
+    //
+    // // declaration
+    // 	: declaration_specifiers ';'
+    // 	| declaration_specifiers init_declarator_list ';'
+    // 	| static_assert_declaration
+    // 	;
+    //     init_declarator_list
+    // 	: init_declarator
+    // 	| init_declarator_list ',' init_declarator
+    // 	;
+
+    // init_declarator | parser here
+    // 	: declarator   |  '=' initializer
+    // 	| declarator   |
+    // 	;
+    //
+    // // function_definition               | parser here
+    // 	: declaration_specifiers declarator | declaration_list compound_statement
+    // 	| declaration_specifiers declarator | compound_statement
+    // 	;
+    //
+    // declaration_list
+    // 	: declaration
+    // 	| declaration_list declaration
+    // 	;
+    //
+    // TODO: FIXME: currently we are matching "int x;" to a function definition
+    // when it should be a declaration.
+
     p.enter(TreeKind::ExternDecl);
     let m = p.open();
 
-    if p.at_any(FN_DEF_DECLARATION_SPECIFIERS_FIRST) {
-        function_def(p);
+    if p.at_declaration_specifier() {
+        // println!("parsing declaration_specifiers in extern_decl {:?}",
+        // p.current_token()); // TODO: distinguish between function definition
+        // and declaration
+
+        let mut declaration_specifer_count = 0;
+
+        while p.nth(declaration_specifer_count).is_declaration_specifier() {
+            declaration_specifer_count += 1;
+        }
+
+        if p.nth(declaration_specifer_count).is_semicolon() {
+            // declaration
+            // 	: declaration_specifiers ';'
+            // 	| declaration_specifiers init_declarator_list ';'
+            // 	| static_assert_declaration
+            // 	;
+
+            declaration(p);
+        } else if !p.nth(declaration_specifer_count).is_declarator() {
+            // TODO: error reporting and recovery
+            p.advance_with_error(&format!(
+                "Unexpected token {}{}{}{} Expected one of{} {}\n",
+                "'".cyan(),
+                p.nth_token(declaration_specifer_count).lexeme().red(),
+                "'".cyan(),
+                ".".black(),
+                ":".black(),
+                display(FN_DEF_DECLARATION_SPECIFIERS_FIRST)
+            ));
+        } else {
+            // TODO: continue parsing
+            // function_definition
+            // 	: declaration_specifiers declarator declaration_list compound_statement
+            // 	| declaration_specifiers declarator compound_statement
+            // 	;
+            if p.nth(declaration_specifer_count + 1).is_declarator() ||
+                p.nth(declaration_specifer_count + 1).is_l_brace()
+            {
+                // if p.at_declaration_specifier() || p.at_compound_statement() {
+                // function_definition
+                // : declaration_specifiers declarator declaration_list
+                // compound_statement
+                function_def(p);
+            } else {
+                declaration(p);
+            }
+            // init_declarator | parser here
+            // 	: declarator   |  '=' initializer
+            // 	| declarator   |
+            // 	;
+            // else if p.nth(declaration_specifer_count + 1).is_equal() {
+            //     // init_declarator
+            //     // : declarator '=' initializer
+            //     // | declarator
+            //     // 	;
+            //     // We know we're at a declaration now, so parse it
+            //     declaration(p);
+            // } else {
+            //     // Declaration
+            //     declaration(p);
+            // }
+        }
+    } else if p.at_static_assert_declaration() {
+        // TODO: need to figure out how to open intermediary nodes to build the tree
+        // with Declaration as the parent node
+
+        // If we have a static assert declaration, parse it (this is a declaration)
+        static_assert_declaration(p);
     } else {
-        declaration(p);
+        p.advance_with_error(&format!(
+            "Unexpected token {}{}{}{} Expected one of{} {}\n",
+            "'".cyan(),
+            p.current_token().lexeme().red(),
+            "'".cyan(),
+            ".".black(),
+            ":".black(),
+            display(FN_DEF_DECLARATION_SPECIFIERS_FIRST)
+        ));
     }
+
+    // function_definition               | parser here
+    // 	: declaration_specifiers declarator | declaration_list compound_statement
+    // 	| declaration_specifiers declarator | compound_statement
+    // 	;
 
     p.close(m, TreeKind::ExternDecl);
     p.trace_exit();
 }
 
-// function_definition
-// 	: declaration_specifiers declarator declaration_list compound_statement
-// 	| declaration_specifiers declarator compound_statement
-// 	;
-//
-// FunctionDef = DeclarationSpecifiers Declarator (DeclarationList)?
-// CompoundStatement
-// | DeclarationSpecifiers Declarator CompoundStatement
+///```yacc
+/// function_definition
+/// 	: declaration_specifiers declarator declaration_list compound_statement
+/// 	| declaration_specifiers declarator compound_statement
+/// 	;
+/// ```
+///
+/// FunctionDef = DeclarationSpecifiers Declarator (DeclarationList)?
+/// CompoundStatement
+/// | DeclarationSpecifiers Declarator CompoundStatement
 pub(crate) fn function_def(p: &mut Parser) {
     p.enter(TreeKind::FunctionDef);
     let m = p.open();
@@ -697,12 +1093,13 @@ pub(crate) fn function_def(p: &mut Parser) {
     // Parse declaration specifiers
     declaration_specifiers(p);
 
-    println!("parsing declarator in function_def {:?}", p.current_token());
+    // println!("parsing declarator in function_def {:?}", p.current_token());
 
     // Parse declarator
     declarator(p);
 
-    println!("finished parsing declarator in function_def {:?}", p.current_token());
+    // println!("finished parsing declarator in function_def {:?}",
+    // p.current_token());
 
     // Check if there's a declaration list
     if p.at_any(DECLARATION_LIST_FIRST) {
@@ -766,7 +1163,11 @@ fn statement_list(p: &mut Parser) {
         // Attempt to parse a statement
         if !p.at_statement() {
             // If parsing a statement fails, report an error and try to recover
-            p.error("Expected a statement");
+            p.error(&format!(
+                "Unexpected token, expected one of: {}",
+                display(STATEMENT_LIST_FIRST)
+            ));
+
             // Attempt to skip tokens until we find a statement or reach the end
             while !p.eof() && !p.at(TokenKind::RBRACE) {
                 if p.at_statement() {
@@ -829,7 +1230,15 @@ pub(crate) fn statement(p: &mut Parser) {
     } else if p.at_any(&[TokenKind::IDENTIFIER, TokenKind::SEMICOLON]) {
         expression_statement(p);
     } else {
-        p.advance_with_error("Expected statement");
+        p.advance_with_error(&format!(
+            "Unexpected token {}{}{}{} Expected one of{} {}\n",
+            "'".cyan(),
+            p.current_token().lexeme().red(),
+            "'".cyan(),
+            ".".black(),
+            ":".black(),
+            display(STATEMENT_LIST_FIRST)
+        ));
     }
 
     p.close(m, TreeKind::Statement);
@@ -889,7 +1298,11 @@ pub(crate) fn compound_statement(p: &mut Parser) {
     if p.at_any(STATEMENT_LIST_FIRST) {
         statement_list(p);
     } else if p.at_any(DECLARATION_LIST_FIRST) {
+        // println!("parsing declaration_list in compound_statement {:?}",
+        // p.current_token());
         declaration_list(p);
+        // println!("finished parsing declaration_list in compound_statement {:?}",
+        // p.current_token());
 
         // Check if there's a statement_list after declaration_list
         if p.at_any(STATEMENT_LIST_FIRST) {
@@ -965,6 +1378,9 @@ pub(crate) fn selection_statement(p: &mut Parser) {
 /// Parses an **iteration statement** as per the [**C grammar**][1].
 ///
 /// # Syntax
+///
+/// ## [C 2011 standard][1]
+///
 /// ```text
 /// iteration_statement
 ///     : WHILE '(' expression ')' statement
@@ -975,6 +1391,8 @@ pub(crate) fn selection_statement(p: &mut Parser) {
 ///     | FOR '(' declaration expression_statement expression ')' statement
 ///     ;
 /// ```
+///
+/// ## [Ungrammar](https://rust-analyzer.github.io//blog/2020/10/24/introducing-ungrammar.html)
 ///
 /// ```ungrammar
 /// IterationStatement = "while" "(" Expression ")" Statement
@@ -1038,7 +1456,11 @@ pub(crate) fn iteration_statement(p: &mut Parser) {
         p.expect(TokenKind::RPAREN);
         statement(p);
     } else {
-        p.advance_with_error("Expected WHILE_KW, DO_KW, or FOR_KW in iteration_statement");
+        // TODO: error reporting
+        p.advance_with_error(&format!(
+            "Unexpected token '{}'. Expected one of: 'while', 'do', 'for' keywords",
+            p.current_token().lexeme()
+        ));
     }
 
     p.close(m, TreeKind::IterationStatement);
@@ -1222,7 +1644,7 @@ pub(crate) fn direct_declarator(p: &mut Parser) {
     p.enter(TreeKind::DirectDeclarator);
     let m = p.open();
 
-    println!("parsing direct_declarator: {:?}", p.current_token());
+    // println!("parsing direct_declarator: {:?}", p.current_token());
 
     // Try to match the various production rules for direct_declarator
     if p.at(TokenKind::IDENTIFIER) {
@@ -1926,7 +2348,8 @@ pub(crate) fn primary_expression(p: &mut Parser) {
     p.enter(TreeKind::PrimaryExpression);
     let m = p.open();
 
-    println!("primary_expression: {:?} {:?}", p.current_token().kind(), p.current_token().lexeme());
+    // println!("primary_expression: {:?} {:?}", p.current_token().kind(),
+    // p.current_token().lexeme());
 
     if p.at(TokenKind::IDENTIFIER) {
         p.advance();
@@ -2347,8 +2770,21 @@ fn declaration_list(p: &mut Parser) {
 
     // TODO: make this logic more robust
 
-    while !p.eof() && !p.at(TokenKind::RBRACE) {
+    let mut declaration_seen = false;
+
+    while !p.eof() && p.at_declaration() {
         declaration(p);
+
+        if !declaration_seen {
+            declaration_seen = true;
+        }
+    }
+
+    if !declaration_seen {
+        p.advance_with_error(&format!(
+            "Expected a declaration, but instead found {:?}",
+            p.current()
+        ));
     }
 
     p.close(m, TreeKind::DeclarationList);
@@ -2462,11 +2898,11 @@ fn declaration_specifiers(p: &mut Parser) {
     p.enter(TreeKind::DeclarationSpecifiers);
     let m = p.open();
 
-    println!(
-        "declaration_specifiers: {:?} {:?}",
-        p.current_token().kind(),
-        p.current_token().lexeme()
-    );
+    // println!(
+    //     "declaration_specifiers: {:?} {:?}",
+    //     p.current_token().kind(),
+    //     p.current_token().lexeme()
+    // );
 
     if p.at_storage_class_specifier() {
         storage_class_specifier(p);

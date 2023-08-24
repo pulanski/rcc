@@ -16,4 +16,12 @@
 //     return 0;
 // }
 
-int main(int argc, char** argv) { return 0; }
+// int main(int argc, char** argv) { return 0; }
+
+// double add(double x, double y) { return x + y; }
+
+int main()
+{
+    int x;
+    return 0;
+}

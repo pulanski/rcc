@@ -52,11 +52,11 @@ chalk-recursive = { version = "0.90.0", default-features = false }
 chrono = "=0.4.19"                                                 # Avoid a dependency iana-time-zone, which requires a fixup
 # clap = "4.0.7"
 clap = { version = "4", default-features = false, features = [
-  "error-context",
-  "help",
-  "std",
-  "usage",
-  "derive",
+    "error-context",
+    "help",
+    "std",
+    "usage",
+    "derive",
 ] }
 clap_derive = "4.0.7"
 codespan = "0.11.1"
@@ -75,7 +75,7 @@ crossbeam = "0.8.2"
 crossbeam-channel = "0.5.7"
 crossbeam-epoch = "0.9.14"
 crossterm = { version = "0.26.1", default-features = false, features = [
-  "event-stream",
+    "event-stream",
 ] }
 signal-hook-mio = { version = "0.2.3", features = ["support-v0_7"] }
 # signal-hook = { version = "0.3.9", features = ["extended-siginfo"] }
@@ -276,12 +276,12 @@ slog = "2.7.0"
 signal-hook-registry = "1.4.1"
 siphasher = "0.3.3"
 smallvec = { version = "1.10", features = [
-  "const_generics",
-  "const_new",
-  "serde",
-  "specialization",
-  "union",
-  "write",
+    "const_generics",
+    "const_new",
+    "serde",
+    "specialization",
+    "union",
+    "write",
 ] }
 smartstring = "1.0.1"
 smol_str = "0.1.24"
@@ -298,6 +298,7 @@ strum_macros = "0.24.3"
 # superconsole = "0.1.0"
 symlink = "0.1.0"
 syn = { version = "2.0.13", features = ["extra-traits", "full", "visit"] }
+syntect = "5.1.0"
 sync_wrapper = "0.1.0"
 sys-info = "0.9.1"
 sysinfo = "0.28.4"
@@ -313,7 +314,7 @@ test-case = "3.1.0"
 # test-context = "0.1.4"
 text-size = "1.1.0"
 textwrap = { version = "0.14.0", default-features = false, features = [
-  "unicode-width",
+    "unicode-width",
 ] }
 # textwrap = { version = "0.11", features = ["term_size"] }
 # error[E0658]: use of unstable library feature 'rustc_private': this crate is being loaded from the sysroot, an unstable location; did you mean to load this crate from crates.io via `Cargo.toml` instead?
@@ -330,11 +331,11 @@ thiserror = "1.0.40"
 tinyvec = "1.5.1"
 tokio = { version = "1.27.0", features = ["full"] }
 tokio-stream = { version = "0.1.4", features = [
-  "fs",
-  "io-util",
-  "net",
-  "sync",
-  "time",
+    "fs",
+    "io-util",
+    "net",
+    "sync",
+    "time",
 ] }
 tokio-util = { version = "0.7.7", features = ["full"] }
 toml = "0.7.3"
@@ -362,9 +363,9 @@ unicode-width = "0.1.9"
 unindent = "0.2.1"
 url = "2.3.1"
 uuid = { version = "1.3.0", features = [
-  "v4",                # Lets you generate random UUIDs
-  "fast-rng",          # Use a faster (but still sufficiently random) RNG
-  "macro-diagnostics", # Enable better diagnostics for compile-time UUIDs
+    "v4",                # Lets you generate random UUIDs
+    "fast-rng",          # Use a faster (but still sufficiently random) RNG
+    "macro-diagnostics", # Enable better diagnostics for compile-time UUIDs
 ] }
 # validators = "0.24.3"
 walkdir = "2.3.2"

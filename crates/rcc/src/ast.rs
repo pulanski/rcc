@@ -1,8 +1,13 @@
-use std::fmt::{self, Display};
-
+use crate::lexer::{
+    Span,
+    Token,
+};
+use owo_colors::OwoColorize;
+use std::fmt::{
+    self,
+    Display,
+};
 use strum_macros::Display;
-
-use crate::lexer::Token;
 
 #[macro_export]
 macro_rules! format_to {
@@ -12,7 +17,7 @@ macro_rules! format_to {
     };
 }
 
-#[derive(Debug, Display)]
+#[derive(Debug, Display, PartialEq, Eq, Clone, Copy)]
 pub enum TreeKind {
     TranslationUnit,
     StaticAssertDeclaration,
@@ -104,80 +109,10 @@ pub enum TreeKind {
     AbstractDeclarator,
 }
 
-// impl Display for TreeKind {
-//   fn fmt(
-//     &self,
-//     f: &mut std::fmt::Formatter<'_>,
-//   ) -> std::fmt::Result {
-//     match self {
-//       TreeKind::TranslationUnit => write!(f, "TranslationUnit"),
-//       TreeKind::StructDeclarator =>
-//       TreeKind::EnumSpecifier =>
-//       TreeKind::Enumerator => todo!(),
-//       TreeKind::EnumeratorList => todo!(),
-//       TreeKind::StructOrUnionSpecifier => todo!(),
-//       TreeKind::PrimaryExpression => todo!(),
-//       TreeKind::StructDeclaratorList => todo!(),
-//       TreeKind::StructDeclaration => todo!(),
-//       TreeKind::StructDeclarationList => todo!(),
-//       TreeKind::ArgumentExpressionList => todo!(),
-//       TreeKind::TypeName => todo!(),
-//       TreeKind::SpecifierQualifierList => todo!(),
-//       TreeKind::DirectDeclarator => todo!(),
-//       TreeKind::ErrorTree => todo!(),
-//       TreeKind::CompoundStatement => todo!(),
-//       TreeKind::LogicalAndExpression => todo!(),
-//       TreeKind::ExternDecl => todo!(),
-//       TreeKind::File => todo!(),
-//       TreeKind::PostfixExpression => todo!(),
-//       TreeKind::InclusiveOrExpression => todo!(),
-//       TreeKind::ExclusiveOrExpression => todo!(),
-//       TreeKind::AndExpression => todo!(),
-//       TreeKind::EqualityExpression => todo!(),
-//       TreeKind::RelationalExpression => todo!(),
-//       TreeKind::ShiftExpression => todo!(),
-//       TreeKind::AdditiveExpression => todo!(),
-//       TreeKind::MultiplicativeExpression => todo!(),
-//       TreeKind::CastExpression => todo!(),
-//       TreeKind::UnaryExpression => todo!(),
-//       TreeKind::IdentifierList => todo!(),
-//       TreeKind::StatementList => todo!(),
-//       TreeKind::DirectAbstractDeclarator => todo!(),
-//       TreeKind::Fn => todo!(),
-//       TreeKind::TypeExpr => todo!(),
-//       TreeKind::ParamList => todo!(),
-//       TreeKind::LogicalOrExpression => todo!(),
-//       TreeKind::Pointer => todo!(),
-//       TreeKind::Declaration => todo!(),
-//       TreeKind::DeclarationList => todo!(),
-//       TreeKind::InitDeclaratorList => todo!(),
-//       TreeKind::TypeQualifierList => todo!(),
-//       TreeKind::InitDeclarator => todo!(),
-//       TreeKind::Declarator => todo!(),
-//       TreeKind::TypeSpecifier => todo!(),
-//       TreeKind::TypeQualifier => todo!(),
-//       TreeKind::Param => todo!(),
-//       TreeKind::Block => todo!(),
-//       TreeKind::StmtLet => todo!(),
-//       TreeKind::StorageClassSpecifier => todo!(),
-//       TreeKind::StmtReturn => todo!(),
-//       TreeKind::StmtExpr => todo!(),
-//       TreeKind::ExprLiteral => todo!(),
-//       TreeKind::ExprName => todo!(),
-//       TreeKind::ExprParen => todo!(),
-//       TreeKind::ExprBinary => todo!(),
-//       TreeKind::ExprCall => todo!(),
-//       TreeKind::ArgList => todo!(),
-//       TreeKind::Arg => todo!(),
-//       TreeKind::DeclarationSpecifiers => todo!(),
-//       TreeKind::FunctionDef => todo!(),
-//     }
-//   }
-// }
-
 #[derive(Debug)]
 pub struct Tree {
-    pub(crate) kind: TreeKind,
+    pub(crate) kind:     TreeKind,
+    pub(crate) range:    Span,
     pub(crate) children: Vec<Child>,
 }
 
@@ -190,16 +125,62 @@ pub enum Child {
 impl Tree {
     pub fn print(&self, buf: &mut String, level: usize) {
         let indent = "  ".repeat(level);
-        format_to!(buf, "{indent}{:?}\n", self.kind);
+
+        // Print the tree node with its range.
+        if level == 0 {
+            format_to!(
+                buf,
+                "{indent}{}{}{}\n",
+                self.kind.green(),
+                "@".yellow(),
+                self.range.black().italic()
+            );
+        } else {
+            format_to!(
+                buf,
+                "{indent}{}{}{}{}\n",
+                "└─".black(),
+                self.kind.green(),
+                "@".yellow(),
+                self.range.black().italic()
+            );
+        }
+
         for child in &self.children {
             match child {
                 Child::Token(token) => {
-                    format_to!(buf, "{indent}  '{}'\n", token.lexeme)
+                    // Print the token with its range.
+                    format_to!(
+                        buf,
+                        "{indent}  {} {:?}@{} {}{}{}\n",
+                        "\\-".magenta(),
+                        token.kind().blue(),
+                        token.span().to_string().black().italic(),
+                        "'".red(),
+                        token.lexeme,
+                        "'".red(),
+                    );
                 }
                 Child::Tree(tree) => tree.print(buf, level + 1),
             }
         }
         assert!(buf.ends_with('\n'));
+    }
+
+    // Matches certain patterns on parse trees and transforms them into
+    // AST nodes.
+    // pub fn transform(&mut self) {
+    //     match self.kind {
+    //         TreeKind::TranslationUnit => {
+    //             // Transform the translation unit into a file node.
+    //             self.kind = TreeKind::File;
+    //         }
+
+    pub fn contains_errors(&self) -> bool {
+        self.kind == TreeKind::ErrorTree ||
+            self.children
+                .iter()
+                .any(|child| matches!(child, Child::Tree(tree) if tree.contains_errors()))
     }
 }
 

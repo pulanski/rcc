@@ -1,10 +1,17 @@
 use std::{
-    fmt::{self, Display},
+    fmt::{
+        self,
+        Display,
+    },
     ops::Range,
 };
 
 use derive_more::Display;
-use getset::{Getters, MutGetters, Setters};
+use getset::{
+    Getters,
+    MutGetters,
+    Setters,
+};
 // use getset::{Getters, MutGetters, Setters};
 // use itertools::Itertools;
 use logos::Logos;
@@ -15,7 +22,7 @@ use typed_builder::TypedBuilder;
 use crate::cst::SyntaxKind;
 
 #[allow(non_camel_case_types, clippy::upper_case_acronyms)]
-#[derive(Logos, Debug, Display, Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Logos, Debug, Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord)]
 pub enum TokenKind {
     // Punctuation
     #[token("+")]
@@ -329,6 +336,127 @@ pub enum TokenKind {
     #[end]
     EOF,
 }
+impl Display for TokenKind {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            // Operators
+            TokenKind::PLUS => write!(f, "+"),
+            TokenKind::MINUS => write!(f, "-"),
+            TokenKind::STAR => write!(f, "*"),
+            TokenKind::SLASH => write!(f, "/"),
+            TokenKind::DSLASH => write!(f, "//"),
+            TokenKind::PERCENT => write!(f, "%"),
+            TokenKind::DSTAR => write!(f, "**"),
+            TokenKind::TILDE => write!(f, "~"),
+            TokenKind::AMP => write!(f, "&"),
+            TokenKind::DOUBLEAMP => write!(f, "&&"),
+            TokenKind::PIPE => write!(f, "|"),
+            TokenKind::DOUBLEPIPE => write!(f, "||"),
+            TokenKind::CARET => write!(f, "^"),
+            TokenKind::LSHIFT => write!(f, "<<"),
+            TokenKind::RSHIFT => write!(f, ">>"),
+            TokenKind::EQ => write!(f, "="),
+            TokenKind::LT => write!(f, "<"),
+            TokenKind::GT => write!(f, ">"),
+            TokenKind::GE => write!(f, ">="),
+            TokenKind::LE => write!(f, "<="),
+            TokenKind::EQEQ => write!(f, "=="),
+            TokenKind::NE => write!(f, "!="),
+            TokenKind::BANG => write!(f, "!"),
+            TokenKind::PLUSEQ => write!(f, "+="),
+            TokenKind::MINUSEQ => write!(f, "-="),
+            TokenKind::STAREQ => write!(f, "*="),
+            TokenKind::SLASHEQ => write!(f, "/="),
+            TokenKind::DSLASHEQ => write!(f, "//="),
+            TokenKind::PERCENTEQ => write!(f, "%="),
+            TokenKind::AMPEQ => write!(f, "&="),
+            TokenKind::PIPEEQ => write!(f, "|="),
+            TokenKind::CARETEQ => write!(f, "^="),
+            TokenKind::LSHIFTEQ => write!(f, "<<="),
+            TokenKind::RSHIFTEQ => write!(f, ">>="),
+            TokenKind::QUESTION => write!(f, "?"),
+            TokenKind::PTR_OP => write!(f, "->"),
+            TokenKind::INC_OP => write!(f, "++"),
+            TokenKind::DEC_OP => write!(f, "--"),
+
+            // Other Symbols
+            TokenKind::DOT => write!(f, "."),
+            TokenKind::COMMA => write!(f, ","),
+            TokenKind::SEMICOLON => write!(f, ";"),
+            TokenKind::COLON => write!(f, ":"),
+            TokenKind::LPAREN => write!(f, "("),
+            TokenKind::RPAREN => write!(f, ")"),
+            TokenKind::LBRACKET => write!(f, "["),
+            TokenKind::RBRACKET => write!(f, "]"),
+            TokenKind::LBRACE => write!(f, "{{"),
+            TokenKind::RBRACE => write!(f, "}}"),
+            TokenKind::ELLIPSIS => write!(f, "..."),
+
+            // Keywords
+            TokenKind::AUTO_KW => write!(f, "auto"),
+            TokenKind::BREAK_KW => write!(f, "break"),
+            TokenKind::CASE_KW => write!(f, "case"),
+            TokenKind::CHAR_KW => write!(f, "char"),
+            TokenKind::CONST_KW => write!(f, "const"),
+            TokenKind::CONTINUE_KW => write!(f, "continue"),
+            TokenKind::DEFAULT_KW => write!(f, "default"),
+            TokenKind::DO_KW => write!(f, "do"),
+            TokenKind::DOUBLE_KW => write!(f, "double"),
+            TokenKind::ELSE_KW => write!(f, "else"),
+            TokenKind::ENUM_KW => write!(f, "enum"),
+            TokenKind::EXTERN_KW => write!(f, "extern"),
+            TokenKind::FLOAT_KW => write!(f, "float"),
+            TokenKind::FOR_KW => write!(f, "for"),
+            TokenKind::GOTO_KW => write!(f, "goto"),
+            TokenKind::IF_KW => write!(f, "if"),
+            TokenKind::INLINE_KW => write!(f, "inline"),
+            TokenKind::INT_KW => write!(f, "int"),
+            TokenKind::LONG_KW => write!(f, "long"),
+            TokenKind::REGISTER_KW => write!(f, "register"),
+            TokenKind::RESTRICT_KW => write!(f, "restrict"),
+            TokenKind::RETURN_KW => write!(f, "return"),
+            TokenKind::SHORT_KW => write!(f, "short"),
+            TokenKind::SIGNED_KW => write!(f, "signed"),
+            TokenKind::SIZEOF_KW => write!(f, "sizeof"),
+            TokenKind::STATIC_KW => write!(f, "static"),
+            TokenKind::STRUCT_KW => write!(f, "struct"),
+            TokenKind::SWITCH_KW => write!(f, "switch"),
+            TokenKind::TYPEDEF_KW => write!(f, "typedef"),
+            TokenKind::UNION_KW => write!(f, "union"),
+            TokenKind::UNSIGNED_KW => write!(f, "unsigned"),
+            TokenKind::VOID_KW => write!(f, "void"),
+            TokenKind::VOLATILE_KW => write!(f, "volatile"),
+            TokenKind::WHILE_KW => write!(f, "while"),
+            TokenKind::ALIGNAS_KW => write!(f, "_Alignas"),
+            TokenKind::ALIGNOF_KW => write!(f, "_Alignof"),
+            TokenKind::ATOMIC_KW => write!(f, "_Atomic"),
+            TokenKind::BOOL_KW => write!(f, "_Bool"),
+            TokenKind::COMPLEX_KW => write!(f, "_Complex"),
+            TokenKind::GENERIC_KW => write!(f, "_Generic"),
+            TokenKind::IMAGINARY_KW => write!(f, "_Imaginary"),
+            TokenKind::NORETURN_KW => write!(f, "_Noreturn"),
+            TokenKind::STATIC_ASSERT_KW => write!(f, "_Static_assert"),
+            TokenKind::THREAD_LOCAL_KW => write!(f, "_Thread_local"),
+            TokenKind::FUNC_NAME_KW => write!(f, "__func__"),
+
+            // Identifier and Literals
+            TokenKind::IDENTIFIER => write!(f, "identifier"),
+            TokenKind::STRING => write!(f, "string literal"),
+            TokenKind::BYTES => write!(f, "bytes literal"),
+            TokenKind::INTEGER_CONSTANT => write!(f, "integer constant"),
+            TokenKind::FLOATING_CONSTANT => write!(f, "floating constant"),
+
+            // Comments and Whitespace
+            TokenKind::COMMENT => write!(f, "comment"),
+            TokenKind::WHITESPACE => write!(f, "whitespace"),
+            TokenKind::NEWLINE => write!(f, "newline"),
+
+            // Unknown and EOF
+            TokenKind::UNKNOWN => write!(f, "unknown"),
+            TokenKind::EOF => write!(f, "end of file"),
+        }
+    }
+}
 
 impl TokenKind {
     /// Convert a given [`TokenKind`] to a [`SyntaxKind`].
@@ -446,13 +574,118 @@ impl TokenKind {
             TokenKind::FUNC_NAME_KW => SyntaxKind::FUNC_NAME_KW,
         }
     }
+
+    pub(crate) fn is_declaration_specifier(&self) -> bool {
+        self.is_storage_class_specifier() ||
+            self.is_type_specifier() ||
+            self.is_type_qualifier() ||
+            self.is_function_specifier() ||
+            self.is_alignment_specifier()
+    }
+
+    pub(crate) fn is_semicolon(&self) -> bool {
+        matches!(self, TokenKind::SEMICOLON)
+    }
+
+    pub(crate) fn is_declarator(&self) -> bool {
+        self.is_direct_declarator() || self.is_pointer()
+    }
+
+    pub(crate) fn is_direct_declarator(&self) -> bool {
+        matches!(self, TokenKind::IDENTIFIER | TokenKind::LPAREN)
+    }
+
+    pub(crate) fn is_pointer(&self) -> bool {
+        matches!(self, TokenKind::STAR)
+    }
+
+    pub(crate) fn is_equal(&self) -> bool {
+        matches!(self, TokenKind::EQ)
+    }
+
+    pub(crate) fn is_storage_class_specifier(&self) -> bool {
+        matches!(
+            self,
+            TokenKind::AUTO_KW |
+                TokenKind::EXTERN_KW |
+                TokenKind::REGISTER_KW |
+                TokenKind::STATIC_KW |
+                TokenKind::THREAD_LOCAL_KW
+        )
+    }
+
+    pub(crate) fn is_type_specifier(&self) -> bool {
+        matches!(
+            self,
+            TokenKind::VOID_KW |
+                TokenKind::CHAR_KW |
+                TokenKind::SHORT_KW |
+                TokenKind::INT_KW |
+                TokenKind::LONG_KW |
+                TokenKind::FLOAT_KW |
+                TokenKind::DOUBLE_KW |
+                TokenKind::SIGNED_KW |
+                TokenKind::UNSIGNED_KW |
+                TokenKind::BOOL_KW |
+                TokenKind::COMPLEX_KW |
+                TokenKind::IMAGINARY_KW |
+                TokenKind::STRUCT_KW |
+                TokenKind::UNION_KW |
+                TokenKind::ENUM_KW |
+                TokenKind::TYPEDEF_KW |
+                TokenKind::INLINE_KW |
+                TokenKind::RESTRICT_KW |
+                TokenKind::ATOMIC_KW |
+                TokenKind::GENERIC_KW |
+                TokenKind::NORETURN_KW |
+                TokenKind::STATIC_ASSERT_KW
+        )
+    }
+
+    pub(crate) fn is_function_specifier(&self) -> bool {
+        matches!(self, TokenKind::INLINE_KW | TokenKind::NORETURN_KW)
+    }
+
+    pub(crate) fn is_type_qualifier(&self) -> bool {
+        matches!(
+            self,
+            TokenKind::CONST_KW |
+                TokenKind::RESTRICT_KW |
+                TokenKind::VOLATILE_KW |
+                TokenKind::ATOMIC_KW
+        )
+    }
+
+    pub(crate) fn is_alignment_specifier(&self) -> bool {
+        matches!(self, TokenKind::ALIGNAS_KW)
+    }
+
+    pub(crate) fn is_l_brace(&self) -> bool {
+        matches!(self, TokenKind::LBRACE)
+    }
 }
 
-#[derive(Debug, Display, Default, Clone, Copy, PartialEq, Eq, Hash, Ord, PartialOrd)]
+#[derive(
+    Debug,
+    Display,
+    Default,
+    Clone,
+    Copy,
+    PartialEq,
+    Eq,
+    Hash,
+    Ord,
+    PartialOrd,
+    Getters,
+    MutGetters,
+    Setters,
+    TypedBuilder,
+)]
 #[display(fmt = "{start}..{end}")]
+#[getset(get = "pub", get_mut = "pub", set = "pub")]
 pub struct Span {
     start: usize,
-    end: usize,
+    end:   usize,
 }
 
 // use rowan::{TextRange, TextSize};
@@ -483,9 +716,9 @@ impl Span {
 )]
 #[getset(get = "pub", get_mut = "pub", set = "pub")]
 pub struct Token {
-    pub kind: TokenKind,
+    pub kind:   TokenKind,
     pub lexeme: String,
-    pub span: Span,
+    pub span:   Span,
 }
 
 impl Token {
@@ -533,7 +766,7 @@ impl TokenSink {
 )]
 pub struct TokenStream {
     #[getset(get = "pub", get_mut = "pub", set = "pub")]
-    text: String,
+    text:   String,
     #[getset(get = "pub", get_mut = "pub", set = "pub")]
     tokens: Vec<Token>,
     #[builder(default = 0)]
@@ -547,7 +780,7 @@ pub struct TokenStream {
 impl TokenStream {
     pub fn new(input: &str) -> Self {
         Self {
-            text: String::from(input),
+            text:   String::from(input),
             tokens: Vec::new(),
             cursor: 0,
             // file_name: PathBuf::new(),
@@ -585,4 +818,172 @@ impl Iterator for TokenStream {
         self.cursor += 1;
         token
     }
+}
+
+pub fn lex(input: &str) -> TokenSink {
+    let start = std::time::Instant::now();
+
+    let mut lexer = TokenKind::lexer(input);
+    let mut token_sink = TokenSink::new(input);
+    // TokenSink::new(file_id, file.name().to_string().into());
+    let mut current_unknown_token: Option<Token> = None;
+
+    while let Some(token_result) = lexer.next() {
+        match token_result {
+            Ok(token) => {
+                if let Some(unknown_token) = current_unknown_token.clone() {
+                    // TODO: Add diagnostic
+                    // token_sink.lexical_errors.push(
+                    //   unknown_token_diagnostic(
+                    //     file_id,
+                    //     &unknown_token,
+                    //   ),
+                    // );
+
+                    token_sink.tokens.push(unknown_token);
+                    current_unknown_token = None;
+                }
+
+                // If token is whitespace (e.g. a newline, comment, etc.), skip it.
+                if token == TokenKind::WHITESPACE ||
+                    token == TokenKind::COMMENT ||
+                    token == TokenKind::NEWLINE
+                {
+                    continue;
+                }
+
+                tracing::trace!(
+                    " {}  Creating token {:?} at {:?}",
+                    "LEXER".green(),
+                    token.yellow(),
+                    lexer.span().black().italic()
+                );
+
+                // If the token is a double star, we want to convert it to two single stars and
+                // add them to the token sink.
+
+                if token == TokenKind::DSTAR {
+                    tracing::trace!(
+                        " {}  Creating token {:?} at {:?}",
+                        "LEXER".green(),
+                        TokenKind::STAR.yellow(),
+                        lexer.span().black().italic()
+                    );
+
+                    token_sink.tokens.push(Token::new(
+                        TokenKind::STAR,
+                        "*".to_string().into(),
+                        (lexer.span().start..lexer.span().start + 1).into(),
+                    ));
+
+                    token_sink.tokens.push(Token::new(
+                        TokenKind::STAR,
+                        "*".to_string().into(),
+                        (lexer.span().start + 1..lexer.span().end).into(),
+                    ));
+
+                    continue;
+                }
+
+                token_sink.tokens.push(Token::new(
+                    token,
+                    lexer.slice().to_string().into(),
+                    lexer.span().into(),
+                ));
+            }
+            Err(()) => {
+                if let Some(unknown_token) = current_unknown_token.clone() {
+                    let Token { kind: _, span, lexeme } = unknown_token;
+
+                    let span = span.merge(lexer.span());
+                    let updated_lexeme = format!("{}{}", lexeme, lexer.slice());
+
+                    tracing::debug!(
+                        "Gluing together unknown tokens {} and {} to form {} at {}",
+                        lexeme,
+                        lexer.slice(),
+                        updated_lexeme,
+                        span
+                    );
+
+                    current_unknown_token =
+                        Some(Token::new(TokenKind::UNKNOWN, updated_lexeme.into(), span));
+                } else {
+                    tracing::debug!(
+                        "Creating new unknown token {} at {:?}",
+                        lexer.slice(),
+                        lexer.span()
+                    );
+
+                    current_unknown_token = Some(Token::new(
+                        TokenKind::UNKNOWN,
+                        lexer.slice().to_string().into(),
+                        lexer.span().into(),
+                    ));
+                }
+            }
+        }
+    }
+
+    tracing::trace!(
+        " {}  Creating token {} at {:?}",
+        "LEXER".green(),
+        "EOF".yellow(),
+        lexer.span().black().italic()
+    );
+
+    token_sink.tokens.push(Token::new(TokenKind::EOF, "".to_string().into(), lexer.span().into()));
+
+    // Collect token information and format it as a tree
+    let mut token_info = vec![];
+    for token in token_sink.tokens().iter() {
+        token_info.push(token);
+    }
+    let formatted_tokens = format_tokens_as_tree(&token_info, "  ");
+
+    tracing::debug!("\n\n{}{}\n\n{}", "Token Stream".blue(), ":".black(), formatted_tokens);
+
+    let elapsed = start.elapsed();
+
+    tracing::info!(
+        " {}   {} {} constructed{}{}{}",
+        "LEXER".yellow(),
+        " SUCCESS ".black().on_green(),
+        "Token Stream".blue(),
+        " in ".black(),
+        format!("{elapsed:?}").cyan(),
+        ".".black()
+    );
+
+    token_sink
+}
+
+fn format_tokens_as_tree(tokens: &[&Token], indent: &str) -> String {
+    let mut formatted = String::new();
+
+    for (i, token) in tokens.iter().enumerate() {
+        formatted.push_str(&format!(
+            "{indent}{}{:?}{}{}\n",
+            "└─".black(),
+            token.kind.green(),
+            "@".yellow(),
+            token.span.black().italic()
+        ));
+
+        formatted.push_str(&format!(
+            "{indent}  {} {:?}@{} {}{}{}\n",
+            "\\-".magenta(),
+            token.kind.blue(),
+            token.span.black().italic(),
+            "'".red(),
+            token.lexeme,
+            "'".red(),
+        ));
+
+        if i < tokens.len() - 1 {
+            formatted.push('\n');
+        }
+    }
+
+    formatted
 }
