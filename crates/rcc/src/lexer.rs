@@ -1,17 +1,10 @@
 use std::{
-    fmt::{
-        self,
-        Display,
-    },
+    fmt::{self, Display},
     ops::Range,
 };
 
 use derive_more::Display;
-use getset::{
-    Getters,
-    MutGetters,
-    Setters,
-};
+use getset::{Getters, MutGetters, Setters};
 // use getset::{Getters, MutGetters, Setters};
 // use itertools::Itertools;
 use logos::Logos;
@@ -576,11 +569,11 @@ impl TokenKind {
     }
 
     pub(crate) fn is_declaration_specifier(&self) -> bool {
-        self.is_storage_class_specifier() ||
-            self.is_type_specifier() ||
-            self.is_type_qualifier() ||
-            self.is_function_specifier() ||
-            self.is_alignment_specifier()
+        self.is_storage_class_specifier()
+            || self.is_type_specifier()
+            || self.is_type_qualifier()
+            || self.is_function_specifier()
+            || self.is_alignment_specifier()
     }
 
     pub(crate) fn is_semicolon(&self) -> bool {
@@ -606,39 +599,39 @@ impl TokenKind {
     pub(crate) fn is_storage_class_specifier(&self) -> bool {
         matches!(
             self,
-            TokenKind::AUTO_KW |
-                TokenKind::EXTERN_KW |
-                TokenKind::REGISTER_KW |
-                TokenKind::STATIC_KW |
-                TokenKind::THREAD_LOCAL_KW
+            TokenKind::AUTO_KW
+                | TokenKind::EXTERN_KW
+                | TokenKind::REGISTER_KW
+                | TokenKind::STATIC_KW
+                | TokenKind::THREAD_LOCAL_KW
         )
     }
 
     pub(crate) fn is_type_specifier(&self) -> bool {
         matches!(
             self,
-            TokenKind::VOID_KW |
-                TokenKind::CHAR_KW |
-                TokenKind::SHORT_KW |
-                TokenKind::INT_KW |
-                TokenKind::LONG_KW |
-                TokenKind::FLOAT_KW |
-                TokenKind::DOUBLE_KW |
-                TokenKind::SIGNED_KW |
-                TokenKind::UNSIGNED_KW |
-                TokenKind::BOOL_KW |
-                TokenKind::COMPLEX_KW |
-                TokenKind::IMAGINARY_KW |
-                TokenKind::STRUCT_KW |
-                TokenKind::UNION_KW |
-                TokenKind::ENUM_KW |
-                TokenKind::TYPEDEF_KW |
-                TokenKind::INLINE_KW |
-                TokenKind::RESTRICT_KW |
-                TokenKind::ATOMIC_KW |
-                TokenKind::GENERIC_KW |
-                TokenKind::NORETURN_KW |
-                TokenKind::STATIC_ASSERT_KW
+            TokenKind::VOID_KW
+                | TokenKind::CHAR_KW
+                | TokenKind::SHORT_KW
+                | TokenKind::INT_KW
+                | TokenKind::LONG_KW
+                | TokenKind::FLOAT_KW
+                | TokenKind::DOUBLE_KW
+                | TokenKind::SIGNED_KW
+                | TokenKind::UNSIGNED_KW
+                | TokenKind::BOOL_KW
+                | TokenKind::COMPLEX_KW
+                | TokenKind::IMAGINARY_KW
+                | TokenKind::STRUCT_KW
+                | TokenKind::UNION_KW
+                | TokenKind::ENUM_KW
+                | TokenKind::TYPEDEF_KW
+                | TokenKind::INLINE_KW
+                | TokenKind::RESTRICT_KW
+                | TokenKind::ATOMIC_KW
+                | TokenKind::GENERIC_KW
+                | TokenKind::NORETURN_KW
+                | TokenKind::STATIC_ASSERT_KW
         )
     }
 
@@ -649,10 +642,10 @@ impl TokenKind {
     pub(crate) fn is_type_qualifier(&self) -> bool {
         matches!(
             self,
-            TokenKind::CONST_KW |
-                TokenKind::RESTRICT_KW |
-                TokenKind::VOLATILE_KW |
-                TokenKind::ATOMIC_KW
+            TokenKind::CONST_KW
+                | TokenKind::RESTRICT_KW
+                | TokenKind::VOLATILE_KW
+                | TokenKind::ATOMIC_KW
         )
     }
 
@@ -685,7 +678,7 @@ impl TokenKind {
 #[getset(get = "pub", get_mut = "pub", set = "pub")]
 pub struct Span {
     start: usize,
-    end:   usize,
+    end: usize,
 }
 
 // use rowan::{TextRange, TextSize};
@@ -716,9 +709,9 @@ impl Span {
 )]
 #[getset(get = "pub", get_mut = "pub", set = "pub")]
 pub struct Token {
-    pub kind:   TokenKind,
+    pub kind: TokenKind,
     pub lexeme: String,
-    pub span:   Span,
+    pub span: Span,
 }
 
 impl Token {
@@ -766,7 +759,7 @@ impl TokenSink {
 )]
 pub struct TokenStream {
     #[getset(get = "pub", get_mut = "pub", set = "pub")]
-    text:   String,
+    text: String,
     #[getset(get = "pub", get_mut = "pub", set = "pub")]
     tokens: Vec<Token>,
     #[builder(default = 0)]
@@ -780,7 +773,7 @@ pub struct TokenStream {
 impl TokenStream {
     pub fn new(input: &str) -> Self {
         Self {
-            text:   String::from(input),
+            text: String::from(input),
             tokens: Vec::new(),
             cursor: 0,
             // file_name: PathBuf::new(),
@@ -845,9 +838,9 @@ pub fn lex(input: &str) -> TokenSink {
                 }
 
                 // If token is whitespace (e.g. a newline, comment, etc.), skip it.
-                if token == TokenKind::WHITESPACE ||
-                    token == TokenKind::COMMENT ||
-                    token == TokenKind::NEWLINE
+                if token == TokenKind::WHITESPACE
+                    || token == TokenKind::COMMENT
+                    || token == TokenKind::NEWLINE
                 {
                     continue;
                 }
@@ -909,9 +902,10 @@ pub fn lex(input: &str) -> TokenSink {
                     current_unknown_token =
                         Some(Token::new(TokenKind::UNKNOWN, updated_lexeme.into(), span));
                 } else {
-                    tracing::debug!(
-                        "Creating new unknown token {} at {:?}",
-                        lexer.slice(),
+                    tracing::trace!(
+                        " {}  Creating unknown token {:?} at {:?}",
+                        "LEXER".green(),
+                        TokenKind::UNKNOWN.yellow(),
                         lexer.span()
                     );
 

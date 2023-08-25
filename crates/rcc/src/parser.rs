@@ -1,26 +1,12 @@
 use crate::{
-    ast::{
-        Child,
-        Tree,
-        TreeKind,
-    },
-    lexer::{
-        self,
-        Span,
-        Token,
-        TokenKind,
-        TokenSink,
-        TokenStream,
-    },
+    ast::{Child, Tree, TreeKind},
+    lexer::{self, Span, Token, TokenKind, TokenSink, TokenStream},
     token_set::TokenSet,
 };
 use anyhow::Result;
 use owo_colors::OwoColorize;
 use smartstring::alias::String;
-use std::{
-    cell::Cell,
-    fs,
-};
+use std::{cell::Cell, fs};
 
 // Function to parse a single file
 pub(crate) fn parse_file(file_path: &str) -> Result<Tree> {
@@ -60,9 +46,6 @@ pub(crate) fn parse_cwd() -> Result<Vec<Tree>> {
 }
 
 pub fn parse(text: &str) -> Tree {
-    let token_sink: TokenSink = lexer::lex(text);
-    let token_stream = token_sink.tokens;
-
     parse_tree(text, TreeKind::TranslationUnit)
 }
 
@@ -279,10 +262,10 @@ struct MarkClosed {
 }
 
 pub struct Parser {
-    tokens:     TokenStream,
-    pos:        usize,
-    fuel:       Cell<u32>,
-    events:     Vec<Event>,
+    tokens: TokenStream,
+    pos: usize,
+    fuel: Cell<u32>,
+    events: Vec<Event>,
     call_stack: Vec<ParserCall>,
 }
 
@@ -724,11 +707,11 @@ impl Parser {
     }
 
     fn at_declaration_specifier(&self) -> bool {
-        self.at_storage_class_specifier() ||
-            self.at_type_specifier() ||
-            self.at_type_qualifier() ||
-            self.at_function_specifier() ||
-            self.at_alignment_specifier()
+        self.at_storage_class_specifier()
+            || self.at_type_specifier()
+            || self.at_type_qualifier()
+            || self.at_function_specifier()
+            || self.at_alignment_specifier()
     }
 
     fn at_alignment_specifier(&self) -> bool {
@@ -1020,8 +1003,8 @@ fn extern_decl(p: &mut Parser) {
             // 	: declaration_specifiers declarator declaration_list compound_statement
             // 	| declaration_specifiers declarator compound_statement
             // 	;
-            if p.nth(declaration_specifer_count + 1).is_declarator() ||
-                p.nth(declaration_specifer_count + 1).is_l_brace()
+            if p.nth(declaration_specifer_count + 1).is_declarator()
+                || p.nth(declaration_specifer_count + 1).is_l_brace()
             {
                 // if p.at_declaration_specifier() || p.at_compound_statement() {
                 // function_definition
@@ -1186,21 +1169,49 @@ fn statement_list(p: &mut Parser) {
     p.trace_exit();
 }
 
-// statement
-// : labeled_statement
-// | compound_statement
-// | expression_statement
-// | selection_statement
-// | iteration_statement
-// | jump_statement
-// ;
-//
-// Statement = ExpressionStatement
-// | CompoundStatement
-// | ExpressionStatement
-// | SelectionStatement
-// | IterationStatement
-// | JumpStatement
+/// Parses a **statement** in **C** according to the [**C 2011 standard**][1].
+///
+/// This function handles parsing of various types of statements in C,
+/// including:
+/// - [`labeled_statement`]
+/// - [`compound_statement`]
+/// - [`expression_statement`]
+/// - [`selection_statement`]
+/// - [`iteration_statement`]
+/// - [`jump_statement`]
+///
+/// # Syntax
+///
+/// ## C 2011 Standard
+///
+/// A statement can be one of the following:
+///
+/// - `labeled_statement`
+/// - `compound_statement`
+/// - `expression_statement`
+/// - `selection_statement`
+/// - `iteration_statement`
+/// - `jump_statement`
+///
+/// ## Yacc
+///
+/// ```yacc
+/// statement
+/// : labeled_statement
+/// | compound_statement
+/// | expression_statement
+/// | selection_statement
+/// | iteration_statement
+/// | jump_statement
+/// ;
+/// ```
+///
+/// # Notes
+///
+/// This function assumes that the parser is positioned **at the start** of a
+/// **statement**.
+///
+/// [1]: https://port70.net/~nsz/c/c11/n1570.html#6.8
 pub(crate) fn statement(p: &mut Parser) {
     p.enter(TreeKind::Statement);
 
@@ -1208,8 +1219,8 @@ pub(crate) fn statement(p: &mut Parser) {
 
     let m = p.open();
 
-    if p.at_any(&[TokenKind::CASE_KW, TokenKind::DEFAULT_KW]) ||
-        (p.at(TokenKind::IDENTIFIER) && p.nth(1) == TokenKind::COLON)
+    if p.at_any(&[TokenKind::CASE_KW, TokenKind::DEFAULT_KW])
+        || (p.at(TokenKind::IDENTIFIER) && p.nth(1) == TokenKind::COLON)
     {
         labeled_statement(p);
     } else if p.at(TokenKind::LBRACE) {
@@ -1243,15 +1254,49 @@ pub(crate) fn statement(p: &mut Parser) {
     p.trace_exit();
 }
 
-// labeled_statement
-// : IDENTIFIER ':' statement
-// | CASE_KW constant_expression ':' statement
-// | DEFAULT_KW ':' statement
-// ;
-//
-// LabeledStatement = IDENTIFIER ':' Statement
-// | CASE_KW ConstantExpression ':' Statement
-// | DEFAULT_KW ':' Statement
+/// Parses a **labeled statement** in **C** as per the [**C 2011 standard**][1].
+///
+/// Handles parsing of labeled statements, including labels with
+/// `IDENTIFIER`, `CASE`, and `DEFAULT`.
+///
+/// # Syntax
+///
+/// ## C 2011 Standard
+///
+/// - Labeled statement with `IDENTIFIER` label:
+///
+/// ```text
+/// label_identifier: statement
+/// ```
+///
+/// - Labeled statement with `CASE` label:
+///
+/// ```text
+/// case constant_expression: statement
+/// ```
+///
+/// - Labeled statement with `DEFAULT` label:
+///
+/// ```text
+/// default: statement
+/// ```
+///
+/// ## Yacc
+///
+/// ```yacc
+/// labeled_statement
+/// : IDENTIFIER ':' statement
+/// | CASE_KW constant_expression ':' statement
+/// | DEFAULT_KW ':' statement
+/// ;
+/// ```
+///
+/// # Notes
+///
+/// This function assumes that the parser is positioned **at the start** of a
+/// **labeled statement**.
+///
+/// [1]: https://port70.net/~nsz/c/c11/n1570.html#6.8.1
 fn labeled_statement(p: &mut Parser) {
     p.enter(TreeKind::LabeledStatement);
     let m = p.open();
@@ -1281,6 +1326,50 @@ fn labeled_statement(p: &mut Parser) {
 // ;
 //
 // CompoundStatement = '{' (DeclarationList)? (StatementList)? '}'
+
+/// Parses a **compound statement** in **C** as per the [**C 2011
+/// standard**][1].
+///
+/// Handles parsing of statements enclosed within curly braces.
+///
+/// # Syntax
+///
+/// ## C 2011 Standard
+///
+/// - Compound statement:
+///
+/// ```text
+/// {
+///     // statement_list
+/// }
+/// ```
+///
+/// - Compound statement with declarations:
+///
+/// ```text
+/// {
+///     // declaration_list
+///     // statement_list
+/// }
+/// ```
+///
+/// ## Yacc
+///
+/// ```yacc
+/// compound_statement
+/// : '{' '}'
+/// | '{' statement_list '}'
+/// | '{' declaration_list '}'
+/// | '{' declaration_list statement_list '}'
+/// ;
+/// ```
+///
+/// # Notes
+///
+/// This function assumes that the parser is positioned **at the start** of a
+/// **compound statement**.
+///
+/// [1]: https://port70.net/~nsz/c/c11/n1570.html#6.8.2
 pub(crate) fn compound_statement(p: &mut Parser) {
     assert!(
         p.at(TokenKind::LBRACE),
@@ -1373,38 +1462,77 @@ pub(crate) fn selection_statement(p: &mut Parser) {
     p.trace_exit();
 }
 
-/// Parses an **iteration statement** as per the [**C grammar**][1].
+/// Parses an **iteration statement** in **C** as per the [**C 2011
+/// standard**][1].
+///
+/// This function handles parsing of `while`, `do...while`, and `for` loops.
 ///
 /// # Syntax
 ///
-/// ## [C 2011 standard][1]
+/// ## C 2011 Standard
+///
+/// - `while` loop:
 ///
 /// ```text
+/// while (expression) statement
+/// ```
+///
+/// - `do...while` loop:
+///
+/// ```text
+/// do statement while (expression);
+/// ```
+///
+/// - `for` loop:
+///
+/// ```text
+/// for (expression_statement expression_statement
+///   [expression]) statement
+/// ```
+///
+/// ## Yacc
+///
+/// ```yacc
 /// iteration_statement
-///     : WHILE '(' expression ')' statement
-///     | DO statement WHILE '(' expression ')' ';'
-///     | FOR '(' expression_statement expression_statement ')' statement
-///     | FOR '(' expression_statement expression_statement expression ')' statement
-///     | FOR '(' declaration expression_statement ')' statement
-///     | FOR '(' declaration expression_statement expression ')' statement
-///     ;
+/// : WHILE '(' expression ')' statement
+/// | DO statement WHILE '(' expression ')' ';'
+/// | FOR '(' expression_statement expression_statement ')' statement
+/// | FOR '(' expression_statement expression_statement expression ')' statement
+/// | FOR '(' declaration expression_statement ')' statement
+/// | FOR '(' declaration expression_statement expression ')' statement
+/// ;
 /// ```
 ///
-/// ## [Ungrammar](https://rust-analyzer.github.io//blog/2020/10/24/introducing-ungrammar.html)
+/// # Examples
 ///
-/// ```ungrammar
-/// IterationStatement = "while" "(" Expression ")" Statement
-/// | "do" Statement "while" "(" Expression ")" ";"
-/// | "for" "(" ExpressionStatement ExpressionStatement Expression? ")" Statement
-/// | "for" "(" Declaration ExpressionStatement Expression? ")" Statement
+/// ## `while` loop
+///
+/// ```c
+/// while (x < 10) {
+///    x++;
+/// }
 /// ```
 ///
-/// # Arguments
-/// * `p` - A mutable reference to the parser.
+/// ## `do...while` loop
+///
+/// ```c
+/// do {
+///    x++;
+/// } while (x < 10);
+/// ```
+///
+/// ## `for` loop
+///
+/// ```c
+/// for (int i = 0; i < 10; i++) {
+///   x++;
+/// }
+/// ```
 ///
 /// # Notes
-/// This function assumes that the parser is positioned at the start of an
-/// iteration statement.
+///
+/// This function assumes that the parser is positioned **at the start** of an
+/// **iteration statement**.
 ///
 /// [1]: https://port70.net/~nsz/c/c11/n1570.html#6.8.5
 pub(crate) fn iteration_statement(p: &mut Parser) {
@@ -2343,12 +2471,12 @@ fn unary_operator(p: &mut Parser) {
 fn postfix_expression(p: &mut Parser) {
     let m = p.open();
     primary_expression(p);
-    while p.at(TokenKind::LBRACKET) ||
-        p.at(TokenKind::LPAREN) ||
-        p.at(TokenKind::DOT) ||
-        p.at(TokenKind::PTR_OP) ||
-        p.at(TokenKind::INC_OP) ||
-        p.at(TokenKind::DEC_OP)
+    while p.at(TokenKind::LBRACKET)
+        || p.at(TokenKind::LPAREN)
+        || p.at(TokenKind::DOT)
+        || p.at(TokenKind::PTR_OP)
+        || p.at(TokenKind::INC_OP)
+        || p.at(TokenKind::DEC_OP)
     {
         if p.at(TokenKind::LBRACKET) {
             p.advance();
@@ -2502,9 +2630,9 @@ pub(crate) fn constant(p: &mut Parser) {
     p.enter(TreeKind::Constant);
     let m = p.open();
 
-    if p.at(TokenKind::INTEGER_CONSTANT) ||
-        p.at(TokenKind::FLOATING_CONSTANT) ||
-        p.at(TokenKind::IDENTIFIER)
+    if p.at(TokenKind::INTEGER_CONSTANT)
+        || p.at(TokenKind::FLOATING_CONSTANT)
+        || p.at(TokenKind::IDENTIFIER)
     // ENUMERATION_CONSTANT
     {
         p.advance();

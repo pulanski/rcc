@@ -1,14 +1,7 @@
-use crate::lexer::{
-    Span,
-    Token,
-    TokenKind,
-};
+use crate::lexer::{Span, Token, TokenKind};
 use owo_colors::OwoColorize;
 use smartstring::alias::String;
-use std::fmt::{
-    self,
-    Display,
-};
+use std::fmt::{self, Display};
 use strum_macros::Display;
 
 #[macro_export]
@@ -112,8 +105,8 @@ pub enum TreeKind {
 
 #[derive(Debug)]
 pub struct Tree {
-    pub(crate) kind:     TreeKind,
-    pub(crate) range:    Span,
+    pub(crate) kind: TreeKind,
+    pub(crate) range: Span,
     pub(crate) children: Vec<Child>,
 }
 
@@ -199,6 +192,9 @@ impl Tree {
     }
 
     fn transform_function(&self) -> Function {
+        // TODO: Need to refactor this code to
+        // to be more modular and reusable
+
         let mut name = String::new();
         let mut params = vec![];
         let mut return_type = DataType::Int;
@@ -302,13 +298,15 @@ impl Tree {
                                                 if let Child::Tree(type_specifier) =
                                                     &declaration_specifiers.children[0]
                                                 {
-                                                    if type_specifier.kind ==
-                                                        TreeKind::TypeSpecifier
-                                                    {
-                                                        // println!(
-                                                        //     "type_specifier {type_specifier:#?}"
-                                                        // );
+                                                    // TODO: Need to handle case like char**
+                                                    // We need to "follow the pointers" to get true
+                                                    // parameter type
 
+                                                    // TODO: Need to handle case like char[10]
+
+                                                    if type_specifier.kind
+                                                        == TreeKind::TypeSpecifier
+                                                    {
                                                         // Get the parameter type
                                                         param_type =
                                                             type_specifier.transform_type();
@@ -355,7 +353,7 @@ impl Tree {
                                             // Add the parameter to the list
                                             params.push(Parameter {
                                                 name: param_name,
-                                                ty:   param_type,
+                                                ty: param_type,
                                             });
                                         }
                                     }
@@ -394,8 +392,9 @@ impl Tree {
     }
 
     pub fn contains_errors(&self) -> bool {
-        self.kind == TreeKind::ErrorTree ||
-            self.children
+        self.kind == TreeKind::ErrorTree
+            || self
+                .children
                 .iter()
                 .any(|child| matches!(child, Child::Tree(tree) if tree.contains_errors()))
     }
@@ -515,16 +514,16 @@ pub enum ExternDecl {
 
 #[derive(Debug)]
 pub struct Function {
-    pub name:        String,
-    pub params:      Vec<Parameter>,
+    pub name: String,
+    pub params: Vec<Parameter>,
     pub return_type: DataType,
-    pub body:        Statement,
+    pub body: Statement,
 }
 
 #[derive(Debug)]
 pub struct Parameter {
     pub name: String,
-    pub ty:   DataType,
+    pub ty: DataType,
 }
 
 #[derive(Debug)]
@@ -551,7 +550,7 @@ pub enum Literal {
 
 #[derive(Debug)]
 pub struct Declaration {
-    pub ty:  DataType,
+    pub ty: DataType,
     pub var: Symbol,
     // pub val: Option<Expression>,
 }
