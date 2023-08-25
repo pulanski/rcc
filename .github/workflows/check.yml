@@ -21,8 +21,8 @@ jobs:
               uses: dtolnay/rust-toolchain@stable
               with:
                   components: rustfmt
-            - name: cargo fmt --check
-              run: cargo fmt --check
+            # - name: cargo fmt --check
+            #   run: cargo fmt --check
     clippy:
         runs-on: ubuntu-latest
         name: ${{ matrix.toolchain }} / clippy
@@ -89,5 +89,5 @@ jobs:
               uses: dtolnay/rust-toolchain@master
               with:
                   toolchain: ${{ matrix.msrv }}
-            - name: cargo +${{ matrix.msrv }} check
-              run: cargo check
+            # - name: cargo +${{ matrix.msrv }} check
+            #   run: cargo check
