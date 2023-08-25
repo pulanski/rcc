@@ -5,12 +5,14 @@ mod parser;
 mod preprocessor;
 mod token_set;
 
+use anyhow::Result;
+use std::process::ExitCode;
 use tracing_subscriber::{
     fmt::Subscriber,
     EnvFilter,
 };
 
-fn main() {
+fn main() -> Result<ExitCode> {
     let subscriber = Subscriber::builder()
         .with_env_filter(EnvFilter::from_default_env())
         .with_ansi(true)
@@ -23,10 +25,11 @@ fn main() {
     // Set the subscriber as the default.
     tracing::subscriber::set_global_default(subscriber).expect("failed to set subscriber");
 
-    // Parse a single file
-    if let Ok(parsed_tree) = parser::parse_file("testdata/a.c") {
-        println!("{parsed_tree}");
-    }
+    // Parse the file into a CST
+    let mut cst = parser::parse_file("testdata/parse/main.c")?;
+    // Reduce the CST to an AST
+    let ast = ast::reduce(&mut cst);
+    println!("{ast:#?}");
 
     // Recursively parse all files in a directory
     // if let Ok(results) = parser::parse_directory("path/to/directory") {
@@ -41,6 +44,8 @@ fn main() {
     //         println!("{}", result);
     //     }
     // }
+
+    Ok(ExitCode::SUCCESS)
 }
 
 #[cfg(test)]

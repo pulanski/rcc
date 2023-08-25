@@ -1,15 +1,13 @@
 int main()
 {
+    int x[] = {1, 2, 3};
+
     // Define struct Point before using it
     struct Point
     {
         int x;
         int y;
     };
-
-    // TODO:
-    // int x[] = {1, 2, 3};
-    // struct Point p = {.x = 10, .y = 20};
 
     while (1)
     {
@@ -23,3 +21,9 @@ int main()
 
     return 0;
 }
+
+// TODO: add support for the following
+// Declare an array of integers
+// int arr[10] = {0};
+
+// struct Point p = {.x = 10, .y = 20};

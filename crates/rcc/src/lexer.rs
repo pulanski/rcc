@@ -440,7 +440,7 @@ impl Display for TokenKind {
             TokenKind::FUNC_NAME_KW => write!(f, "__func__"),
 
             // Identifier and Literals
-            TokenKind::IDENTIFIER => write!(f, "identifier"),
+            TokenKind::IDENTIFIER => write!(f, "IDENTIFIER"),
             TokenKind::STRING => write!(f, "string literal"),
             TokenKind::BYTES => write!(f, "bytes literal"),
             TokenKind::INTEGER_CONSTANT => write!(f, "integer constant"),

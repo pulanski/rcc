@@ -23,14 +23,12 @@ use std::{
 };
 
 // Function to parse a single file
-pub(crate) fn parse_file(file_path: &str) -> Result<String> {
-    let input = fs::read_to_string(file_path)?;
-    let tree = parse(&input);
-    Ok(format!("{tree}").into())
+pub(crate) fn parse_file(file_path: &str) -> Result<Tree> {
+    Ok(parse(&fs::read_to_string(file_path)?))
 }
 
 // Function to recursively parse all files in a directory
-pub(crate) fn parse_directory(dir_path: &str) -> Result<Vec<String>> {
+pub(crate) fn parse_directory(dir_path: &str) -> Result<Vec<Tree>> {
     let mut results = Vec::new();
 
     for entry in fs::read_dir(dir_path)? {
@@ -56,7 +54,7 @@ pub(crate) fn parse_directory(dir_path: &str) -> Result<Vec<String>> {
 }
 
 // Function to parse the current working directory
-pub(crate) fn parse_cwd() -> Result<Vec<String>> {
+pub(crate) fn parse_cwd() -> Result<Vec<Tree>> {
     let cwd = std::env::current_dir()?;
     parse_directory(cwd.as_os_str().to_string_lossy().to_string().as_str())
 }
@@ -65,9 +63,7 @@ pub fn parse(text: &str) -> Tree {
     let token_sink: TokenSink = lexer::lex(text);
     let token_stream = token_sink.tokens;
 
-    let mut p = Parser::new(token_stream);
-    translation_unit(&mut p);
-    p.build_tree()
+    parse_tree(text, TreeKind::TranslationUnit)
 }
 
 pub fn parse_tree(text: &str, tree_kind: TreeKind) -> Tree {
@@ -91,7 +87,7 @@ pub fn parse_tree(text: &str, tree_kind: TreeKind) -> Tree {
     match tree_kind {
         TreeKind::TranslationUnit => translation_unit(&mut p),
         TreeKind::InitializerList => todo!(),
-        TreeKind::ParameterList => todo!(),
+        TreeKind::ParamList => todo!(),
         TreeKind::ParameterDeclaration => todo!(),
         TreeKind::Initializer => todo!(),
         TreeKind::StructDeclarator => todo!(),
@@ -130,7 +126,6 @@ pub fn parse_tree(text: &str, tree_kind: TreeKind) -> Tree {
         TreeKind::DirectAbstractDeclarator => todo!(),
         TreeKind::Fn => todo!(),
         TreeKind::TypeExpr => todo!(),
-        TreeKind::ParamList => todo!(),
         TreeKind::LogicalOrExpression => todo!(),
         TreeKind::Pointer => todo!(),
         TreeKind::Declaration => declaration(&mut p),
@@ -174,7 +169,7 @@ pub fn parse_tree(text: &str, tree_kind: TreeKind) -> Tree {
         TreeKind::GenericSelection => todo!(),
         TreeKind::GenericAssocList => todo!(),
         TreeKind::GenericAssociation => todo!(),
-        TreeKind::ParameterTypeList => todo!(),
+        TreeKind::ParamTypeList => todo!(),
         TreeKind::StructOrUnion => todo!(),
         TreeKind::AbstractDeclarator => todo!(),
     }
@@ -678,7 +673,6 @@ impl Parser {
     /// Checks if the current token is in contained within the
     /// given [`TokenSet`], `kinds`.
     pub(crate) fn at_ts(&self, kinds: TokenSet) -> bool {
-        tracing::trace!("Checking if current token is in {:?}", kinds);
         kinds.contains(self.current())
     }
 
@@ -713,9 +707,13 @@ impl Parser {
         // TODO: Error reporting.
 
         tracing::error!(
-            "Expected {expected}{comma} but instead found {found}{period}",
-            expected = kind.to_string().yellow(),
+            "Unexpected token {cyan_apos}{found}{cyan_apos}. Expected \
+             {magenta_apos}{expected}{magenta_apos}{comma} but instead found \
+             {cyan_apos}{found}{cyan_apos}{period}",
+            cyan_apos = "'".cyan(),
+            expected = kind.to_string().green(),
             comma = ",".black(),
+            magenta_apos = "'".magenta(),
             found = found.red(),
             period = ".".black(),
         );
@@ -1485,6 +1483,16 @@ fn atomic_type_specifier(p: &mut Parser) {
     p.trace_exit();
 }
 
+// enumerator_list
+// 	: enumerator
+// 	| enumerator_list ',' enumerator
+// 	;
+
+// enumerator	/* identifiers must be flagged as ENUMERATION_CONSTANT */
+// 	: enumeration_constant '=' constant_expression
+// 	| enumeration_constant
+// 	;
+
 // jump_statement
 // : RETURN_KW expression? ';'
 // | BREAK_KW ';'
@@ -1538,11 +1546,14 @@ pub(crate) fn declaration(p: &mut Parser) {
 
     // println!("parsing declaration: {:?}", p.current_token());
     if p.at(TokenKind::STATIC_ASSERT_KW) {
+        // If we have a static assert declaration, parse it (this is a declaration)
         static_assert_declaration(p);
     } else {
+        // Parse declaration specifiers
         declaration_specifiers(p);
         if p.at(TokenKind::SEMICOLON) {
-            p.advance();
+            // Consume the semicolon
+            p.expect(TokenKind::SEMICOLON);
         } else {
             init_declarator_list(p);
             p.expect(TokenKind::SEMICOLON);
@@ -1663,6 +1674,53 @@ pub(crate) fn direct_declarator(p: &mut Parser) {
 
             p.expect(TokenKind::RPAREN); // Consume ')'
         }
+
+        // Check if it's an array
+        if p.at(TokenKind::LBRACKET) {
+            p.advance(); // Consume '['
+
+            // Check if it's a static array
+            if p.at(TokenKind::STATIC_KW) {
+                p.advance(); // Consume STATIC
+
+                // Check if it's a type_qualifier_list
+                if p.at_type_qualifier() {
+                    type_qualifier_list(p);
+                }
+
+                // Parse assignment_expression
+                assignment_expression(p);
+            } else if p.at(TokenKind::STAR) {
+                p.advance(); // Consume '*'
+            } else if p.at_type_qualifier() {
+                type_qualifier_list(p);
+
+                if p.at(TokenKind::STAR) {
+                    p.advance(); // Consume '*'
+                } else if p.at(TokenKind::STATIC_KW) {
+                    p.advance(); // Consume STATIC
+                    assignment_expression(p);
+                } else if p.at_assignment_operator() {
+                    assignment_expression(p);
+                }
+            } else if p.at_assignment_operator() {
+                // Parse assignment_expression
+                assignment_expression(p);
+            }
+
+            p.expect(TokenKind::RBRACKET); // Consume ']'
+        }
+
+        // // Check if it's a static array
+        // if p.at(TokenKind::STATIC_KW) {
+        //     p.advance(); // Consume STATIC
+
+        //     // Check if it's a type_qualifier_list or assignment_expression
+        //     if p.at_type_qualifier() {
+        //         type_qualifier_list(p);
+        //     } else if p.at_assignment_operator() {
+        //         assignment_expression(p);
+        //     } else {
     } else if p.at(TokenKind::LPAREN) {
         p.advance(); // Consume '('
         declarator(p);
@@ -2492,7 +2550,7 @@ pub(crate) fn string(p: &mut Parser) {
 //
 // ParameterTypeList = ParameterList (',' ELLIPSIS)?
 fn parameter_type_list(p: &mut Parser) {
-    p.enter(TreeKind::ParameterTypeList);
+    p.enter(TreeKind::ParamTypeList);
     let m = p.open();
 
     parameter_list(p);
@@ -2501,7 +2559,7 @@ fn parameter_type_list(p: &mut Parser) {
         p.expect(TokenKind::ELLIPSIS);
     }
 
-    p.close(m, TreeKind::ParameterTypeList);
+    p.close(m, TreeKind::ParamTypeList);
     p.trace_exit();
 }
 
@@ -2511,7 +2569,7 @@ fn parameter_type_list(p: &mut Parser) {
 //
 // ParameterList = ParameterDeclaration (',' ParameterDeclaration)*
 fn parameter_list(p: &mut Parser) {
-    p.enter(TreeKind::ParameterList);
+    p.enter(TreeKind::ParamList);
     let m = p.open();
 
     parameter_declaration(p);
@@ -2520,7 +2578,7 @@ fn parameter_list(p: &mut Parser) {
         parameter_declaration(p);
     }
 
-    p.close(m, TreeKind::ParameterList);
+    p.close(m, TreeKind::ParamList);
     p.trace_exit();
 }
 
@@ -3146,11 +3204,7 @@ fn enum_specifier(p: &mut Parser) {
     p.enter(TreeKind::EnumSpecifier);
     let m = p.open();
 
-    if p.at(TokenKind::ENUM_KW) {
-        p.advance();
-    } else {
-        // TODO: Error reporting.
-    }
+    p.expect(TokenKind::ENUM_KW);
 
     if p.at(TokenKind::IDENTIFIER) {
         p.advance();
