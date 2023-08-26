@@ -1,4 +1,5 @@
-int main()
+int main(int argc, char **argv)
+// int main(int argc, char *argv[])
 {
     int x[] = {1, 2, 3};
 
@@ -8,6 +9,17 @@ int main()
         int x;
         int y;
     };
+
+    int c = "hello";
+
+    // Define a custom data type
+    typedef int MyInt;
+
+    // TODO: Handle the case where the custom data type is used before it is defined
+    // Use the custom data type
+    // MyInt a = 10;
+
+    const int b = 20;
 
     while (1)
     {
@@ -27,3 +39,9 @@ int main()
 // int arr[10] = {0};
 
 // struct Point p = {.x = 10, .y = 20};
+
+
+// obj AST {
+//     node: Node,
+//     children: Vec<AST>,
+// }

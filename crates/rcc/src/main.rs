@@ -1,5 +1,6 @@
 mod ast;
 mod cst;
+mod diagnostics;
 mod lexer;
 mod parser;
 mod preprocessor;
@@ -7,7 +8,10 @@ mod token_set;
 
 use anyhow::Result;
 use std::process::ExitCode;
-use tracing_subscriber::{fmt::Subscriber, EnvFilter};
+use tracing_subscriber::{
+    fmt::Subscriber,
+    EnvFilter,
+};
 
 // TODO: Get a stats on how many tokens are lexed (for reporting of
 // `lexed x tokens at y tokens per second`)
@@ -26,7 +30,7 @@ fn main() -> Result<ExitCode> {
     let subscriber = Subscriber::builder()
         .with_env_filter(EnvFilter::from_default_env())
         .with_ansi(true)
-        .with_max_level(tracing::Level::TRACE)
+        .with_max_level(tracing::Level::INFO)
         .with_line_number(false)
         .with_thread_names(false)
         .without_time() // turn off timestamps
@@ -35,18 +39,22 @@ fn main() -> Result<ExitCode> {
     // Set the subscriber as the default.
     tracing::subscriber::set_global_default(subscriber).expect("failed to set subscriber");
 
+    let mut diagnostics_engine = diagnostics::DiagnosticsEngine::new();
+
     // Parse the file into a CST
-    // let mut cst = parser::parse_file("testdata/parse/main.c")?;
+    let mut cst =
+        parser::parse_file_with_diagnotics("testdata/parse/b.c", &mut diagnostics_engine)?;
+    // let mut cst = parser::parse_file("testdata/parse/b.c")?;
     // // Reduce the CST to an AST
-    // let ast = ast::reduce(&mut cst);
-    // println!("{ast:#?}");
+    let ast = ast::reduce(&mut cst);
+    println!("{ast:#?}");
 
     // Recursively parse all files in a directory
-    if let Ok(results) = parser::parse_directory("testdata/parse") {
-        for result in results {
-            // println!("{}", result);
-        }
-    }
+    // if let Ok(results) = parser::parse_directory("testdata/parse") {
+    //     for result in results {
+    //         // println!("{}", result);
+    //     }
+    // }
 
     // // Parse the current working directory
     // if let Ok(results) = parser::parse_cwd() {

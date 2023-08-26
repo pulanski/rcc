@@ -1,56 +1,57 @@
 use crate::{
-    ast::{Child, Tree, TreeKind},
-    lexer::{self, Span, Token, TokenKind, TokenSink, TokenStream},
+    cst::{
+        Child,
+        Tree,
+        TreeKind,
+        TreeSink,
+    },
+    diagnostics::{
+        self,
+        DiagnosticsEngine,
+    },
+    lexer::{
+        self,
+        Span,
+        Token,
+        TokenKind,
+        TokenSink,
+        TokenStream,
+    },
     token_set::TokenSet,
 };
 use anyhow::Result;
 use owo_colors::OwoColorize;
 use smartstring::alias::String;
-use std::{cell::Cell, fs};
+use std::{
+    cell::Cell,
+    fs,
+};
 
-// Function to parse a single file
-pub(crate) fn parse_file(file_path: &str) -> Result<Tree> {
-    Ok(parse(&fs::read_to_string(file_path)?))
+pub(crate) fn parse_file_with_diagnotics(
+    file_path: &str,
+    diagnostics: &mut DiagnosticsEngine,
+) -> Result<Tree> {
+    let text = fs::read_to_string(file_path)?;
+    let file_id = diagnostics.add_file(file_path, text.to_string());
+
+    Ok(parse_with_diagnostics(&text, diagnostics, file_id))
 }
 
-// Function to recursively parse all files in a directory
-pub(crate) fn parse_directory(dir_path: &str) -> Result<Vec<Tree>> {
-    let mut results = Vec::new();
-
-    for entry in fs::read_dir(dir_path)? {
-        let entry = entry?;
-        let path = entry.path();
-
-        if path.is_file() {
-            if let Some(path) = path.to_str() {
-                if let Ok(parsed_tree) = parse_file(path) {
-                    results.push(parsed_tree);
-                }
-            }
-        } else if path.is_dir() {
-            if let Ok(mut dir_results) =
-                parse_directory(path.to_string_lossy().to_string().as_str())
-            {
-                results.append(&mut dir_results);
-            }
-        }
-    }
-
-    Ok(results)
+pub fn parse_with_diagnostics(
+    text: &str,
+    diagnostics_engine: &mut DiagnosticsEngine,
+    file_id: usize,
+) -> Tree {
+    parse_tree_with_diagnostics(text, TreeKind::TranslationUnit, diagnostics_engine, file_id)
 }
 
-// Function to parse the current working directory
-pub(crate) fn parse_cwd() -> Result<Vec<Tree>> {
-    let cwd = std::env::current_dir()?;
-    parse_directory(cwd.as_os_str().to_string_lossy().to_string().as_str())
-}
-
-pub fn parse(text: &str) -> Tree {
-    parse_tree(text, TreeKind::TranslationUnit)
-}
-
-pub fn parse_tree(text: &str, tree_kind: TreeKind) -> Tree {
-    tracing::info!(
+pub fn parse_tree_with_diagnostics(
+    text: &str,
+    tree_kind: TreeKind,
+    diagnostics: &mut DiagnosticsEngine,
+    file_id: usize,
+) -> Tree {
+    tracing::trace!(
         " {}  {} {}{}{} into a {}{}",
         "PARSER".yellow(),
         " START ".black().on_yellow(),
@@ -60,12 +61,12 @@ pub fn parse_tree(text: &str, tree_kind: TreeKind) -> Tree {
         "CST".blue(),
         "...".black()
     );
-    let token_sink: TokenSink = lexer::lex(text);
+
+    let token_sink: TokenSink = lexer::lex_with_diagnostics(text, diagnostics, file_id);
     let token_stream = token_sink.tokens;
 
     let start = std::time::Instant::now();
-
-    let mut p = Parser::new(token_stream);
+    let mut p = Parser::new(token_stream, file_id);
 
     match tree_kind {
         TreeKind::TranslationUnit => translation_unit(&mut p),
@@ -155,11 +156,16 @@ pub fn parse_tree(text: &str, tree_kind: TreeKind) -> Tree {
         TreeKind::ParamTypeList => todo!(),
         TreeKind::StructOrUnion => todo!(),
         TreeKind::AbstractDeclarator => todo!(),
+        TreeKind::Unknown => todo!(),
     }
 
-    let tree = p.build_tree();
+    let tree = p.clone().build_tree();
     let elapsed = start.elapsed();
     tracing::debug!(" {}\n\n  {}{}\n\n{}", "PARSER".green(), "CST".blue(), ":".black(), tree);
+
+    // Emit diagnostics
+    p.drain_errors(diagnostics);
+    // diagnostics.flush();
 
     if !tree.contains_errors() {
         tracing::info!(
@@ -229,7 +235,7 @@ fn format_call_stack(call_stack: &[String]) -> String {
     result
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Event {
     Open { kind: TreeKind, range: Span },
     Close,
@@ -261,22 +267,34 @@ struct MarkClosed {
     index: usize,
 }
 
+#[derive(Debug, Clone)]
 pub struct Parser {
-    tokens: TokenStream,
-    pos: usize,
-    fuel: Cell<u32>,
-    events: Vec<Event>,
+    tokens:     TokenStream,
+    pos:        usize,
+    fuel:       Cell<u32>,
+    events:     Vec<Event>,
     call_stack: Vec<ParserCall>,
+    tree_sink:  TreeSink,
+    file_id:    usize,
 }
 
+#[derive(Debug, Clone)]
 pub struct ParserCall {
     pub(crate) name: String,
     // pub(crate) body: Tree,
 }
 
 impl Parser {
-    pub fn new(tokens: TokenStream) -> Parser {
-        Parser { tokens, pos: 0, fuel: Cell::new(256), events: Vec::new(), call_stack: Vec::new() }
+    pub fn new(tokens: TokenStream, file_id: usize) -> Parser {
+        Parser {
+            tokens,
+            pos: 0,
+            fuel: Cell::new(256),
+            events: Vec::new(),
+            call_stack: Vec::new(),
+            tree_sink: TreeSink::new(),
+            file_id,
+        }
     }
 
     pub fn enter(&mut self, tree_kind: TreeKind) {
@@ -683,11 +701,20 @@ impl Parser {
     }
 
     fn expect(&mut self, kind: TokenKind) {
-        let found = self.nth(0);
+        let curr_tok = self.current_token();
+        let found = curr_tok.lexeme();
+
         if self.eat(kind) {
             return;
         }
         // TODO: Error reporting.
+
+        self.tree_sink.push_error(diagnostics::unexpected_token_diagnostic(
+            self.file_id,
+            &curr_tok,
+            &kind,
+            // found,
+        ));
 
         tracing::error!(
             "Unexpected token {cyan_apos}{found}{cyan_apos}. Expected \
@@ -707,11 +734,11 @@ impl Parser {
     }
 
     fn at_declaration_specifier(&self) -> bool {
-        self.at_storage_class_specifier()
-            || self.at_type_specifier()
-            || self.at_type_qualifier()
-            || self.at_function_specifier()
-            || self.at_alignment_specifier()
+        self.at_storage_class_specifier() ||
+            self.at_type_specifier() ||
+            self.at_type_qualifier() ||
+            self.at_function_specifier() ||
+            self.at_alignment_specifier()
     }
 
     fn at_alignment_specifier(&self) -> bool {
@@ -850,6 +877,10 @@ impl Parser {
     fn at_declarator(&self) -> bool {
         self.at_any(&[TokenKind::IDENTIFIER, TokenKind::STAR, TokenKind::LPAREN])
     }
+
+    fn drain_errors(&mut self, diagnostics: &mut DiagnosticsEngine) {
+        self.tree_sink.drain_errors(diagnostics);
+    }
 }
 
 // translation_unit
@@ -973,7 +1004,6 @@ fn extern_decl(p: &mut Parser) {
         // and declaration
 
         let mut declaration_specifer_count = 0;
-
         while p.nth(declaration_specifer_count).is_declaration_specifier() {
             declaration_specifer_count += 1;
         }
@@ -1003,8 +1033,8 @@ fn extern_decl(p: &mut Parser) {
             // 	: declaration_specifiers declarator declaration_list compound_statement
             // 	| declaration_specifiers declarator compound_statement
             // 	;
-            if p.nth(declaration_specifer_count + 1).is_declarator()
-                || p.nth(declaration_specifer_count + 1).is_l_brace()
+            if p.nth(declaration_specifer_count + 1).is_declarator() ||
+                p.nth(declaration_specifer_count + 1).is_l_brace()
             {
                 // if p.at_declaration_specifier() || p.at_compound_statement() {
                 // function_definition
@@ -1219,8 +1249,8 @@ pub(crate) fn statement(p: &mut Parser) {
 
     let m = p.open();
 
-    if p.at_any(&[TokenKind::CASE_KW, TokenKind::DEFAULT_KW])
-        || (p.at(TokenKind::IDENTIFIER) && p.nth(1) == TokenKind::COLON)
+    if p.at_any(&[TokenKind::CASE_KW, TokenKind::DEFAULT_KW]) ||
+        (p.at(TokenKind::IDENTIFIER) && p.nth(1) == TokenKind::COLON)
     {
         labeled_statement(p);
     } else if p.at(TokenKind::LBRACE) {
@@ -2471,12 +2501,12 @@ fn unary_operator(p: &mut Parser) {
 fn postfix_expression(p: &mut Parser) {
     let m = p.open();
     primary_expression(p);
-    while p.at(TokenKind::LBRACKET)
-        || p.at(TokenKind::LPAREN)
-        || p.at(TokenKind::DOT)
-        || p.at(TokenKind::PTR_OP)
-        || p.at(TokenKind::INC_OP)
-        || p.at(TokenKind::DEC_OP)
+    while p.at(TokenKind::LBRACKET) ||
+        p.at(TokenKind::LPAREN) ||
+        p.at(TokenKind::DOT) ||
+        p.at(TokenKind::PTR_OP) ||
+        p.at(TokenKind::INC_OP) ||
+        p.at(TokenKind::DEC_OP)
     {
         if p.at(TokenKind::LBRACKET) {
             p.advance();
@@ -2630,9 +2660,9 @@ pub(crate) fn constant(p: &mut Parser) {
     p.enter(TreeKind::Constant);
     let m = p.open();
 
-    if p.at(TokenKind::INTEGER_CONSTANT)
-        || p.at(TokenKind::FLOATING_CONSTANT)
-        || p.at(TokenKind::IDENTIFIER)
+    if p.at(TokenKind::INTEGER_CONSTANT) ||
+        p.at(TokenKind::FLOATING_CONSTANT) ||
+        p.at(TokenKind::IDENTIFIER)
     // ENUMERATION_CONSTANT
     {
         p.advance();
@@ -2731,6 +2761,8 @@ fn parameter_declaration(p: &mut Parser) {
     // 	| direct_abstract_declarator
     // 	;
 
+    // TODO: Make more robust with more comprehensive checks.
+
     p.enter(TreeKind::ParameterDeclaration);
     let m = p.open();
 
@@ -2758,9 +2790,6 @@ fn parameter_declaration(p: &mut Parser) {
     } else {
         direct_declarator(p);
     }
-
-    // abstract_declarator(p);
-    // declarator(p);
 
     p.close(m, TreeKind::ParameterDeclaration);
     p.trace_exit();
@@ -3587,7 +3616,20 @@ fn type_qualifier(p: &mut Parser) {
         p.advance();
     } else {
         // TODO: Error reporting.
-        p.error("expected type qualifier (const, volatile, restrict, or atomic)");
+        p.advance_with_error(&format!(
+            "Unexpected token {}{}{}{} Expected one of{} {}\n",
+            "'".cyan(),
+            p.current_token().lexeme().red(),
+            "'".cyan(),
+            ".".black(),
+            ":".black(),
+            display(&[
+                TokenKind::CONST_KW,
+                TokenKind::VOLATILE_KW,
+                TokenKind::RESTRICT_KW,
+                TokenKind::ATOMIC_KW,
+            ]),
+        ));
     }
 
     p.close(m, TreeKind::TypeQualifier);
@@ -3602,3 +3644,186 @@ fn type_qualifier(p: &mut Parser) {
 // DEBUG rcc::parser: PARSER TYPEDEF_KW 0..7 -> translation_unit
 // DEBUG rcc::parser: PARSER TYPEDEF_KW 0..7 -> translation_unit
 //                                           | -> external_declaration
+
+// TODO: Get the following APIs working again, need to figure out naming and
+// composition of the parser.
+
+// Function to parse a single file
+// pub(crate) fn parse_file(file_path: &str) -> Result<Tree> {
+//     Ok(parse(&fs::read_to_string(file_path)?))
+// }
+
+// Function to recursively parse all files in a directory
+// pub(crate) fn parse_directory(dir_path: &str) -> Result<Vec<Tree>> {
+//     let mut results = Vec::new();
+
+//     for entry in fs::read_dir(dir_path)? {
+//         let entry = entry?;
+//         let path = entry.path();
+
+//         if path.is_file() {
+//             if let Some(path) = path.to_str() {
+//                 if let Ok(parsed_tree) = parse_file(path) {
+//                     results.push(parsed_tree);
+//                 }
+//             }
+//         } else if path.is_dir() {
+//             if let Ok(mut dir_results) =
+//                 parse_directory(path.to_string_lossy().to_string().as_str())
+//             {
+//                 results.append(&mut dir_results);
+//             }
+//         }
+//     }
+
+//     Ok(results)
+// }
+
+// Function to parse the current working directory
+// pub(crate) fn parse_cwd() -> Result<Vec<Tree>> {
+//     let cwd = std::env::current_dir()?;
+//     parse_directory(cwd.as_os_str().to_string_lossy().to_string().as_str())
+// }
+
+// pub fn parse(text: &str) -> Tree {
+//     parse_tree(text, TreeKind::TranslationUnit)
+// }
+
+// pub fn parse_tree(text: &str, tree_kind: TreeKind) -> Tree {
+//     tracing::trace!(
+//         " {}  {} {}{}{} into a {}{}",
+//         "PARSER".yellow(),
+//         " START ".black().on_yellow(),
+//         "Parsing".italic(),
+//         " ".black(),
+//         tree_kind.green(),
+//         "CST".blue(),
+//         "...".black()
+//     );
+
+//     let token_sink: TokenSink = lexer::lex_with_diagnostics(text);
+//     let token_stream = token_sink.tokens;
+
+//     let start = std::time::Instant::now();
+
+//     let mut p = Parser::new(token_stream);
+
+//     match tree_kind {
+//         TreeKind::TranslationUnit => translation_unit(&mut p),
+//         TreeKind::InitializerList => todo!(),
+//         TreeKind::ParamList => todo!(),
+//         TreeKind::ParameterDeclaration => todo!(),
+//         TreeKind::Initializer => todo!(),
+//         TreeKind::StructDeclarator => todo!(),
+//         TreeKind::EnumSpecifier => todo!(),
+//         TreeKind::Enumerator => todo!(),
+//         TreeKind::Expression => todo!(),
+//         TreeKind::ConditionalExpression => todo!(),
+//         TreeKind::EnumeratorList => todo!(),
+//         TreeKind::StructOrUnionSpecifier => todo!(),
+//         TreeKind::PrimaryExpression => primary_expression(&mut p),
+//         TreeKind::StructDeclaratorList => todo!(),
+//         TreeKind::StructDeclaration => todo!(),
+//         TreeKind::StructDeclarationList => todo!(),
+//         TreeKind::ArgumentExpressionList => todo!(),
+//         TreeKind::TypeName => todo!(),
+//         TreeKind::SpecifierQualifierList => todo!(),
+//         TreeKind::DirectDeclarator => direct_declarator(&mut p),
+//         TreeKind::ErrorTree => todo!(),
+//         TreeKind::CompoundStatement => compound_statement(&mut p),
+//         TreeKind::LogicalAndExpression => todo!(),
+//         TreeKind::ExternDecl => todo!(),
+//         TreeKind::File => todo!(),
+//         TreeKind::PostfixExpression => todo!(),
+//         TreeKind::InclusiveOrExpression => todo!(),
+//         TreeKind::ExclusiveOrExpression => todo!(),
+//         TreeKind::AndExpression => todo!(),
+//         TreeKind::EqualityExpression => todo!(),
+//         TreeKind::RelationalExpression => todo!(),
+//         TreeKind::ShiftExpression => todo!(),
+//         TreeKind::AdditiveExpression => todo!(),
+//         TreeKind::MultiplicativeExpression => todo!(),
+//         TreeKind::CastExpression => todo!(),
+//         TreeKind::UnaryExpression => unary_expression(&mut p),
+//         TreeKind::IdentifierList => todo!(),
+//         TreeKind::StatementList => todo!(),
+//         TreeKind::DirectAbstractDeclarator => todo!(),
+//         TreeKind::Fn => todo!(),
+//         TreeKind::TypeExpr => todo!(),
+//         TreeKind::LogicalOrExpression => todo!(),
+//         TreeKind::Pointer => todo!(),
+//         TreeKind::Declaration => declaration(&mut p),
+//         TreeKind::DeclarationList => todo!(),
+//         TreeKind::InitDeclaratorList => todo!(),
+//         TreeKind::TypeQualifierList => todo!(),
+//         TreeKind::InitDeclarator => todo!(),
+//         TreeKind::Declarator => todo!(),
+//         TreeKind::TypeSpecifier => todo!(),
+//         TreeKind::TypeQualifier => todo!(),
+//         TreeKind::Param => todo!(),
+//         TreeKind::Block => todo!(),
+//         TreeKind::StmtLet => todo!(),
+//         TreeKind::StorageClassSpecifier => todo!(),
+//         TreeKind::StmtReturn => todo!(),
+//         TreeKind::StmtExpr => todo!(),
+//         TreeKind::ExprLiteral => todo!(),
+//         TreeKind::ExprName => todo!(),
+//         TreeKind::ExprParen => todo!(),
+//         TreeKind::ExprBinary => todo!(),
+//         TreeKind::ExprCall => todo!(),
+//         TreeKind::ArgList => todo!(),
+//         TreeKind::Arg => todo!(),
+//         TreeKind::DeclarationSpecifiers => todo!(),
+//         TreeKind::FunctionDef => function_def(&mut p),
+//         TreeKind::UnaryOperator => todo!(),
+//         TreeKind::Statement => statement(&mut p),
+//         TreeKind::LabeledStatement => todo!(),
+//         TreeKind::ExpressionStatement => todo!(),
+//         TreeKind::IterationStatement => todo!(),
+//         TreeKind::JumpStatement => jump_statement(&mut p),
+//         TreeKind::SelectionStatement => todo!(),
+//         TreeKind::AssignmentExpression => todo!(),
+//         TreeKind::ConstantExpression => todo!(),
+//         TreeKind::FunctionSpecifier => todo!(),
+//         TreeKind::AlignmentSpecifier => todo!(),
+//         TreeKind::StaticAssertDeclaration => todo!(),
+//         TreeKind::AtomicTypeSpecifier => todo!(),
+//         TreeKind::Constant => todo!(),
+//         TreeKind::String => todo!(),
+//         TreeKind::GenericSelection => todo!(),
+//         TreeKind::GenericAssocList => todo!(),
+//         TreeKind::GenericAssociation => todo!(),
+//         TreeKind::ParamTypeList => todo!(),
+//         TreeKind::StructOrUnion => todo!(),
+//         TreeKind::AbstractDeclarator => todo!(),
+//     }
+
+//     let tree = p.build_tree();
+//     let elapsed = start.elapsed();
+//     tracing::debug!(" {}\n\n  {}{}\n\n{}", "PARSER".green(), "CST".blue(),
+// ":".black(), tree);
+
+//     if !tree.contains_errors() {
+//         tracing::info!(
+//             " {}  {} {} constructed{}{}{}",
+//             "PARSER".yellow(),
+//             " SUCCESS ".black().on_green(),
+//             "CST".blue(),
+//             " in ".black(),
+//             format!("{elapsed:?}").cyan(),
+//             ".".black()
+//         );
+//     } else {
+//         tracing::info!(
+//             " {}  {} {} constructed{}{} with errors{}",
+//             "PARSER".yellow(),
+//             " FAILURE ".black().on_red(),
+//             "CST".blue(),
+//             " in ".black(),
+//             format!("{elapsed:?}").cyan(),
+//             ".".black()
+//         );
+//     }
+
+//     tree
+// }

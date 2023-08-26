@@ -1,18 +1,47 @@
 use std::{
-    fmt::{self, Display},
+    fmt::{
+        self,
+        Display,
+    },
+    fs::{
+        read_to_string,
+        File,
+    },
+    io::Read,
     ops::Range,
+    path::PathBuf,
 };
 
+use codespan_reporting::{
+    diagnostic::Diagnostic,
+    files::{
+        SimpleFile,
+        SimpleFiles,
+    },
+};
 use derive_more::Display;
-use getset::{Getters, MutGetters, Setters};
+use getset::{
+    Getters,
+    MutGetters,
+    Setters,
+};
 // use getset::{Getters, MutGetters, Setters};
 // use itertools::Itertools;
+use crate::{
+    cst::SyntaxKind,
+    diagnostics::{
+        self,
+        DiagnosticsEngine,
+    },
+};
+use derive_new::new;
 use logos::Logos;
 use owo_colors::OwoColorize;
-use smartstring::alias::String;
+use shrinkwraprs::Shrinkwrap;
+// use smartstring::alias::String;
 use typed_builder::TypedBuilder;
 
-use crate::cst::SyntaxKind;
+pub type FileId = usize;
 
 #[allow(non_camel_case_types, clippy::upper_case_acronyms)]
 #[derive(Logos, Debug, Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord)]
@@ -569,11 +598,11 @@ impl TokenKind {
     }
 
     pub(crate) fn is_declaration_specifier(&self) -> bool {
-        self.is_storage_class_specifier()
-            || self.is_type_specifier()
-            || self.is_type_qualifier()
-            || self.is_function_specifier()
-            || self.is_alignment_specifier()
+        self.is_storage_class_specifier() ||
+            self.is_type_specifier() ||
+            self.is_type_qualifier() ||
+            self.is_function_specifier() ||
+            self.is_alignment_specifier()
     }
 
     pub(crate) fn is_semicolon(&self) -> bool {
@@ -599,39 +628,39 @@ impl TokenKind {
     pub(crate) fn is_storage_class_specifier(&self) -> bool {
         matches!(
             self,
-            TokenKind::AUTO_KW
-                | TokenKind::EXTERN_KW
-                | TokenKind::REGISTER_KW
-                | TokenKind::STATIC_KW
-                | TokenKind::THREAD_LOCAL_KW
+            TokenKind::AUTO_KW |
+                TokenKind::EXTERN_KW |
+                TokenKind::REGISTER_KW |
+                TokenKind::STATIC_KW |
+                TokenKind::THREAD_LOCAL_KW
         )
     }
 
     pub(crate) fn is_type_specifier(&self) -> bool {
         matches!(
             self,
-            TokenKind::VOID_KW
-                | TokenKind::CHAR_KW
-                | TokenKind::SHORT_KW
-                | TokenKind::INT_KW
-                | TokenKind::LONG_KW
-                | TokenKind::FLOAT_KW
-                | TokenKind::DOUBLE_KW
-                | TokenKind::SIGNED_KW
-                | TokenKind::UNSIGNED_KW
-                | TokenKind::BOOL_KW
-                | TokenKind::COMPLEX_KW
-                | TokenKind::IMAGINARY_KW
-                | TokenKind::STRUCT_KW
-                | TokenKind::UNION_KW
-                | TokenKind::ENUM_KW
-                | TokenKind::TYPEDEF_KW
-                | TokenKind::INLINE_KW
-                | TokenKind::RESTRICT_KW
-                | TokenKind::ATOMIC_KW
-                | TokenKind::GENERIC_KW
-                | TokenKind::NORETURN_KW
-                | TokenKind::STATIC_ASSERT_KW
+            TokenKind::VOID_KW |
+                TokenKind::CHAR_KW |
+                TokenKind::SHORT_KW |
+                TokenKind::INT_KW |
+                TokenKind::LONG_KW |
+                TokenKind::FLOAT_KW |
+                TokenKind::DOUBLE_KW |
+                TokenKind::SIGNED_KW |
+                TokenKind::UNSIGNED_KW |
+                TokenKind::BOOL_KW |
+                TokenKind::COMPLEX_KW |
+                TokenKind::IMAGINARY_KW |
+                TokenKind::STRUCT_KW |
+                TokenKind::UNION_KW |
+                TokenKind::ENUM_KW |
+                TokenKind::TYPEDEF_KW |
+                TokenKind::INLINE_KW |
+                TokenKind::RESTRICT_KW |
+                TokenKind::ATOMIC_KW |
+                TokenKind::GENERIC_KW |
+                TokenKind::NORETURN_KW |
+                TokenKind::STATIC_ASSERT_KW
         )
     }
 
@@ -642,10 +671,10 @@ impl TokenKind {
     pub(crate) fn is_type_qualifier(&self) -> bool {
         matches!(
             self,
-            TokenKind::CONST_KW
-                | TokenKind::RESTRICT_KW
-                | TokenKind::VOLATILE_KW
-                | TokenKind::ATOMIC_KW
+            TokenKind::CONST_KW |
+                TokenKind::RESTRICT_KW |
+                TokenKind::VOLATILE_KW |
+                TokenKind::ATOMIC_KW
         )
     }
 
@@ -673,12 +702,19 @@ impl TokenKind {
     MutGetters,
     Setters,
     TypedBuilder,
+    /*  */
 )]
 #[display(fmt = "{start}..{end}")]
 #[getset(get = "pub", get_mut = "pub", set = "pub")]
 pub struct Span {
     start: usize,
-    end: usize,
+    end:   usize,
+}
+
+impl Span {
+    pub fn new(start: usize, end: usize) -> Self {
+        Self { start, end }
+    }
 }
 
 // use rowan::{TextRange, TextSize};
@@ -709,9 +745,9 @@ impl Span {
 )]
 #[getset(get = "pub", get_mut = "pub", set = "pub")]
 pub struct Token {
-    pub kind: TokenKind,
+    pub kind:   TokenKind,
     pub lexeme: String,
-    pub span: Span,
+    pub span:   Span,
 }
 
 impl Token {
@@ -730,55 +766,47 @@ impl Display for Token {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Getters, Setters, MutGetters, TypedBuilder)]
-#[getset(set = "pub", get_mut = "pub")]
-pub struct TokenSink {
-    pub tokens: TokenStream,
-    // pub lexical_errors: Vec<Diagnostic<FileId>>,
-}
-
-impl TokenSink {
-    pub fn new(input: &str) -> Self {
-        Self {
-            tokens: TokenStream::new(input),
-            // lexical_errors: Vec::new(),
-        }
-    }
-
-    pub fn pretty_print(&self) -> String {
-        self.tokens.pretty_print()
-    }
-
-    pub fn tokens(&self) -> &[Token] {
-        &self.tokens.tokens
-    }
-}
-
 #[derive(
     Debug, Clone, PartialEq, Eq, Hash, Ord, PartialOrd, Getters, MutGetters, Setters, TypedBuilder,
 )]
 pub struct TokenStream {
     #[getset(get = "pub", get_mut = "pub", set = "pub")]
-    text: String,
+    text:      String,
     #[getset(get = "pub", get_mut = "pub", set = "pub")]
-    tokens: Vec<Token>,
+    tokens:    Vec<Token>,
     #[builder(default = 0)]
     #[getset(get = "pub", get_mut = "pub", set = "pub")]
-    cursor: usize,
-    // #[getset(get = "pub", get_mut = "pub", set = "pub")]
-    // file_name: PathBuf,
-    // file_id: FileId,
+    cursor:    usize,
+    #[getset(get = "pub", get_mut = "pub", set = "pub")]
+    file_name: PathBuf,
+    file_id:   FileId,
 }
 
 impl TokenStream {
     pub fn new(input: &str) -> Self {
         Self {
-            text: String::from(input),
+            text:      String::from(input),
+            tokens:    Vec::new(),
+            cursor:    0,
+            file_name: PathBuf::new(),
+            file_id:   FileId::default(),
+        }
+    }
+
+    pub fn from_file(file_id: FileId, file: &PathBuf) -> Self {
+        Self {
+            text: read_to_string(file).unwrap().into(),
             tokens: Vec::new(),
             cursor: 0,
-            // file_name: PathBuf::new(),
-            // file_id: FileId::default(),
+            file_name: file.clone(),
+            file_id,
         }
+    }
+
+    fn from_db_file(file_id: FileId, db_file: SimpleFile<String, String>) -> Self {
+        let text = db_file.source().to_string();
+
+        Self { tokens: Vec::new(), cursor: 0, file_id, file_name: db_file.name().into(), text }
     }
 
     pub fn push(&mut self, token: Token) {
@@ -813,34 +841,34 @@ impl Iterator for TokenStream {
     }
 }
 
-pub fn lex(input: &str) -> TokenSink {
+pub fn lex_with_diagnostics(
+    input: &str,
+    diagnostics: &mut DiagnosticsEngine,
+    file_id: usize,
+) -> TokenSink {
     let start = std::time::Instant::now();
 
     let mut lexer = TokenKind::lexer(input);
-    let mut token_sink = TokenSink::new(input);
-    // TokenSink::new(file_id, file.name().to_string().into());
+    let file = diagnostics.files.get(file_id).expect("Failed to get file from db");
+    let mut token_sink = TokenSink::from_db_file(file_id, file);
     let mut current_unknown_token: Option<Token> = None;
 
     while let Some(token_result) = lexer.next() {
         match token_result {
             Ok(token) => {
                 if let Some(unknown_token) = current_unknown_token.clone() {
-                    // TODO: Add diagnostic
-                    // token_sink.lexical_errors.push(
-                    //   unknown_token_diagnostic(
-                    //     file_id,
-                    //     &unknown_token,
-                    //   ),
-                    // );
+                    token_sink
+                        .lexical_errors
+                        .push(diagnostics::unknown_token_diagnostic(file_id, &unknown_token));
 
                     token_sink.tokens.push(unknown_token);
                     current_unknown_token = None;
                 }
 
                 // If token is whitespace (e.g. a newline, comment, etc.), skip it.
-                if token == TokenKind::WHITESPACE
-                    || token == TokenKind::COMMENT
-                    || token == TokenKind::NEWLINE
+                if token == TokenKind::WHITESPACE ||
+                    token == TokenKind::COMMENT ||
+                    token == TokenKind::NEWLINE
                 {
                     continue;
                 }
@@ -926,11 +954,11 @@ pub fn lex(input: &str) -> TokenSink {
         lexer.span().black().italic()
     );
 
-    token_sink.tokens.push(Token::new(TokenKind::EOF, "".to_string().into(), lexer.span().into()));
+    token_sink.tokens.push(Token::new(TokenKind::EOF, "".to_string(), lexer.span().into()));
 
     // Collect token information and format it as a tree
     let mut token_info = vec![];
-    for token in token_sink.tokens().iter() {
+    for token in token_sink.tokens().tokens.iter() {
         token_info.push(token);
     }
     let formatted_tokens = format_tokens_as_tree(&token_info, "  ");
@@ -939,18 +967,184 @@ pub fn lex(input: &str) -> TokenSink {
 
     let elapsed = start.elapsed();
 
-    tracing::info!(
-        " {}   {} {} constructed{}{}{}",
-        "LEXER".yellow(),
-        " SUCCESS ".black().on_green(),
-        "Token Stream".blue(),
-        " in ".black(),
-        format!("{elapsed:?}").cyan(),
-        ".".black()
-    );
+    let num_errors = token_sink.num_errors();
+
+    // Emit diagnostics
+    token_sink.drain_errors(diagnostics);
+    diagnostics.flush();
+
+    if num_errors > 0 {
+        let error_description = if num_errors > 1 { "errors" } else { "error" };
+
+        tracing::error!(
+            "  {}   {} {} constructed{}{} with {} {}{}",
+            "LEXER".yellow(),
+            " FAILURE ".black().on_red(),
+            "Token Stream".blue(),
+            " in ".black(),
+            format!("{elapsed:?}").cyan(),
+            num_errors.to_string().red(),
+            error_description.red(), // Conditionally append "s"
+            ".".black()
+        );
+    } else {
+        tracing::info!(
+            "  {}   {} {} constructed{}{}{}",
+            "LEXER".yellow(),
+            " SUCCESS ".black().on_green(),
+            "Token Stream".blue(),
+            " in ".black(),
+            format!("{elapsed:?}").cyan(),
+            ".".black()
+        );
+    }
 
     token_sink
 }
+
+// pub fn lex(input: &str) -> TokenSink {
+//     let mut files = SimpleFiles::new();
+
+//     let file_id = files.add("STDIN", input.to_string());
+//     let file = files.get(file_id).expect("Failed to get file from db");
+
+//     let start = std::time::Instant::now();
+
+//     let mut lexer = TokenKind::lexer(input);
+//     let mut token_sink = TokenSink::from_db_file(file_id, file);
+//     let mut current_unknown_token: Option<Token> = None;
+
+//     while let Some(token_result) = lexer.next() {
+//         match token_result {
+//             Ok(token) => {
+//                 if let Some(unknown_token) = current_unknown_token.clone() {
+//                     // TODO: Add diagnostic
+//                     token_sink
+//                         .lexical_errors
+//                         .push(diagnostics::unknown_token_diagnostic(file_id,
+// &unknown_token));
+
+//                     token_sink.tokens.push(unknown_token);
+//                     current_unknown_token = None;
+//                 }
+
+//                 // If token is whitespace (e.g. a newline, comment, etc.),
+// skip it.                 if token == TokenKind::WHITESPACE ||
+//                     token == TokenKind::COMMENT ||
+//                     token == TokenKind::NEWLINE
+//                 {
+//                     continue;
+//                 }
+
+//                 tracing::trace!(
+//                     " {}  Creating token {:?} at {:?}",
+//                     "LEXER".green(),
+//                     token.yellow(),
+//                     lexer.span().black().italic()
+//                 );
+
+//                 // If the token is a double star, we want to convert it to
+// two single stars and                 // add them to the token sink.
+
+//                 if token == TokenKind::DSTAR {
+//                     tracing::trace!(
+//                         " {}  Creating token {:?} at {:?}",
+//                         "LEXER".green(),
+//                         TokenKind::STAR.yellow(),
+//                         lexer.span().black().italic()
+//                     );
+
+//                     token_sink.tokens.push(Token::new(
+//                         TokenKind::STAR,
+//                         "*".to_string().into(),
+//                         (lexer.span().start..lexer.span().start + 1).into(),
+//                     ));
+
+//                     token_sink.tokens.push(Token::new(
+//                         TokenKind::STAR,
+//                         "*".to_string().into(),
+//                         (lexer.span().start + 1..lexer.span().end).into(),
+//                     ));
+
+//                     continue;
+//                 }
+
+//                 token_sink.tokens.push(Token::new(
+//                     token,
+//                     lexer.slice().to_string().into(),
+//                     lexer.span().into(),
+//                 ));
+//             }
+//             Err(()) => {
+//                 if let Some(unknown_token) = current_unknown_token.clone() {
+//                     let Token { kind: _, span, lexeme } = unknown_token;
+
+//                     let span = span.merge(lexer.span());
+//                     let updated_lexeme = format!("{}{}", lexeme,
+// lexer.slice());
+
+//                     tracing::debug!(
+//                         "Gluing together unknown tokens {} and {} to form {}
+// at {}",                         lexeme,
+//                         lexer.slice(),
+//                         updated_lexeme,
+//                         span
+//                     );
+
+//                     current_unknown_token =
+//                         Some(Token::new(TokenKind::UNKNOWN,
+// updated_lexeme.into(), span));                 } else {
+//                     tracing::trace!(
+//                         " {}  Creating unknown token {:?} at {:?}",
+//                         "LEXER".green(),
+//                         TokenKind::UNKNOWN.yellow(),
+//                         lexer.span()
+//                     );
+
+//                     current_unknown_token = Some(Token::new(
+//                         TokenKind::UNKNOWN,
+//                         lexer.slice().to_string().into(),
+//                         lexer.span().into(),
+//                     ));
+//                 }
+//             }
+//         }
+//     }
+
+//     tracing::trace!(
+//         " {}  Creating token {} at {:?}",
+//         "LEXER".green(),
+//         "EOF".yellow(),
+//         lexer.span().black().italic()
+//     );
+
+//     token_sink.tokens.push(Token::new(TokenKind::EOF, "".to_string().into(),
+// lexer.span().into()));
+
+//     // Collect token information and format it as a tree
+//     let mut token_info = vec![];
+//     for token in token_sink.tokens().tokens.iter() {
+//         token_info.push(token);
+//     }
+//     let formatted_tokens = format_tokens_as_tree(&token_info, "  ");
+
+//     tracing::debug!("\n\n{}{}\n\n{}", "Token Stream".blue(), ":".black(),
+// formatted_tokens);
+
+//     let elapsed = start.elapsed();
+
+//     tracing::info!(
+//         "  {}   {} {} constructed{}{}{}",
+//         "LEXER".yellow(),
+//         " SUCCESS ".black().on_green(),
+//         "Token Stream".blue(),
+//         " in ".black(),
+//         format!("{elapsed:?}").cyan(),
+//         ".".black()
+//     );
+
+//     token_sink
+// }
 
 fn format_tokens_as_tree(tokens: &[&Token], indent: &str) -> String {
     let mut formatted = String::new();
@@ -980,4 +1174,49 @@ fn format_tokens_as_tree(tokens: &[&Token], indent: &str) -> String {
     }
 
     formatted
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Getters, Setters, MutGetters, TypedBuilder)]
+#[getset(get = "pub", set = "pub", get_mut = "pub")]
+pub struct TokenSink {
+    pub tokens:         TokenStream,
+    pub lexical_errors: Vec<Diagnostic<FileId>>,
+}
+
+impl TokenSink {
+    pub fn new(file_id: FileId, file_name: PathBuf) -> Self {
+        Self {
+            tokens:         TokenStream::from_file(file_id, &file_name),
+            lexical_errors: Vec::new(),
+        }
+    }
+
+    // pub fn empty_sink() -> Self {
+    //     Self { tokens: TokenStream::empty_stream(), lexical_errors: Vec::new() }
+    // }
+
+    pub fn from_db_file(file_id: FileId, db_file: &SimpleFile<String, String>) -> Self {
+        Self {
+            tokens:         TokenStream::from_db_file(file_id, db_file.clone()),
+            lexical_errors: Vec::new(),
+        }
+    }
+
+    pub fn has_errors(&self) -> bool {
+        !self.lexical_errors.is_empty()
+    }
+
+    // pub fn add_error(&mut self, error: Diagnostic<FileId>) {
+    //     self.lexical_errors.push(error);
+    // }
+
+    pub fn drain_errors(&mut self, diagnostics: &mut DiagnosticsEngine) {
+        for error in self.lexical_errors.drain(..) {
+            diagnostics.emit(error.clone());
+        }
+    }
+
+    pub fn num_errors(&self) -> usize {
+        self.lexical_errors.len()
+    }
 }
