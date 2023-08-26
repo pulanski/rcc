@@ -1,23 +1,14 @@
-use std::{
-    fmt::{
+use crate::{
+    cst::SyntaxKind,
+    diagnostics::{
         self,
-        Display,
+        DiagnosticsEngine,
+        FileId,
     },
-    fs::{
-        read_to_string,
-        File,
-    },
-    io::Read,
-    ops::Range,
-    path::PathBuf,
 };
-
 use codespan_reporting::{
     diagnostic::Diagnostic,
-    files::{
-        SimpleFile,
-        SimpleFiles,
-    },
+    files::SimpleFile,
 };
 use derive_more::Display;
 use getset::{
@@ -25,23 +16,18 @@ use getset::{
     MutGetters,
     Setters,
 };
-// use getset::{Getters, MutGetters, Setters};
-// use itertools::Itertools;
-use crate::{
-    cst::SyntaxKind,
-    diagnostics::{
-        self,
-        DiagnosticsEngine,
-    },
-};
-use derive_new::new;
 use logos::Logos;
 use owo_colors::OwoColorize;
-use shrinkwraprs::Shrinkwrap;
-// use smartstring::alias::String;
+use std::{
+    fmt::{
+        self,
+        Display,
+    },
+    fs::read_to_string,
+    ops::Range,
+    path::PathBuf,
+};
 use typed_builder::TypedBuilder;
-
-pub type FileId = usize;
 
 #[allow(non_camel_case_types, clippy::upper_case_acronyms)]
 #[derive(Logos, Debug, Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord)]

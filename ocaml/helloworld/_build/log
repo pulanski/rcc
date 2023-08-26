@@ -1,0 +1,6 @@
+# dune init project helloworld
+# OCAMLPARAM: unset
+# Shared cache: disabled
+# Workspace root:
+# /Users/jkersey/Desktop/dev/repos/personal/private/misc/resilient_ll/ocaml/helloworld
+# Auto-detected concurrency: 10

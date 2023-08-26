@@ -8,6 +8,11 @@ use crate::{
     diagnostics::{
         self,
         DiagnosticsEngine,
+        ErrorKind,
+        FileId,
+        SemanticError,
+        SyntaxError,
+        UnexpectedToken,
     },
     lexer::{
         self,
@@ -163,11 +168,13 @@ pub fn parse_tree_with_diagnostics(
     let elapsed = start.elapsed();
     tracing::debug!(" {}\n\n  {}{}\n\n{}", "PARSER".green(), "CST".blue(), ":".black(), tree);
 
+    let num_errors = p.num_errors();
+
     // Emit diagnostics
     p.drain_errors(diagnostics);
-    // diagnostics.flush();
+    diagnostics.flush();
 
-    if !tree.contains_errors() {
+    if num_errors == 0 {
         tracing::info!(
             " {}  {} {} constructed{}{}{}",
             "PARSER".yellow(),
@@ -179,12 +186,14 @@ pub fn parse_tree_with_diagnostics(
         );
     } else {
         tracing::info!(
-            " {}  {} {} constructed{}{} with errors{}",
+            " {}  {} {} constructed{}{} with {}{}{}",
             "PARSER".yellow(),
             " FAILURE ".black().on_red(),
             "CST".blue(),
             " in ".black(),
             format!("{elapsed:?}").cyan(),
+            num_errors.to_string().red(),
+            " errors".red(),
             ".".black()
         );
     }
@@ -205,6 +214,8 @@ fn large_parser_prefix() -> String {
     )
     .into()
 }
+
+// fn foo(foo) {}
 
 fn small_parser_prefix() -> String {
     format!("\t{}{}{}", "[".black(), " PARSER ".yellow(), "]".black(),).into()
@@ -269,13 +280,14 @@ struct MarkClosed {
 
 #[derive(Debug, Clone)]
 pub struct Parser {
-    tokens:     TokenStream,
-    pos:        usize,
-    fuel:       Cell<u32>,
-    events:     Vec<Event>,
-    call_stack: Vec<ParserCall>,
-    tree_sink:  TreeSink,
-    file_id:    usize,
+    tokens:        TokenStream,
+    pos:           usize,
+    fuel:          Cell<u32>,
+    events:        Vec<Event>,
+    call_stack:    Vec<ParserCall>,
+    tree_sink:     TreeSink,
+    file_id:       usize,
+    error_emitted: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -294,7 +306,12 @@ impl Parser {
             call_stack: Vec::new(),
             tree_sink: TreeSink::new(),
             file_id,
+            error_emitted: false,
         }
+    }
+
+    pub fn num_errors(&self) -> usize {
+        self.tree_sink.num_errors()
     }
 
     pub fn enter(&mut self, tree_kind: TreeKind) {
@@ -626,12 +643,94 @@ impl Parser {
         self.pos += 1;
     }
 
+    fn advance_with_diagnostic(&mut self, diagnostic: diagnostics::Diagnostic<FileId>) {
+        self.tree_sink.push_error(diagnostic);
+        self.advance();
+    }
+
     fn advance_with_error(&mut self, error: &str) {
+        self.enter(TreeKind::ErrorTree);
         let m = self.open();
+
         // TODO: Error reporting.
         tracing::error!("{error}");
+
         self.advance();
         self.close(m, TreeKind::ErrorTree);
+    }
+
+    // SOON TO REPLACE advance_with_error api
+    fn emit_error(&mut self, error_kind: ErrorKind) {
+        self.enter(TreeKind::ErrorTree);
+        let m = self.open();
+
+        let expected = self.current();
+
+        // Create a custom diagnostic based on the error kind and push it to the
+        // tree_sink
+        match error_kind {
+            ErrorKind::Syntax(SyntaxError::UnexpectedToken(UnexpectedToken {
+                unexpected_token,
+                expected,
+            })) => {
+                self.tree_sink.push_error(diagnostics::unexpected_token_diagnostic(
+                    self.file_id,
+                    &unexpected_token,
+                    &expected,
+                ));
+            }
+            ErrorKind::Semantic(SemanticError::ExpectedFunctionOrDecl) => {
+                self.tree_sink.push_error(diagnostics::expected_function_or_decl(
+                    self.file_id,
+                    &self.final_token(),
+                ));
+            }
+
+            _ => todo!(),
+            /* ErrorKind::Syntax(SyntaxError::UnknownToken(token)) => {
+             *     self.tree_sink.push(self.syntax_error_unknown_token_diagnostic(&token));
+             * }
+             * ErrorKind::Syntax(SyntaxError::UnterminatedString(token)) => {
+             *     self.tree_sink.push(self.syntax_error_unterminated_string_diagnostic(&
+             * token)); }
+             * ErrorKind::Syntax(SyntaxError::UnterminatedComment(token)) => {
+             *     self.tree_sink.push(self.syntax_error_unterminated_comment_diagnostic(&
+             * token)); }
+             * ErrorKind::Syntax(SyntaxError::UnterminatedCharacter(token)) => {
+             *     self.tree_sink.push(self.syntax_error_unterminated_character_diagnostic(&
+             * token)); }
+             * ErrorKind::Syntax(SyntaxError::UnterminatedEscapeSequence(token)) => {
+             *     self.tree_sink
+             *         .push(self.syntax_error_unterminated_escape_sequence_diagnostic(&
+             * token)); }
+             * ErrorKind::Semantic(SemanticError::ExpectedStatement) => {
+             *     self.tree_sink.push(self.semantic_error_expected_statement_diagnostic());
+             * } */
+        }
+
+        // Log the error message for debugging or tracing
+        // TODO: Enhance tracing and debugging here
+        // tracing::error!("{error_kind}");
+
+        self.close(m, TreeKind::ErrorTree);
+    }
+
+    fn final_token(&self) -> Token {
+        self.tokens.get(self.tokens.len() - 1).unwrap()
+    }
+
+    fn final_token_span(&self) -> Span {
+        *self.final_token().span()
+    }
+
+    fn advance_with_special_error(&mut self, error: ErrorKind) {
+        // self.enter(TreeKind::ErrorTree);
+        // let m = self.open();
+
+        // self.advance();
+        self.emit_error(error);
+
+        // self.close(m, TreeKind::ErrorTree);
     }
 
     fn eof(&self) -> bool {
@@ -664,7 +763,7 @@ impl Parser {
         self.fuel.set(self.fuel.get() - 1);
         self.tokens
             .get(self.pos + lookahead)
-            .map_or(Token::new(TokenKind::EOF, "".into(), Span::default()), |it| it.clone())
+            .map_or(Token::new(TokenKind::EOF, "".into(), Span::default()), |it| it)
     }
 
     fn at(&self, kind: TokenKind) -> bool {
@@ -707,26 +806,11 @@ impl Parser {
         if self.eat(kind) {
             return;
         }
-        // TODO: Error reporting.
 
-        self.tree_sink.push_error(diagnostics::unexpected_token_diagnostic(
-            self.file_id,
-            &curr_tok,
-            &kind,
-            // found,
-        ));
-
-        tracing::error!(
-            "Unexpected token {cyan_apos}{found}{cyan_apos}. Expected \
-             {magenta_apos}{expected}{magenta_apos}{comma} but instead found \
-             {cyan_apos}{found}{cyan_apos}{period}",
-            cyan_apos = "'".cyan(),
-            expected = kind.to_string().green(),
-            comma = ",".black(),
-            magenta_apos = "'".magenta(),
-            found = found.red(),
-            period = ".".black(),
-        );
+        self.emit_error(ErrorKind::Syntax(SyntaxError::UnexpectedToken(UnexpectedToken {
+            unexpected_token: curr_tok,
+            expected:         kind,
+        })));
     }
 
     fn at_static_assert_declaration(&self) -> bool {
@@ -894,11 +978,27 @@ pub fn translation_unit(p: &mut Parser) {
     let m = p.open();
     let mut seen_extern = false;
 
-    // parse all external declarations
+    // Parse all external declarations
     while !p.eof() {
-        // TODO: Error recovery.
+        if let Err(err_kind) = extern_decl(p) {
+            // Handle the error, you can log it or do whatever is necessary.
+            // For example, you can collect errors in a vector.
 
-        extern_decl(p);
+            let err = match err_kind {
+                ErrorKind::Syntax(SyntaxError::TypeSpecifierMissing(token)) => {
+                    diagnostics::type_specifier_missing(p.file_id, &token)
+                }
+                // Add more error kinds here...
+                _ => todo!(),
+                // ErrorKind::Semantic(_) => todo!(),
+            };
+
+            // TODO: make more robust here...
+            p.advance();
+            p.tree_sink.push_error(err);
+        } else {
+            // TODO: Error recovery.
+        }
 
         if !seen_extern {
             seen_extern = true;
@@ -906,32 +1006,65 @@ pub fn translation_unit(p: &mut Parser) {
     }
 
     if !seen_extern {
-        p.advance_with_error("expected 'main' function");
+        p.advance_with_special_error(ErrorKind::Semantic(SemanticError::ExpectedFunctionOrDecl));
     }
-
-    // loop {
-    //     // If there are no more tokens, break
-    //     if p.peek().is_none() {
-    //         if !seen_extern {
-    //             p.advance_with_error("expected 'main' function");
-    //         }
-    //         break;
-    //     }
-
-    //     // Parse an external declaration
-    //     extern_decl(p);
-
-    //     // If flag isn't set, set it
-    //     if !seen_extern {
-    //         seen_extern = true;
-    //     }
-    // }
 
     p.close(m, TreeKind::TranslationUnit);
     p.trace_exit()
 }
 
-const FN_DEF_DECLARATION_SPECIFIERS_FIRST: &[TokenKind] = &[
+// TODO: Move to something like this to remove sequential reporting of the same
+// error
+//
+// pub fn translation_unit(p: &mut Parser) {
+//     p.enter(TreeKind::TranslationUnit);
+//     let m = p.open();
+//     let mut seen_extern = false;
+
+//     // Parse all external declarations
+//     while !p.eof() {
+//         if let Err(err_kind) = extern_decl(p) {
+//             // Handle the error, you can log it or do whatever is necessary.
+//             // For example, you can collect errors in a vector.
+
+//             if !p.error_emitted {
+//                 let err = match err_kind {
+//
+// ErrorKind::Syntax(SyntaxError::TypeSpecifierMissing(token)) => {
+// diagnostics::type_specifier_missing(p.file_id, &token)                     }
+//                     // Add more error kinds here...
+//                     _ => todo!(),
+//                     // ErrorKind::Semantic(_) => todo!(),
+//                 };
+
+//                 // TODO: make more robust here...
+//                 p.advance();
+//                 p.tree_sink.push_error(err);
+//             }
+
+//             // Set the error_emitted flag to true
+//             tracing::debug!("Turning on error_emitted flag");
+//             p.error_emitted = true;
+//         } else {
+//             tracing::debug!("Turning off error_emitted flag");
+//             p.error_emitted = false;
+//         }
+
+//         if !seen_extern {
+//             seen_extern = true;
+//         }
+//     }
+
+//     if !seen_extern {
+//         // Emit a special error if no external declarations were seen
+//         p.advance_with_special_error(ErrorKind::Semantic(SemanticError::ExpectedFunctionOrDecl));
+//     }
+
+//     p.close(m, TreeKind::TranslationUnit);
+//     p.trace_exit();
+// }
+
+pub(crate) const FN_DEF_DECLARATION_SPECIFIERS_FIRST: &[TokenKind] = &[
     TokenKind::VOID_KW,
     TokenKind::CHAR_KW,
     TokenKind::SHORT_KW,
@@ -947,7 +1080,7 @@ const FN_DEF_DECLARATION_SPECIFIERS_FIRST: &[TokenKind] = &[
     TokenKind::IDENTIFIER,
 ];
 
-fn display(token_set: &[TokenKind]) -> String {
+pub fn display(token_set: &[TokenKind]) -> String {
     token_set
         .iter()
         .map(|it| format!("{}{}{}", "'".magenta(), it.to_string().green(), "'".magenta()))
@@ -964,7 +1097,8 @@ fn display(token_set: &[TokenKind]) -> String {
 // ;
 //
 // ExternDecl = FunctionDef | Declaration
-fn extern_decl(p: &mut Parser) {
+// fn extern_decl(p: &mut Parser) {
+fn extern_decl(p: &mut Parser) -> Result<(), ErrorKind> {
     // For reference:
     //
     // // declaration
@@ -1067,24 +1201,29 @@ fn extern_decl(p: &mut Parser) {
         // If we have a static assert declaration, parse it (this is a declaration)
         static_assert_declaration(p);
     } else {
-        p.advance_with_error(&format!(
-            "Unexpected token {}{}{}{} Expected one of{} {}\n",
-            "'".cyan(),
-            p.current_token().lexeme().red(),
-            "'".cyan(),
-            ".".black(),
-            ":".black(),
-            display(FN_DEF_DECLARATION_SPECIFIERS_FIRST)
-        ));
-    }
+        // TODO: do not emit subsequent errors if we have already emitted this error
+        // (i.e. no need to emit the same error twice, only emit first occurrence)
 
-    // function_definition               | parser here
-    // 	: declaration_specifiers declarator | declaration_list compound_statement
-    // 	| declaration_specifiers declarator | compound_statement
-    // 	;
+        // Set the error_emitted flag to true
+        p.error_emitted = true;
+
+        p.close(m, TreeKind::ExternDecl);
+        p.trace_exit();
+
+        // println!("parsing declaration_specifiers in extern_decl {:?}",
+        // p.current_token());
+        return Err(ErrorKind::Syntax(SyntaxError::TypeSpecifierMissing(p.current_token())));
+        // p.advance_with_diagnostic(diagnostics::expected_declaration_specifier(
+        //     p.file_id,
+        //     &p.current_token(),
+        //     FN_DEF_DECLARATION_SPECIFIERS_FIRST,
+        // ));
+    }
 
     p.close(m, TreeKind::ExternDecl);
     p.trace_exit();
+
+    Ok(())
 }
 
 ///```yacc
@@ -3212,66 +3351,6 @@ fn alignment_specifier(p: &mut Parser) {
     p.trace_exit();
 }
 
-// NOTE: OLD VERSION OF Syntax
-// fn declaration_specifiers(p: &mut Parser) {
-//   p.enter(TreeKind::DeclarationSpecifiers);
-//   let m = p.open();
-
-//   while p.at_any(&[
-//     TokenKind::AUTO_KW,
-//     TokenKind::REGISTER_KW,
-//     TokenKind::STATIC_KW,
-//     TokenKind::EXTERN_KW,
-//     TokenKind::TYPEDEF_KW,
-//     TokenKind::CONST_KW,
-//     TokenKind::VOLATILE_KW,
-//     TokenKind::VOID_KW,
-//     TokenKind::CHAR_KW,
-//     TokenKind::SHORT_KW,
-//     TokenKind::INT_KW,
-//     TokenKind::LONG_KW,
-//     // TokenKind::FLOAT,
-//     TokenKind::DOUBLE_KW,
-//     TokenKind::SIGNED_KW,
-//     TokenKind::UNSIGNED_KW,
-//     TokenKind::STRUCT_KW,
-//     TokenKind::UNION_KW,
-//     TokenKind::ENUM_KW,
-//   ]) {
-//     if p.at_any(&[
-//       TokenKind::AUTO_KW,
-//       TokenKind::REGISTER_KW,
-//       TokenKind::STATIC_KW,
-//       TokenKind::EXTERN_KW,
-//       TokenKind::TYPEDEF_KW,
-//     ]) {
-//       storage_class_specifier(p);
-//     } else if p.at_any(&[
-//       TokenKind::VOID_KW,
-//       TokenKind::CHAR_KW,
-//       TokenKind::SHORT_KW,
-//       TokenKind::INT_KW,
-//       TokenKind::LONG_KW,
-//       TokenKind::FLOAT_KW,
-//       TokenKind::DOUBLE_KW,
-//       TokenKind::SIGNED_KW,
-//       TokenKind::UNSIGNED_KW,
-//       TokenKind::STRUCT_KW,
-//       TokenKind::UNION_KW,
-//       TokenKind::ENUM_KW,
-//     ]) {
-//       type_specifier(p);
-//     } else if p
-//       .at_any(&[TokenKind::CONST_KW, TokenKind::VOLATILE_KW])
-//     {
-//       type_qualifier(p);
-//     }
-//   }
-
-//   p.close(m, TreeKind::DeclarationSpecifiers);
-//   p.trace_exit();
-// }
-
 // storage_class_specifier
 // : AUTO_KW
 // | REGISTER_KW
@@ -3296,7 +3375,7 @@ fn storage_class_specifier(p: &mut Parser) {
     } else {
         // TODO: error reporting
         // p.error("expected storage class specifier");
-        p.advance_with_error(&format!("expected storage class specifier, but found {}", p.nth(0),));
+        p.advance_with_error(&format!("expected storage class specifier, but found {}", p.nth(0)));
     }
 
     p.close(m, TreeKind::StorageClassSpecifier);
@@ -3344,6 +3423,7 @@ fn type_specifier(p: &mut Parser) {
         p.advance();
     } else {
         // TODO: Error reporting.
+        // p.error(message::expected_type_specifier());
     }
 
     p.close(m, TreeKind::TypeSpecifier);
@@ -3412,6 +3492,7 @@ fn enumerator(p: &mut Parser) {
         p.advance();
     } else {
         // TODO: Error reporting.
+        p.error("expected identifier");
     }
 
     if p.at(TokenKind::EQ) {

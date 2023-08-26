@@ -8,5 +8,9 @@
     "files.associations": {
         "*.dockerfile.*": "dockerfile",
         "bitset": "c"
+    },
+    "ocaml.sandbox": {
+        "kind": "opam",
+        "switch": "default"
     }
 }

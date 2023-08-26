@@ -8,10 +8,13 @@ plugins:
           uri: https://github.com/trunk-io/plugins
 runtimes:
     enabled:
+        - go@1.21.0
         - node@18.12.1
         - python@3.10.8
 lint:
     enabled:
+        - shellcheck@0.9.0
+        - shfmt@3.6.0
         - actionlint@1.6.25
         - bandit@1.7.5
         - black@23.7.0

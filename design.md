@@ -8,7 +8,7 @@ The compiler frontend is the initial stage of a compiler responsible for process
 
 At a high level, the compiler frontend consists of several interconnected stages that progressively refine and prepare the source code for deeper analysis by the compiler:
 
-1. **Preprocessing**: The initial step takes a stream of bytes as input, which could be a file on the filesystem, a buffer in a REPL, or any valid source code input. It runs a preprocessor that applies various transformations to the source code, resolving and expanding macros, handling conditional compilation, and emitting a modified stream of bytes.
+1. **Preprocessing**: The initial step takes a stream of bytes as input, which could be a file on the filesystem, a buffer in a REPL, or any valid source code input. It runs a preprocessor that applies various transformations to the source code, resolving and expanding macros, handling conditional compilation, and emitting a modified stream of bytes. The output from preprocessing is a modified stream of bytes that is passed as input to the lexer.
 
 2. **Tokenization (Lexer)**: After preprocessing, the modified stream of bytes is passed to the lexer. The lexer tokenizes the input stream, converting it into a stream of tokens. A token typically consists of three parts: its kind (e.g., identifier, keyword, operator), its span (indicating its position in the source code), and the lexeme (the actual text of the token).
 
@@ -16,9 +16,7 @@ At a high level, the compiler frontend consists of several interconnected stages
 
 4. **AST Transformation**: Once the CST is constructed, we proceed to transform it into a more minimal Abstract Syntax Tree (AST). This transformation involves pruning or simplifying many of the interior nodes found within the CST, resulting in a more concise representation of the code. The AST serves as the foundation for further analysis.
 
- - Example: The CST may contain a node for a function call, which includes the function name, the arguments, and the parentheses. The AST, on the other hand, may contain a node for a function call, which includes the function name and the arguments. The parentheses are not included in the AST because they are not semantically meaningful.
-
-
+-   Example: The CST may contain a node for a function call, which includes the function name, the arguments, and the parentheses. The AST, on the other hand, may contain a node for a function call, which includes the function name and the arguments. The parentheses are not included in the AST because they are not semantically meaningful.
 
 5. **Typechecking and Name Resolution**: With the AST in hand, the frontend begins the process of typechecking and name resolution. This stage involves verifying the correctness of types and resolving variable and function names within the code. It lays the groundwork for semantic analysis and code optimization in the subsequent compiler stages.
 
@@ -63,6 +61,7 @@ The compiler frontend is the critical initial stage of a compiler that takes raw
 Here's a visualization of what each subsequent pass accomplishes with a simple example:
 
 #### Source Code (Before Preprocessing)
+
 ```c
 #define MAX 100
 
@@ -76,6 +75,7 @@ int main() {
 ```
 
 #### Preprocessing
+
 ```c
 int main() {
     int sum = 0;
@@ -87,6 +87,7 @@ int main() {
 ```
 
 #### Tokenization (Lexer)
+
 ```
 Token Stream:
 - [Keyword: int]
@@ -126,6 +127,7 @@ Token Stream:
 ```
 
 #### Parsing (Recursive Descent Parser) TODO: Update this
+
 ```
 Concrete Syntax Tree (CST):
 - [Function: main]
@@ -140,6 +142,7 @@ Concrete Syntax Tree (CST):
 ```
 
 #### AST Transformation TODO: Update this
+
 ```
 Abstract Syntax Tree (AST):
 - [Function: main]

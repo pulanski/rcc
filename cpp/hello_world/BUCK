@@ -1,0 +1,14 @@
+# load("//test_utils.bzl", "assert_output")
+
+cxx_binary(
+    name = "main",
+    srcs = ["main.cc"],
+    link_style = "static",
+    deps = ["//cpp/library:library"],
+)
+
+# assert_output(
+#     name = "check_main",
+#     command = "$(exe_target :main)",
+#     output = "hello world from cpp toolchain",
+# )

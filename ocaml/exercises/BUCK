@@ -1,0 +1,5 @@
+# buildifier: disable=no-effect
+ocaml_binary(
+    name = "bin",
+    srcs = glob(["*.ml"]),
+) if not host_info().os.is_windows else None

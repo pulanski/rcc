@@ -10,82 +10,96 @@
 ## Grammar Productions:
 
 ### primary_expression
-- [x] Handle IDENTIFIER
-- [x] Handle constant
-- [x] Handle string
-- [x] Handle '(' expression ')'
-- [x] Handle generic_selection
+
+-   [x] Handle IDENTIFIER
+-   [x] Handle constant
+-   [x] Handle string
+-   [x] Handle '(' expression ')'
+-   [x] Handle generic_selection
 
 ### constant
-- [x] Handle I_CONSTANT
-- [x] Handle F_CONSTANT
-- [x] Handle ENUMERATION_CONSTANT
+
+-   [x] Handle I_CONSTANT
+-   [x] Handle F_CONSTANT
+-   [x] Handle ENUMERATION_CONSTANT
 
 ### enumeration_constant
-- [x] Handle IDENTIFIER
+
+-   [x] Handle IDENTIFIER
 
 ### string
-- [x] Handle STRING_LITERAL
-- [x] Handle FUNC_NAME
+
+-   [x] Handle STRING_LITERAL
+-   [x] Handle FUNC_NAME
 
 ### generic_selection
-- [x] Handle GENERIC '(' assignment_expression ',' generic_assoc_list ')'
+
+-   [x] Handle GENERIC '(' assignment_expression ',' generic_assoc_list ')'
 
 ### generic_assoc_list
-- [x] Handle generic_association
-- [x] Handle generic_assoc_list ',' generic_association
+
+-   [x] Handle generic_association
+-   [x] Handle generic_assoc_list ',' generic_association
 
 ### generic_association
-- [x] Handle type_name ':' assignment_expression
-- [x] Handle DEFAULT ':' assignment_expression
+
+-   [x] Handle type_name ':' assignment_expression
+-   [x] Handle DEFAULT ':' assignment_expression
 
 ### postfix_expression
-- [x] Handle primary_expression
-- [x] Handle postfix_expression '[' expression ']'
-- [x] Handle postfix_expression '(' ')'
-- [x] Handle postfix_expression '(' argument_expression_list ')'
-- [x] Handle postfix_expression '.' IDENTIFIER
-- [x] Handle postfix_expression PTR_OP IDENTIFIER
-- [x] Handle postfix_expression INC_OP
-- [x] Handle postfix_expression DEC_OP
-- [x] Handle '(' type_name ')' '{' initializer_list '}'
-- [x] Handle '(' type_name ')' '{' initializer_list ',' '}'
+
+-   [x] Handle primary_expression
+-   [x] Handle postfix_expression '[' expression ']'
+-   [x] Handle postfix_expression '(' ')'
+-   [x] Handle postfix_expression '(' argument_expression_list ')'
+-   [x] Handle postfix_expression '.' IDENTIFIER
+-   [x] Handle postfix_expression PTR_OP IDENTIFIER
+-   [x] Handle postfix_expression INC_OP
+-   [x] Handle postfix_expression DEC_OP
+-   [x] Handle '(' type_name ')' '{' initializer_list '}'
+-   [x] Handle '(' type_name ')' '{' initializer_list ',' '}'
 
 ### argument_expression_list
-- [x] Handle assignment_expression
-- [x] Handle argument_expression_list ',' assignment_expression
+
+-   [x] Handle assignment_expression
+-   [x] Handle argument_expression_list ',' assignment_expression
 
 ### unary_expression
-- [x] Handle postfix_expression
-- [x] Handle INC_OP unary_expression
-- [x] Handle DEC_OP unary_expression
-- [x] Handle unary_operator cast_expression
-- [x] Handle SIZEOF unary_expression
-- [x] Handle SIZEOF '(' type_name ')'
-- [x] Handle ALIGNOF '(' type_name ')'
+
+-   [x] Handle postfix_expression
+-   [x] Handle INC_OP unary_expression
+-   [x] Handle DEC_OP unary_expression
+-   [x] Handle unary_operator cast_expression
+-   [x] Handle SIZEOF unary_expression
+-   [x] Handle SIZEOF '(' type_name ')'
+-   [x] Handle ALIGNOF '(' type_name ')'
 
 ### unary_operator
-- [x] Handle '&'
-- [x] Handle '*'
-- [x] Handle '+'
-- [x] Handle '-'
-- [x] Handle '~'
-- [x] Handle '!'
+
+-   [x] Handle '&'
+-   [x] Handle '\*'
+-   [x] Handle '+'
+-   [x] Handle '-'
+-   [x] Handle '~'
+-   [x] Handle '!'
 
 ### cast_expression
-- [x] Handle unary_expression
-- [x] Handle '(' type_name ')' cast_expression
+
+-   [x] Handle unary_expression
+-   [x] Handle '(' type_name ')' cast_expression
 
 ### multiplicative_expression
-- [x] Handle cast_expression
-- [x] Handle multiplicative_expression '*' cast_expression
-- [x] Handle multiplicative_expression '/' cast_expression
-- [x] Handle multiplicative_expression '%' cast_expression
+
+-   [x] Handle cast_expression
+-   [x] Handle multiplicative_expression '\*' cast_expression
+-   [x] Handle multiplicative_expression '/' cast_expression
+-   [x] Handle multiplicative_expression '%' cast_expression
 
 ### additive_expression
-- [x] Handle multiplicative_expression
-- [x] Handle additive_expression '+' multiplicative_expression
-- [x] Handle additive_expression '-' multiplicative_expression
+
+-   [x] Handle multiplicative_expression
+-   [x] Handle additive_expression '+' multiplicative_expression
+-   [x] Handle additive_expression '-' multiplicative_expression
 
 ### ... (Continue this pattern for all other productions)
 
@@ -96,19 +110,19 @@
 
 ## AST Node Structs:
 
-- [ ] `PrimaryExpression`
-- [ ] `Constant`
-- [ ] `EnumerationConstant`
-- [ ] `String`
-- [ ] `GenericSelection`
-- [ ] `PostfixExpression`
-- [ ] `ArgumentExpressionList`
-- [ ] `UnaryExpression`
-- [ ] `UnaryOperator`
-- [ ] `CastExpression`
-- [ ] `MultiplicativeExpression`
-- [ ] `AdditiveExpression`
-- [ ] ... (Continue this pattern for all other AST nodes)
+-   [ ] `PrimaryExpression`
+-   [ ] `Constant`
+-   [ ] `EnumerationConstant`
+-   [ ] `String`
+-   [ ] `GenericSelection`
+-   [ ] `PostfixExpression`
+-   [ ] `ArgumentExpressionList`
+-   [ ] `UnaryExpression`
+-   [ ] `UnaryOperator`
+-   [ ] `CastExpression`
+-   [ ] `MultiplicativeExpression`
+-   [ ] `AdditiveExpression`
+-   [ ] ... (Continue this pattern for all other AST nodes)
 
 ## Implementing AST Creation:
 

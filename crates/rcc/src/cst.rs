@@ -441,6 +441,10 @@ impl TreeSink {
         Self::default()
     }
 
+    pub fn num_errors(&self) -> usize {
+        self.syntax_errors.len()
+    }
+
     pub fn finish(mut self) -> (Tree, Vec<Diagnostic<usize>>) {
         self.tree.children.retain(|child| match child {
             Child::Tree(tree) => tree.kind != TreeKind::ErrorTree,
@@ -687,9 +691,9 @@ impl Tree {
                 self.range.to_string().black().italic(),
                 "Function".cyan(),
                 "-".red(),
-                " ".yellow().on_black(),
-                name.green().on_black(),
-                " ".yellow().on_black(),
+                " ".yellow(),
+                name.green(),
+                " ".yellow(),
             )
         );
 
@@ -777,7 +781,7 @@ impl Tree {
                                         "ParameterName".cyan(),
                                         "-".red(),
                                         " ".yellow().on_black(),
-                                        token.lexeme.green().on_black(),
+                                        token.lexeme.red().on_black(),
                                         " ".yellow().on_black(),
                                     )
                                 );
@@ -965,6 +969,20 @@ impl Tree {
                 // Get the function name
                 if let Child::Token(token) = &direct_declarator.children[0] {
                     if token.kind == TokenKind::IDENTIFIER {
+                        tracing::trace!(
+                            "{}",
+                            &format!(
+                                "{} Lowering {}@{} to {} {} {}{}{}",
+                                "PARSER".yellow(),
+                                token.kind.to_string().blue(),
+                                token.span().to_string().black().italic(),
+                                "FunctionName".cyan(),
+                                "-".red(),
+                                " ".yellow().on_black(),
+                                token.lexeme.green().on_black(),
+                                " ".yellow().on_black(),
+                            )
+                        );
                         name = token.lexeme.clone();
                     } else {
                         // TODO: Error handling
