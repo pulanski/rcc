@@ -1138,22 +1138,29 @@ impl Tree {
     // }
 
     fn extract_function_body(&self) -> Statement {
-        // Implement the logic for extracting the function body here
-        // You can follow a similar modular approach for this part
-        // println!("extract_function_body {:#?}", self);
-
         // The function body should be the last child of the FunctionDef node.
-        if let Some(last_child) = self.children.last() {
-            // println!("last_child {:#?}", last_child);
 
-            // Check if the last child is a Tree and its kind is CompoundStatement.
+        // The last child should be a Tree node with kind CompoundStatement.
+        if let Some(last_child) = self.children.last() {
             if let Child::Tree(last_tree) = last_child {
                 if last_tree.kind == TreeKind::CompoundStatement {
-                    // println!("last_child {:#?}", last_child);
-                    // Build the AST for the compound statement.
-                    return self.extract_compound_statement();
+                    // println!("last_tree {:#?}", last_tree);
+                    return last_tree.extract_compound_statement();
                 }
             }
+        } else {
+            tracing::error!(
+                "{}",
+                &format!(
+                    "  {}  Unexpected node while lowering {}@{} to {}. Expected {} but found {}",
+                    "PARSER".yellow(),
+                    self.kind.to_string().green(),
+                    self.range.to_string().black().italic(),
+                    "FunctionDef".cyan(),
+                    "CompoundStatement".cyan(),
+                    self.kind.to_string().green(),
+                )
+            );
         }
 
         Statement::Return(Expr::Literal(Literal::IntegerConstant(0)))
@@ -1161,18 +1168,29 @@ impl Tree {
 
     // This function recursively extracts a compound statement.
     fn extract_compound_statement(&self) -> Statement {
+        // Reference:
+        /// compound_statement
+        /// : '{' '}'
+        /// | '{' statement_list '}'
+        /// | '{' declaration_list '}'
+        /// | '{' declaration_list statement_list '}'
+        /// ;
         let mut statements = Vec::<Statement>::new();
 
-        for child in &self.children {
-            // Check if the current child is a Statement.
-            if let Child::Tree(child) = child {
-                if child.kind == TreeKind::Statement {
-                    // Recursively process the Statement node.
-                    // let statement = child.extract_statement();
-                    // statements.push(statement);
-                }
-            }
-        }
+        // println!("extract_compound_statement {:#?}", self);
+
+        // if let Some(
+
+        // for child in &self.children {
+        //     // Check if the current child is a Statement.
+        //     if let Child::Tree(child) = child {
+        //         if child.kind == TreeKind::Statement {
+        //             // Recursively process the Statement node.
+        //             let statement = child.extract_statement();
+        //             // statements.push(statement);
+        //         }
+        //     }
+        // }
 
         // Create and return a compound statement with the extracted statements.
         todo!("Implement compound statement extraction")
@@ -1413,6 +1431,10 @@ impl Tree {
     }
 
     fn transform_declaration(&self) -> Declaration {
+        todo!()
+    }
+
+    fn extract_statement(&self) -> Statement {
         todo!()
     }
 }

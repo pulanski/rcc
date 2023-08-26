@@ -30,7 +30,7 @@ fn main() -> Result<ExitCode> {
     let subscriber = Subscriber::builder()
         .with_env_filter(EnvFilter::from_default_env())
         .with_ansi(true)
-        .with_max_level(tracing::Level::INFO)
+        .with_max_level(tracing::Level::DEBUG)
         .with_line_number(false)
         .with_thread_names(false)
         .without_time() // turn off timestamps
