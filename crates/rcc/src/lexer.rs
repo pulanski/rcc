@@ -955,6 +955,8 @@ pub fn lex_with_diagnostics(
 
     let num_errors = token_sink.num_errors();
 
+    println!("token sink: {:#?}", token_sink);
+
     // Emit diagnostics
     token_sink.drain_errors(diagnostics);
     diagnostics.flush();

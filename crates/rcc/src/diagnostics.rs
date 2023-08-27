@@ -1,7 +1,7 @@
 use crate::{
     lexer::{
         Token,
-        TokenKind,
+        TokenKind, Span,
     },
     parser::{
         display,
@@ -531,6 +531,13 @@ pub(crate) fn type_specifier_missing(
     diagnostic = diagnostic.with_notes(notes);
 
     diagnostic
+}
+
+pub(crate) fn non_void_function_doesnt_return_value(
+    file_id: usize,
+    range: Span,
+) -> Diagnostic<FileId> {
+    todo!()
 }
 
 // "Ensure you use one of the valid declaration specifiers when declaring a

@@ -7,7 +7,11 @@ mod preprocessor;
 mod token_set;
 
 use anyhow::Result;
-use std::process::ExitCode;
+use codespan_reporting::files::SimpleFiles;
+use std::{
+    fs,
+    process::ExitCode,
+};
 use tracing_subscriber::{
     fmt::Subscriber,
     EnvFilter,
@@ -30,7 +34,7 @@ fn main() -> Result<ExitCode> {
     let subscriber = Subscriber::builder()
         .with_env_filter(EnvFilter::from_default_env())
         .with_ansi(true)
-        .with_max_level(tracing::Level::DEBUG)
+        .with_max_level(tracing::Level::TRACE)
         .with_line_number(false)
         .with_thread_names(false)
         .without_time() // turn off timestamps
@@ -39,15 +43,27 @@ fn main() -> Result<ExitCode> {
     // Set the subscriber as the default.
     tracing::subscriber::set_global_default(subscriber).expect("failed to set subscriber");
 
-    let mut diagnostics_engine = diagnostics::DiagnosticsEngine::new();
+    let mut diagnostics = diagnostics::DiagnosticsEngine::new();
+
+    let file_path = "testdata/parse/b.c";
+    let text = fs::read_to_string(file_path)?;
+    let file_id = diagnostics.add_file(file_path, text);
 
     // Parse the file into a CST
-    let mut cst =
-        parser::parse_file_with_diagnotics("testdata/parse/b.c", &mut diagnostics_engine)?;
+    let cst = parser::parse_file_with_diagnotics(file_path, &mut diagnostics)?;
     // let mut cst = parser::parse_file("testdata/parse/b.c")?;
     // // Reduce the CST to an AST
-    let ast = ast::reduce(&mut cst);
-    println!("{ast:#?}");
+    let ast = ast::lower_with_diagnostics(file_id, cst, &mut diagnostics);
+    println!("{:#?}", ast);
+
+    // let ast = ast::reduce(tree, &mut diagnostics_engine);
+    // let file_id = SimpleFiles::new().add("testdata/parse/b.c", cst.source());
+
+    // let ast_sink = ast::lower_with_diagnostics(cst, file_id, &mut
+    // diagnostics_engine);
+
+    //
+    // println!("{ast:#?}");
 
     // Recursively parse all files in a directory
     // if let Ok(results) = parser::parse_directory("testdata/parse") {

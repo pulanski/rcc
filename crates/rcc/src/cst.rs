@@ -311,7 +311,25 @@ impl SyntaxKind {
 }
 
 use crate::{
-    diagnostics::DiagnosticsEngine,
+    ast::{
+        AstSink,
+        Block,
+        DataType,
+        Declaration,
+        Expr,
+        ExternDecl,
+        Function,
+        Literal,
+        Param,
+        Statement,
+        Symbol,
+        TranslationUnit,
+    },
+    diagnostics::{
+        self,
+        DiagnosticsEngine,
+        FileId,
+    },
     lexer::{
         Span,
         Token,
@@ -428,12 +446,17 @@ pub enum TreeKind {
     ParamTypeList,
     StructOrUnion,
     AbstractDeclarator,
+    BlockItemList,
+    BlockItem,
+    Designation,
+    DesignatorList,
+    Designator,
 }
 
 #[derive(Debug, Default, PartialEq, Eq, Clone)]
 pub struct TreeSink {
     pub(crate) tree:          Tree,
-    pub(crate) syntax_errors: Vec<Diagnostic<usize>>,
+    pub(crate) syntax_errors: Vec<Diagnostic<FileId>>,
 }
 
 impl TreeSink {
@@ -445,7 +468,7 @@ impl TreeSink {
         self.syntax_errors.len()
     }
 
-    pub fn finish(mut self) -> (Tree, Vec<Diagnostic<usize>>) {
+    pub fn finish(mut self) -> (Tree, Vec<Diagnostic<FileId>>) {
         self.tree.children.retain(|child| match child {
             Child::Tree(tree) => tree.kind != TreeKind::ErrorTree,
             _ => true,
@@ -454,7 +477,7 @@ impl TreeSink {
     }
 
     pub fn start_node(&mut self, kind: TreeKind, range: Span) {
-        let tree = Tree { kind, range, children: Vec::new() };
+        let tree = Tree { kind, range, children: Vec::new(), file_id: 0 };
         self.tree.children.push(Child::Tree(tree));
     }
 
@@ -491,6 +514,7 @@ pub struct Tree {
     pub(crate) kind:     TreeKind,
     pub(crate) range:    Span,
     pub(crate) children: Vec<Child>,
+    pub(crate) file_id:  FileId,
 }
 
 #[derive(Debug, Display, PartialEq, Eq, Clone)]
@@ -515,13 +539,16 @@ mod smoke_test_tree_traversal {
                     kind:     TreeKind::FunctionDef,
                     range:    Span::new(1, 5),
                     children: vec![],
+                    file_id:  0,
                 }),
                 Child::Tree(Tree {
                     kind:     TreeKind::ExpressionStatement,
                     range:    Span::new(6, 9),
                     children: vec![],
+                    file_id:  0,
                 }),
             ],
+            file_id:  0,
         };
 
         // Test finding a specific child by kind.
@@ -549,6 +576,7 @@ mod smoke_test_tree_traversal {
                 Child::Token(token2.clone()),
                 Child::Token(token3),
             ],
+            file_id:  0,
         };
 
         // Test finding a specific token by kind.
@@ -574,6 +602,14 @@ impl Tree {
             })
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.children.is_empty()
+    }
+
+    pub fn len(&self) -> usize {
+        self.children.len()
+    }
+
     // Helper function to find a token of a specific kind.
     fn find_token(&self, kind: TokenKind) -> Option<&Token> {
         self.children
@@ -583,6 +619,58 @@ impl Tree {
                 _ => None,
             })
             .next()
+    }
+
+    pub fn num_functions(&self) -> usize {
+        self.children
+            .iter()
+            .filter(|child| {
+                // println!("num_functions - child: {:#?}", child);
+                match child {
+                    Child::Tree(tree) => {
+                        if let TreeKind::ExternDecl = tree.kind {
+                            if let Some(_function_def) = tree.find_child(TreeKind::FunctionDef) {
+                                return true;
+                            }
+
+                            if let Some(_declaration) = tree.find_child(TreeKind::Declaration) {
+                                return false;
+                            }
+
+                            false
+                        } else {
+                            false
+                        }
+                    }
+                    _ => false,
+                }
+            })
+            .count()
+    }
+
+    pub fn num_declarations(&self) -> usize {
+        self.children
+            .iter()
+            .filter(|child| match child {
+                Child::Tree(tree) => {
+                    if let TreeKind::ExternDecl = tree.kind {
+                        if let Some(_function_def) = tree.find_child(TreeKind::FunctionDef) {
+                            return false;
+                        }
+
+                        if let Some(_declaration) = tree.find_child(TreeKind::Declaration) {
+                            return true;
+                        }
+
+                        false
+                    } else {
+                        false
+                    }
+                }
+
+                _ => false,
+            })
+            .count()
     }
 
     // fn find_child(&self, kind: TreeKind) -> Option<&Tree> {
@@ -645,7 +733,7 @@ impl Tree {
     // AST nodes. AST nodes are a more minimal representation of thee
     // parse tree that is easier to work with, and is more suitable for
     // analysis and code generation.
-    pub fn lower(&mut self) -> TranslationUnit {
+    pub fn lower(&mut self) -> AstSink {
         let mut functions = Vec::<ExternDecl>::new();
 
         // Get the child node of the ExternDecl
@@ -675,12 +763,149 @@ impl Tree {
                 }
             }
         }
-        TranslationUnit { functions }
+
+        AstSink { translation_unit: TranslationUnit { functions }, syntax_errors: Vec::new() }
+    }
+
+    pub fn lower_with_diagnostics(&mut self, diagnostics: &mut DiagnosticsEngine) -> AstSink {
+        let mut functions = Vec::<ExternDecl>::new();
+
+        for child in &mut self.children {
+            if let Child::Tree(extern_decl) = child {
+                // Go to the child node of the ExternDecl
+                if extern_decl.kind == TreeKind::ExternDecl {
+                    // Find the child node of ExternDecl that is a FunctionDef.
+                    if let Some(function_def) = extern_decl.find_child(TreeKind::FunctionDef) {
+                        functions.push(ExternDecl::Function(
+                            function_def.transform_function_with_diagnostics(diagnostics),
+                        ));
+                        // functions.push(ExternDecl::Function(function_def.
+                        // transform_function()));
+                    } else if let Some(declaration) = extern_decl.find_child(TreeKind::Declaration)
+                    {
+                        functions
+                            .push(ExternDecl::Declaration(declaration.transform_declaration()));
+                    } else {
+                        unreachable!("Expected FunctionDef or Declaration node")
+                    }
+                } else {
+                    unreachable!("Expected ExternDecl node")
+                }
+            }
+        }
+
+        AstSink { translation_unit: TranslationUnit { functions }, syntax_errors: Vec::new() }
+    }
+
+    fn transform_function_with_diagnostics(&self, diagnostics: &mut DiagnosticsEngine) -> Function {
+        let (return_type, params, name) = self.extract_function_signature();
+        let body = self.extract_function_body();
+
+        // if !body.has_statements() {
+        //     tracing::warn!(
+        //         "{}",
+        //         &format!(
+        //             "  {}  Function {}@{} has no statements",
+        //             "PARSER".yellow(),
+        //             name.green(),
+        //             self.range.to_string().black().italic(),
+        //         )
+        //     );
+        // }
+
+        // If we have a return type, but no block, then emit an error.
+        // testdata/parse/b.c:56:17: warning: non-void function does not return a value
+        // [-Wreturn-type] int qux(int x) {}
+        //                 ^
+        // 1 warning generated.
+        if return_type != Box::new(DataType::Void) && !body.has_statements() {
+            tracing::warn!(
+                "{}",
+                &format!(
+                    "  {}  Function {}@{} has no statements",
+                    "PARSER".yellow(),
+                    name.green(),
+                    self.range.to_string().black().italic(),
+                )
+            );
+
+            // non-void function does not return a value
+
+            // self.ast_sink.
+            // push_error(diagnostics::non_void_function_doesnt_return_value(
+            //     self.file_id,
+            //     self.range,
+            // ));
+
+            // println!("self: {:#?}", self);
+
+            // if let Some(mut ast_sink) = self.ast_sink.clone() {
+            //     // println!("ast_sink {:#?}", ast_sink);
+            //     ast_sink.
+            // push_error(diagnostics::non_void_function_doesnt_return_value(
+            //         self.file_id,
+            //         self.range,
+            //     ));
+            // }
+
+            // self.tree_sink.
+            // push_error(diagnostics::unexpected_token_diagnostic(
+            //         self.file_id,
+            //         &unexpected_token,
+            //         &expected,
+            //     ));
+        }
+
+        tracing::trace!(
+            "{}",
+            &format!(
+                "{} Lowering {}@{} to {} {} {}{}{}",
+                "PARSER".yellow(),
+                "FunctionDef".green(),
+                self.range.to_string().black().italic(),
+                "Function".cyan(),
+                "-".red(),
+                " ".yellow(),
+                name.green(),
+                " ".yellow(),
+            )
+        );
+
+        Function { name: Symbol { name }, params, return_type, body }
     }
 
     fn transform_function(&self) -> Function {
         let (return_type, params, name) = self.extract_function_signature();
         let body = self.extract_function_body();
+
+        // if !body.has_statements() {
+        //     tracing::warn!(
+        //         "{}",
+        //         &format!(
+        //             "  {}  Function {}@{} has no statements",
+        //             "PARSER".yellow(),
+        //             name.green(),
+        //             self.range.to_string().black().italic(),
+        //         )
+        //     );
+        // }
+
+        // If we have a return type, but no block, then emit an error.
+        // testdata/parse/b.c:56:17: warning: non-void function does not return a value
+        // [-Wreturn-type] int qux(int x) {}
+        //                 ^
+        // 1 warning generated.
+        if return_type != Box::new(DataType::Void) && !body.has_statements() {
+            tracing::warn!(
+                "{}",
+                &format!(
+                    "  {}  Function {}@{} has no statements",
+                    "PARSER".yellow(),
+                    name.green(),
+                    self.range.to_string().black().italic(),
+                )
+            );
+        }
 
         tracing::trace!(
             "{}",
@@ -1177,24 +1402,31 @@ impl Tree {
         /// ;
         let mut statements = Vec::<Statement>::new();
 
-        // println!("extract_compound_statement {:#?}", self);
+        println!("extract_compound_statement {:#?}", self);
 
         // if let Some(
 
-        // for child in &self.children {
-        //     // Check if the current child is a Statement.
-        //     if let Child::Tree(child) = child {
-        //         if child.kind == TreeKind::Statement {
-        //             // Recursively process the Statement node.
-        //             let statement = child.extract_statement();
-        //             // statements.push(statement);
-        //         }
-        //     }
-        // }
+        let mut compound_statement_seen = false;
+
+        for child in &self.children {
+            // Check if the current child is a Statement.
+            if let Child::Tree(child) = child {
+                // Process the block item list, if anyy.
+                if child.kind == TreeKind::BlockItemList {
+                    let statement = child.extract_block_item_list();
+                    statements.push(statement);
+                    compound_statement_seen = true;
+                }
+            }
+        }
+
+        if compound_statement_seen {
+            println!("compound_statement_seen {:#?}", compound_statement_seen);
+        }
 
         // Create and return a compound statement with the extracted statements.
-        todo!("Implement compound statement extraction")
-        // Statement::Compound(statements)
+        // todo!("Implement compound statement extraction")
+        Statement::Compound(Block::from(statements))
     }
 
     // fn transform_function(&self) -> Function {
@@ -1437,6 +1669,10 @@ impl Tree {
     fn extract_statement(&self) -> Statement {
         todo!()
     }
+
+    fn extract_block_item_list(&self) -> Statement {
+        todo!()
+    }
 }
 
 impl Display for Tree {
@@ -1445,186 +1681,4 @@ impl Display for Tree {
         self.print(&mut buf, 0);
         write!(f, "{buf}")
     }
-}
-
-#[derive(Debug)]
-pub struct TranslationUnit {
-    pub functions: Vec<ExternDecl>,
-}
-
-#[derive(Debug)]
-pub enum ExternDecl {
-    Function(Function),
-    Declaration(Declaration),
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Function {
-    // pub name: Symbol,
-    pub name:        Symbol,
-    pub params:      Vec<Param>,
-    pub return_type: Box<DataType>,
-    pub body:        Statement,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Param {
-    pub name: Symbol,
-    pub ty:   DataType,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Expr {
-    Literal(Literal),
-    Binary { left: Box<Expr>, operator: BinOp, right: Box<Expr> },
-    // Add other types of expressions as needed
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum BinOp {
-    Add,
-    Subtract,
-    Multiply,
-    Divide,
-    Modulo,
-    // Add other binary operators as needed
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Statement {
-    Expression(Expr),
-    If {
-        condition:   Expr,
-        then_branch: Vec<Statement>,
-        else_branch: Option<Vec<Statement>>,
-    },
-    While {
-        condition: Expr,
-        body:      Vec<Statement>,
-    },
-    Return(Expr),
-    Compound(Block),
-    DoWhile {
-        body:      Vec<Statement>,
-        condition: Expr,
-    },
-    For {
-        initializer: Option<Box<Statement>>,
-        condition:   Option<Expr>,
-        increment:   Option<Expr>,
-        body:        Vec<Statement>,
-    },
-    Break,
-    Continue,
-    Assignment(Assignment),
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Block {
-    pub statements: Vec<Statement>,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Literal {
-    Identifier(String),
-    IntegerConstant(i64),
-    // Add other expression types like binary operations, function calls, etc.
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct FunctionCall {
-    pub name: String,
-    pub args: Vec<Expr>,
-    // pub ret:  DataType, // TODO: do we need to add the return type?
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Assignment {
-    pub left:  Box<Expr>,
-    pub right: Box<Expr>,
-}
-
-#[derive(Debug, PartialEq, Eq, Clone)]
-pub struct Constant {
-    pub name: Symbol,
-    pub ty:   DataType,
-    pub val:  Expr,
-}
-
-#[derive(Debug, PartialEq, Eq, Clone)]
-pub struct Declaration {
-    pub specifiers: Vec<DeclarationSpecifier>,
-    pub ty:         DataType,
-    pub var:        Symbol,
-    // pub val: Option<Expression>,
-}
-
-#[derive(Debug, PartialEq, Eq, Clone)]
-pub enum DeclarationSpecifier {
-    Type(DataType),
-    StorageClass(StorageClass),
-    // Add other declaration specifiers as needed
-}
-
-#[derive(Debug, PartialEq, Eq, Clone)]
-pub enum StorageClass {
-    Extern,
-    Static,
-    Register,
-    Auto,
-    ThreadLocal,
-    Typedef,
-    // Add other storage classes as needed
-}
-
-#[derive(Debug, PartialEq, Eq, Clone)]
-pub struct Enum {
-    pub name:      Symbol,
-    pub constants: Vec<Symbol>,
-}
-
-#[derive(Debug, PartialEq, Eq, Clone)]
-pub struct Struct {
-    pub name:    String,
-    pub members: Vec<Declaration>,
-}
-
-#[derive(Debug, PartialEq, Eq, Clone)]
-pub struct Type {
-    pub ty: DataType,
-}
-
-#[derive(Debug, PartialEq, Eq, Clone)]
-pub struct Symbol {
-    pub name: String,
-}
-
-impl From<String> for Symbol {
-    fn from(name: String) -> Self {
-        Self { name }
-    }
-}
-
-#[derive(Debug, Display, PartialEq, Eq, Clone)]
-pub enum DataType {
-    #[strum(serialize = "int")]
-    Int,
-    #[strum(serialize = "char")]
-    Char,
-    #[strum(serialize = "unknown")]
-    Unknown,
-    #[strum(serialize = "float")]
-    Float,
-    #[strum(serialize = "double")]
-    Double,
-    #[strum(serialize = "pointer")]
-    Pointer(Box<DataType>), // For pointer types
-    #[strum(serialize = "array")]
-    Array(Box<DataType>, Option<usize>), // For array types with optional size (e.g. int[10])
-    #[strum(serialize = "struct")]
-    Struct(Struct), // For struct types
-    #[strum(serialize = "enum")]
-    Enum(Enum), // For enum types
-    #[strum(serialize = "function")]
-    Function(Function), // For function types
 }
