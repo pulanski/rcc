@@ -1,5 +1,4 @@
 use crate::{
-    ast::AstSink,
     cst::{
         Child,
         Tree,
@@ -221,8 +220,6 @@ fn large_parser_prefix() -> String {
     .into()
 }
 
-// fn foo(foo) {}
-
 fn small_parser_prefix() -> String {
     format!("\t{}{}{}", "[".black(), " PARSER ".yellow(), "]".black(),).into()
 }
@@ -262,7 +259,7 @@ enum Event {
 impl Event {
     fn get_range(&self) -> Span {
         match self {
-            Event::Open { range, .. } => range.clone(),
+            Event::Open { range, .. } => *range,
             Event::Close => panic!("Attempted to get range from a Close event."),
             Event::Advance => panic!("Attempted to get range from an Advance event."),
         }
@@ -552,7 +549,13 @@ impl Parser {
             match event {
                 // Starting a new node; just push an empty tree to the stack.
                 Event::Open { range, kind } => {
-                    stack.push(Tree { kind, children: Vec::new(), range, file_id: self.file_id });
+                    stack.push(Tree {
+                        kind,
+                        children: Vec::new(),
+                        range,
+                        file_id: self.file_id,
+                        pos: 0,
+                    });
                 }
 
                 // A tree is done.
@@ -1559,15 +1562,6 @@ fn labeled_statement(p: &mut Parser) {
     p.close(m, TreeKind::LabeledStatement);
     p.trace_exit();
 }
-
-// compound_statement
-// : '{' '}'
-// | '{' statement_list '}'
-// | '{' declaration_list '}'
-// | '{' declaration_list statement_list '}'
-// ;
-//
-// CompoundStatement = '{' (DeclarationList)? (StatementList)? '}'
 
 /// Parses a **compound statement** in **C** as per the [**C 2011
 /// standard**][1].

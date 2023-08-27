@@ -167,7 +167,6 @@ pub struct Declaration {
     pub specifiers: Vec<DeclarationSpecifier>,
     pub ty:         DataType,
     pub var:        Symbol,
-    // pub val: Option<Expression>,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]

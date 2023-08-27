@@ -1,6 +1,11 @@
 [workspace]
 resolver = "2"
-members = ["crates/resilient_ll", "crates/rcc"]
+members = [
+    "crates/resilient_ll",
+    "crates/rcc",
+    "crates/predefined_macros",
+    "crates/stdc_version",
+]
 
 
 [workspace.dependencies]

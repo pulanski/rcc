@@ -972,7 +972,7 @@ third_party_rust_binary(
     ],
     rustc_flags = ["--cap-lints=allow"],
     visibility = [],
-    deps = [":cc-1.0.79"],
+    deps = [":cc-1.0.83"],
 )
 
 third_party_rust_library(
@@ -1438,7 +1438,7 @@ third_party_rust_binary(
     rustc_flags = ["--cap-lints=allow"],
     visibility = [],
     deps = [
-        ":cc-1.0.79",
+        ":cc-1.0.83",
         ":pkg-config-0.3.26",
     ],
 )
@@ -1666,22 +1666,33 @@ third_party_rust_library(
     ],
 )
 
+alias(
+    name = "cc",
+    actual = ":cc-1.0.83",
+    visibility = ["PUBLIC"],
+)
+
 third_party_rust_library(
-    name = "cc-1.0.79",
+    name = "cc-1.0.83",
     srcs = [
-        "vendor/cc-1.0.79/src/com.rs",
-        "vendor/cc-1.0.79/src/lib.rs",
-        "vendor/cc-1.0.79/src/registry.rs",
-        "vendor/cc-1.0.79/src/setup_config.rs",
-        "vendor/cc-1.0.79/src/vs_instances.rs",
-        "vendor/cc-1.0.79/src/winapi.rs",
-        "vendor/cc-1.0.79/src/windows_registry.rs",
+        "vendor/cc-1.0.83/src/com.rs",
+        "vendor/cc-1.0.83/src/lib.rs",
+        "vendor/cc-1.0.83/src/os_pipe.rs",
+        "vendor/cc-1.0.83/src/os_pipe/unix.rs",
+        "vendor/cc-1.0.83/src/os_pipe/windows.rs",
+        "vendor/cc-1.0.83/src/registry.rs",
+        "vendor/cc-1.0.83/src/setup_config.rs",
+        "vendor/cc-1.0.83/src/vs_instances.rs",
+        "vendor/cc-1.0.83/src/winapi.rs",
+        "vendor/cc-1.0.83/src/windows_registry.rs",
+        "vendor/cc-1.0.83/src/windows_sys.rs",
     ],
     crate = "cc",
-    crate_root = "vendor/cc-1.0.79/src/lib.rs",
+    crate_root = "vendor/cc-1.0.83/src/lib.rs",
     edition = "2018",
     rustc_flags = ["--cap-lints=allow"],
     visibility = [],
+    deps = [":libc"],
 )
 
 third_party_rust_library(
@@ -6363,7 +6374,7 @@ third_party_rust_binary(
     ],
     rustc_flags = ["--cap-lints=allow"],
     visibility = [],
-    deps = [":cc-1.0.79"],
+    deps = [":cc-1.0.83"],
 )
 
 alias(
@@ -7132,7 +7143,7 @@ third_party_rust_binary(
     edition = "2018",
     rustc_flags = ["--cap-lints=allow"],
     visibility = [],
-    deps = [":cc-1.0.79"],
+    deps = [":cc-1.0.83"],
 )
 
 third_party_rust_library(
@@ -7442,7 +7453,7 @@ third_party_rust_binary(
     rustc_flags = ["--cap-lints=allow"],
     visibility = [],
     deps = [
-        ":cc-1.0.79",
+        ":cc-1.0.83",
         ":lazy_static-1.4.0",
         ":regex-1.7.3",
         ":semver-1.0.17",
@@ -7559,7 +7570,7 @@ third_party_rust_binary(
     rustc_flags = ["--cap-lints=allow"],
     visibility = [],
     deps = [
-        ":cc-1.0.79",
+        ":cc-1.0.83",
         ":lazy_static-1.4.0",
         ":regex-1.7.3",
         ":semver-1.0.17",
@@ -7680,7 +7691,7 @@ third_party_rust_binary(
     rustc_flags = ["--cap-lints=allow"],
     visibility = [],
     deps = [
-        ":cc-1.0.79",
+        ":cc-1.0.83",
         ":lazy_static-1.4.0",
         ":regex-1.7.3",
         ":semver-1.0.17",
@@ -9272,7 +9283,7 @@ third_party_rust_binary(
     rustc_flags = ["--cap-lints=allow"],
     visibility = [],
     deps = [
-        ":cc-1.0.79",
+        ":cc-1.0.83",
         ":pkg-config-0.3.26",
     ],
 )
@@ -13216,7 +13227,7 @@ third_party_rust_binary(
     edition = "2015",
     rustc_flags = ["--cap-lints=allow"],
     visibility = [],
-    deps = [":cc-1.0.79"],
+    deps = [":cc-1.0.83"],
 )
 
 alias(

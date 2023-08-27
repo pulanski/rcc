@@ -23,15 +23,18 @@ mod smoke_test_tree_traversal {
                     range:    Span::new(1, 5),
                     children: vec![],
                     file_id:  0,
+                    pos:      0,
                 }),
                 Child::Tree(Tree {
                     kind:     TreeKind::ExpressionStatement,
                     range:    Span::new(6, 9),
                     children: vec![],
                     file_id:  0,
+                    pos:      0,
                 }),
             ],
             file_id:  0,
+            pos:      0,
         };
 
         // Test finding a specific child by kind.
@@ -60,6 +63,7 @@ mod smoke_test_tree_traversal {
                 Child::Token(token3),
             ],
             file_id:  0,
+            pos:      0,
         };
 
         // Test finding a specific token by kind.
@@ -541,7 +545,7 @@ impl TreeSink {
     }
 
     pub fn start_node(&mut self, kind: TreeKind, range: Span) {
-        let tree = Tree { kind, range, children: Vec::new(), file_id: 0 };
+        let tree = Tree { kind, range, children: Vec::new(), file_id: 0, pos: 0 };
         self.tree.children.push(Child::Tree(tree));
     }
 
@@ -579,6 +583,7 @@ pub struct Tree {
     pub(crate) range:    Span,
     pub(crate) children: Vec<Child>,
     pub(crate) file_id:  FileId,
+    pub(crate) pos:      usize, // The index into the children vector.
 }
 
 #[derive(Debug, Display, PartialEq, Eq, Clone)]
@@ -757,8 +762,12 @@ impl Tree {
                         functions.push(ExternDecl::Function(function_def.transform_function()));
                     } else if let Some(declaration) = extern_decl.find_child(TreeKind::Declaration)
                     {
-                        functions
-                            .push(ExternDecl::Declaration(declaration.transform_declaration()));
+                        // functions.push(ExternDecl::Declaration(
+                        //     declaration.
+                        // transform_declaration_w_diagnostics(),
+                        // ));
+                        // .push(ExternDecl::Declaration(declaration.
+                        // transform_declaration()));
                     } else {
                         unreachable!("Expected FunctionDef or Declaration node")
                     }
@@ -783,12 +792,11 @@ impl Tree {
                         functions.push(ExternDecl::Function(
                             function_def.clone().transform_function_with_diagnostics(diagnostics),
                         ));
-                        // functions.push(ExternDecl::Function(function_def.
-                        // transform_function()));
                     } else if let Some(declaration) = extern_decl.find_child(TreeKind::Declaration)
                     {
-                        functions
-                            .push(ExternDecl::Declaration(declaration.transform_declaration()));
+                        functions.push(ExternDecl::Declaration(
+                            declaration.transform_declaration_with_diagnostics(diagnostics),
+                        ));
                     } else {
                         unreachable!("Expected FunctionDef or Declaration node")
                     }
@@ -805,24 +813,94 @@ impl Tree {
         diagnostics.emit(error);
     }
 
+    pub fn nth(&self, n: usize) -> Option<&Child> {
+        self.children.get(self.pos + n)
+    }
+
+    pub fn at_token(&self, kind: TokenKind) -> bool {
+        self.nth(0).map_or(false, |child| match child {
+            Child::Token(token) => token.kind() == &kind,
+            _ => false,
+        })
+    }
+
+    pub fn at_tree(&self, kind: TreeKind) -> bool {
+        self.nth(0).map_or(false, |child| match child {
+            Child::Tree(tree) => tree.kind == kind,
+            _ => false,
+        })
+    }
+
+    pub fn expect_tree(&mut self, diagnostics: &mut DiagnosticsEngine, kind: TreeKind) {
+        if self.eat_tree(kind) {
+            return;
+        }
+
+        tracing::error!(
+            "{}",
+            &format!(
+                "  {}  Expected {} but found {}",
+                "LOWERING".cyan(),
+                kind.to_string().blue(),
+                "None".green(),
+            )
+        );
+
+        // self.push_error(
+        //     diagnostics::expected_tree(self.file_id, self.range, kind, None),
+        //     diagnostics,
+        // );
+    }
+
+    pub fn expect_token(&mut self, diagnostics: &mut DiagnosticsEngine, kind: TokenKind) {
+        if self.eat_token(kind) {
+            return;
+        }
+
+        tracing::error!(
+            "{}",
+            &format!(
+                "  {}  Expected {} but found {}",
+                "LOWERING".cyan(),
+                kind.to_string().blue(),
+                "None".green(),
+            )
+        );
+
+        // self.push_error(
+        //     diagnostics::expected_token(self.file_id, self.range, kind,
+        // None),     diagnostics,
+        // );
+    }
+
+    pub fn eat_token(&mut self, kind: TokenKind) -> bool {
+        if self.at_token(kind) {
+            self.advance();
+            true
+        } else {
+            false
+        }
+    }
+
+    pub fn eat_tree(&mut self, kind: TreeKind) -> bool {
+        if self.at_tree(kind) {
+            self.advance();
+            true
+        } else {
+            false
+        }
+    }
+
+    pub fn advance(&mut self) {
+        self.pos += 1;
+    }
+
     fn transform_function_with_diagnostics(
         &mut self,
         diagnostics: &mut DiagnosticsEngine,
     ) -> Function {
         let (return_type, params, name) = self.extract_function_signature();
         let body = self.extract_function_body();
-
-        // if !body.has_statements() {
-        //     tracing::warn!(
-        //         "{}",
-        //         &format!(
-        //             "  {}  Function {}@{} has no statements",
-        //             "PARSER".yellow(),
-        //             name.green(),
-        //             self.range.to_string().black().italic(),
-        //         )
-        //     );
-        // }
 
         // If we have a return type, but no block, then emit an error.
         // testdata/parse/b.c:56:17: warning: non-void function does not return a value
@@ -841,34 +919,10 @@ impl Tree {
             );
 
             // non-void function does not return a value
-
-            // self.ast_sink.
-            // push_error(diagnostics::non_void_function_doesnt_return_value(
-            //     self.file_id,
-            //     self.range,
-            // ));
             self.push_error(
                 diagnostics::non_void_function_doesnt_return_value(self.file_id, self.range),
                 diagnostics,
             );
-
-            println!("diag {:#?}", diagnostics);
-
-            // if let Some(mut ast_sink) = self.ast_sink.clone() {
-            //     // println!("ast_sink {:#?}", ast_sink);
-            //     ast_sink.
-            // push_error(diagnostics::non_void_function_doesnt_return_value(
-            //         self.file_id,
-            //         self.range,
-            //     ));
-            // }
-
-            // self.tree_sink.
-            // push_error(diagnostics::unexpected_token_diagnostic(
-            //         self.file_id,
-            //         &unexpected_token,
-            //         &expected,
-            //     ));
         }
 
         tracing::trace!(
@@ -1409,34 +1463,38 @@ impl Tree {
     // This function recursively extracts a compound statement.
     fn extract_compound_statement(&self) -> Statement {
         // Reference:
-        /// compound_statement
-        /// : '{' '}'
-        /// | '{' statement_list '}'
-        /// | '{' declaration_list '}'
-        /// | '{' declaration_list statement_list '}'
-        /// ;
+        // compound_statement
+        // : '{' '}'
+        // | '{'  block_item_list '}'
+        // ;
         let mut statements = Vec::<Statement>::new();
 
-        println!("extract_compound_statement {:#?}", self);
+        // println!("extract_compound_statement {:#?}", self);
 
         // if let Some(
 
         let mut compound_statement_seen = false;
+
+        // println!("compound_statement children {:#?}", self.children);
+
+        // Expect that the first child of the compound statement is
+        // a left brace token.
+        if let Child::Token(token) = &self.children[0] {
+            if token.kind() != &TokenKind::LBRACE {
+                // TODO: Error handling
+            }
+        }
 
         for child in &self.children {
             // Check if the current child is a Statement.
             if let Child::Tree(child) = child {
                 // Process the block item list, if anyy.
                 if child.kind == TreeKind::BlockItemList {
-                    let statement = child.extract_block_item_list();
-                    statements.push(statement);
+                    // let statement = child.extract_block_item_list();
+                    // statements.push(statement);
                     compound_statement_seen = true;
                 }
             }
-        }
-
-        if compound_statement_seen {
-            println!("compound_statement_seen {:#?}", compound_statement_seen);
         }
 
         // Create and return a compound statement with the extracted statements.
@@ -1691,7 +1749,11 @@ impl Tree {
         }
     }
 
-    fn transform_declaration(&self) -> Declaration {
+    fn transform_declaration_with_diagnostics(
+        &self,
+        diagnostics: &mut DiagnosticsEngine,
+    ) -> Declaration {
+        println!("transform_declaration_with_diagnostics {:#?}", self);
         todo!()
     }
 

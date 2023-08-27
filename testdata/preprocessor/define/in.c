@@ -1,4 +1,3 @@
-
 // A define macro with a single argument.
 #define FOO(x) x
 

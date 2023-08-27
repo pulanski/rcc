@@ -41,22 +41,30 @@ fn main() -> Result<ExitCode> {
         .finish();
 
     // Set the subscriber as the default.
-    tracing::subscriber::set_global_default(subscriber).expect("failed to set subscriber");
+    tracing::subscriber::set_global_default(subscriber).expect(
+        "failed to set
+    subscriber",
+    );
 
-    let mut diagnostics = diagnostics::DiagnosticsEngine::new();
+    preprocessor::main();
 
-    let file_path = "testdata/parse/ok/medium/recursive.c";
-    let text = fs::read_to_string(file_path)?;
-    let file_id = diagnostics.add_file(file_path, text);
+    // let mut diagnostics = diagnostics::DiagnosticsEngine::new();
 
-    // Parse the file into a CST
-    let mut cst = parser::parse_file_with_diagnotics(file_path, &mut diagnostics)?;
-    // let mut cst = parser::parse_file("testdata/parse/b.c")?;
-    // // Reduce the CST to an AST
-    let ast = ast::lower_with_diagnostics(file_id, cst.clone(), &mut diagnostics);
-    // println!("{:#?}", ast);
+    // let file_path = "testdata/parse/b.c";
+    // let text = fs::read_to_string(file_path)?;
+    // let file_id = diagnostics.add_file(file_path, text);
 
-    let ast = ast::reduce_with_diagnostics(&mut cst, &mut diagnostics);
+    // // Parse the file into a CST
+    // let mut cst = parser::parse_file_with_diagnotics(file_path, &mut
+    // diagnostics)?; // let mut cst =
+    // parser::parse_file("testdata/parse/b.c")?; // // Reduce the CST to an AST
+    // // let ast = ast::lower_with_diagnostics(file_id, cst.clone(), &mut
+    // // diagnostics); println!("{:#?}", ast);
+
+    // let mut ast_sink = ast::reduce_with_diagnostics(&mut cst, &mut diagnostics);
+
+    // ast_sink.drain_errors(&mut diagnostics);
+    // diagnostics.flush();
     // let file_id = SimpleFiles::new().add("testdata/parse/b.c", cst.source());
 
     // let ast_sink = ast::lower_with_diagnostics(cst, file_id, &mut

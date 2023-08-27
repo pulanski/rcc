@@ -71,12 +71,32 @@ int qux(int x) {}
 
 // 🔥
 
+// TODO: properly parse this, and emit a proper error message
+// e.g.
+// testdata/parse/b.c:74:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+// main(int argc, char **argv)
+// ^
+// int
+// main(int argc, char **argv)
+
 int main(int argc, char **argv)
 {
+    int foo = 10;
+    int bar = 20;
 
+    if (foo == 10) {
+        printf("foo is 10\n");
+    } else {
+        printf("foo is not 10\n");
+    }
+
+    int baz = foo + bar;
 }
 
+
 int x = 3;
+
+int x, y, z = 3;
 
 // TODO: implement parsing routine to handle top level struct declarations
 // struct Point {

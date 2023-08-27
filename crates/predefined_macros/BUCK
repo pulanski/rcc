@@ -1,0 +1,17 @@
+rust_binary(
+    name = "predefined_macros",
+    srcs = glob(["src/**/*.rs"]),
+    crate = "resilient_ll",
+    edition = "2021",
+    deps = [
+        "//third-party/rust:logos",
+        "//third-party/rust:owo-colors",
+        "//third-party/rust:smartstring",
+        "//third-party/rust:tracing",
+        "//third-party/rust:tracing-subscriber",
+    ],
+    env = {
+        "CARGO_MANIFEST_DIR": "src",
+    },
+    visibility = ["PUBLIC"],
+)

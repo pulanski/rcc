@@ -1,0 +1,18 @@
+rust_binary(
+    name = "stdc_version",
+    srcs = glob(["src/**/*.rs"]),
+    crate = "resilient_ll",
+    edition = "2021",
+    deps = [
+        "//third-party/rust:cc",
+        "//third-party/rust:logos",
+        "//third-party/rust:owo-colors",
+        "//third-party/rust:smartstring",
+        "//third-party/rust:tracing",
+        "//third-party/rust:tracing-subscriber",
+    ],
+    env = {
+        "OUT_DIR": ".",
+    },
+    visibility = ["PUBLIC"],
+)

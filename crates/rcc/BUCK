@@ -5,6 +5,7 @@ rust_binary(
     edition = "2021",
     deps = [
         "//third-party/rust:anyhow",
+        "//third-party/rust:chrono",
         "//third-party/rust:codespan-reporting",
         "//third-party/rust:derive-new",
         "//third-party/rust:derive_more",
@@ -24,6 +25,7 @@ rust_binary(
         "//third-party/rust:tracing",
         "//third-party/rust:tracing-subscriber",
         "//third-party/rust:typed-builder",
+        "//third-party/rust:walkdir",
     ],
     visibility = ["PUBLIC"],
 )
@@ -35,6 +37,7 @@ rust_test(
     edition = "2021",
     deps = [
         "//third-party/rust:anyhow",
+        "//third-party/rust:chrono",
         "//third-party/rust:codespan-reporting",
         "//third-party/rust:derive-new",
         "//third-party/rust:derive_more",
@@ -54,6 +57,7 @@ rust_test(
         "//third-party/rust:tracing",
         "//third-party/rust:tracing-subscriber",
         "//third-party/rust:typed-builder",
+        "//third-party/rust:walkdir",
     ],
     visibility = ["PUBLIC"],
 )
