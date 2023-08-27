@@ -952,10 +952,9 @@ pub fn lex_with_diagnostics(
     tracing::debug!("\n\n{}{}\n\n{}", "Token Stream".blue(), ":".black(), formatted_tokens);
 
     let elapsed = start.elapsed();
-
     let num_errors = token_sink.num_errors();
 
-    println!("token sink: {:#?}", token_sink);
+    // println!("token sink: {:#?}", token_sink);
 
     // Emit diagnostics
     token_sink.drain_errors(diagnostics);

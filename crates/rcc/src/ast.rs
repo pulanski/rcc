@@ -1,13 +1,17 @@
 use crate::{
-    cst::Tree,
+    cst::{
+        Child,
+        Tree,
+    },
     diagnostics::{
         DiagnosticsEngine,
         FileId,
     },
 };
 use codespan_reporting::diagnostic::Diagnostic;
+use derive_more::Display;
 use owo_colors::OwoColorize;
-use strum_macros::Display;
+use std::fmt::Display;
 
 #[derive(Debug, Default, PartialEq, Eq, Clone)]
 pub struct AstSink {
@@ -201,7 +205,8 @@ pub struct Type {
     pub ty: DataType,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, Display, PartialEq, Eq, Clone)]
+#[display(fmt = "{name}")]
 pub struct Symbol {
     pub name: String,
 }
@@ -212,30 +217,51 @@ impl From<String> for Symbol {
     }
 }
 
-#[derive(Debug, Display, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub enum DataType {
-    #[strum(serialize = "int")]
+    // #[strum(serialize = "int")]
     Int,
-    #[strum(serialize = "char")]
+    // #[strum(serialize = "char")]
     Char,
-    #[strum(serialize = "unknown")]
+    // #[strum(serialize = "unknown")]
     Unknown,
-    #[strum(serialize = "float")]
+    // #[strum(serialize = "float")]
     Float,
-    #[strum(serialize = "double")]
+    // #[strum(serialize = "double")]
     Double,
-    #[strum(serialize = "pointer")]
+    // #[strum(serialize = "pointer")]
     Pointer(Box<DataType>), // For pointer types
-    #[strum(serialize = "array")]
+    // #[strum(serialize = "array")]
     Array(Box<DataType>, Option<usize>), // For array types with optional size (e.g. int[10])
-    #[strum(serialize = "struct")]
+    // #[strum(serialize = "struct")]
     Struct(Struct), // For struct types
-    #[strum(serialize = "enum")]
+    // #[strum(serialize = "enum")]
     Enum(Enum), // For enum types
-    #[strum(serialize = "function")]
+    // #[strum(serialize = "function")]
     Function(Function), // For function types
-    #[strum(serialize = "void")]
+    // #[strum(serialize = "void")]
     Void,
+}
+
+impl Display for DataType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            DataType::Int => write!(f, "int"),
+            DataType::Char => write!(f, "char"),
+            DataType::Unknown => write!(f, "unknown"),
+            DataType::Float => write!(f, "float"),
+            DataType::Double => write!(f, "double"),
+            DataType::Pointer(ty) => write!(f, "{ty}*"),
+            DataType::Array(ty, size) => match size {
+                Some(size) => write!(f, "{ty}[{size}]"),
+                None => write!(f, "{ty}[]"),
+            },
+            DataType::Struct(s) => write!(f, "{}", s.name),
+            DataType::Enum(e) => write!(f, "{}", e.name),
+            DataType::Function(func) => write!(f, "{}", func.name),
+            DataType::Void => write!(f, "void"),
+        }
+    }
 }
 
 /// Reduce a CST to an AST by lowering
@@ -308,15 +334,16 @@ impl Visitor {
         tracing::trace!(
             "{}",
             format!(
-                "  {}  {} with {} {}{} and {} {}{}",
+                "  {}  Lowering {} with {} {}{} and {} {}{}{}",
                 "LOWERING".cyan(),
-                "TranslationUnit".yellow(),
+                "TranslationUnit".green(),
                 num_functions,
-                "function".yellow(),
-                if num_functions > 1 { "s".yellow() } else { "".yellow() },
+                "function".blue(),
+                if num_functions > 1 { "s".blue() } else { "".blue() },
                 num_declarations,
                 "declarations".yellow(),
                 if num_declarations > 1 { "s".yellow() } else { "".yellow() },
+                "...".black()
             )
         );
 
@@ -328,8 +355,34 @@ impl Visitor {
     fn visit_external_declaration(&self) {
         tracing::trace!(
             "{}",
-            format!("  {}  {}", "LOWERING".green(), "external_declaration".yellow())
+            format!("  {}  Lowering {}...", "LOWERING".cyan(), "ExternalDeclaration".green())
         );
+
+        let node = self.nth_child(0);
+
+        // println!("{:#?}", node);
+
+        // println!("{:#?}", self.tree);
+
+        if self.tree.is_function() {
+            println!("function");
+            //     self.visit_function();
+            // } else if self.tree.is_declaration() {
+            //     self.visit_declaration();
+        } else {
+            tracing::error!(
+                "{}",
+                format!(
+                    "  {}  {}",
+                    "ERROR".red(),
+                    "Expected a function or declaration while lowering".red()
+                )
+            );
+        }
+    }
+
+    fn nth_child(&self, index: usize) -> Option<&Child> {
+        self.tree.nth_child(index)
     }
 }
 

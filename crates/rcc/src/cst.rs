@@ -6,6 +6,70 @@ use num_derive::{
 };
 use strum_macros::EnumCount;
 
+#[cfg(test)]
+mod smoke_test_tree_traversal {
+    use pretty_assertions_sorted::assert_eq;
+
+    use super::*;
+
+    #[test]
+    fn test_find_child() {
+        let tree = Tree {
+            kind:     TreeKind::TranslationUnit,
+            range:    Span::new(0, 10),
+            children: vec![
+                Child::Tree(Tree {
+                    kind:     TreeKind::FunctionDef,
+                    range:    Span::new(1, 5),
+                    children: vec![],
+                    file_id:  0,
+                }),
+                Child::Tree(Tree {
+                    kind:     TreeKind::ExpressionStatement,
+                    range:    Span::new(6, 9),
+                    children: vec![],
+                    file_id:  0,
+                }),
+            ],
+            file_id:  0,
+        };
+
+        // Test finding a specific child by kind.
+        assert!(tree.find_child(TreeKind::FunctionDef).is_some());
+        // assert_eq!(tree.find_child(TreeKind::FunctionDef).unwrap().range, Span {
+        //     start: 1,
+        //     end:   5,
+        // });
+
+        // Test finding a child that doesn't exist.
+        assert!(tree.find_child(TreeKind::SpecifierQualifierList).is_none());
+    }
+
+    #[test]
+    fn test_find_token() {
+        let token1 = Token::new(TokenKind::IDENTIFIER, "foo".into(), Span::new(0, 3));
+        let token2 = Token::new(TokenKind::INTEGER_CONSTANT, "42".into(), Span::new(4, 5));
+        let token3 = Token::new(TokenKind::STRING, "\"hello\"".into(), Span::new(6, 12));
+
+        let tree = Tree {
+            kind:     TreeKind::Expression,
+            range:    Span::new(0, 12),
+            children: vec![
+                Child::Token(token1),
+                Child::Token(token2.clone()),
+                Child::Token(token3),
+            ],
+            file_id:  0,
+        };
+
+        // Test finding a specific token by kind.
+        assert_eq!(tree.find_token(TokenKind::INTEGER_CONSTANT), Some(&token2));
+
+        // Test finding a token that doesn't exist.
+        assert_eq!(tree.find_token(TokenKind::FLOATING_CONSTANT), None);
+    }
+}
+
 #[allow(clippy::manual_non_exhaustive, non_snake_case, non_camel_case_types)]
 #[derive(
     Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, FromPrimitive, ToPrimitive, EnumCount,
@@ -523,70 +587,6 @@ pub enum Child {
     Tree(Tree),
 }
 
-#[cfg(test)]
-mod smoke_test_tree_traversal {
-    use pretty_assertions_sorted::assert_eq;
-
-    use super::*;
-
-    #[test]
-    fn test_find_child() {
-        let tree = Tree {
-            kind:     TreeKind::TranslationUnit,
-            range:    Span::new(0, 10),
-            children: vec![
-                Child::Tree(Tree {
-                    kind:     TreeKind::FunctionDef,
-                    range:    Span::new(1, 5),
-                    children: vec![],
-                    file_id:  0,
-                }),
-                Child::Tree(Tree {
-                    kind:     TreeKind::ExpressionStatement,
-                    range:    Span::new(6, 9),
-                    children: vec![],
-                    file_id:  0,
-                }),
-            ],
-            file_id:  0,
-        };
-
-        // Test finding a specific child by kind.
-        assert!(tree.find_child(TreeKind::FunctionDef).is_some());
-        // assert_eq!(tree.find_child(TreeKind::FunctionDef).unwrap().range, Span {
-        //     start: 1,
-        //     end:   5,
-        // });
-
-        // Test finding a child that doesn't exist.
-        assert!(tree.find_child(TreeKind::SpecifierQualifierList).is_none());
-    }
-
-    #[test]
-    fn test_find_token() {
-        let token1 = Token::new(TokenKind::IDENTIFIER, "foo".into(), Span::new(0, 3));
-        let token2 = Token::new(TokenKind::INTEGER_CONSTANT, "42".into(), Span::new(4, 5));
-        let token3 = Token::new(TokenKind::STRING, "\"hello\"".into(), Span::new(6, 12));
-
-        let tree = Tree {
-            kind:     TreeKind::Expression,
-            range:    Span::new(0, 12),
-            children: vec![
-                Child::Token(token1),
-                Child::Token(token2.clone()),
-                Child::Token(token3),
-            ],
-            file_id:  0,
-        };
-
-        // Test finding a specific token by kind.
-        assert_eq!(tree.find_token(TokenKind::INTEGER_CONSTANT), Some(&token2));
-
-        // Test finding a token that doesn't exist.
-        assert_eq!(tree.find_token(TokenKind::FLOATING_CONSTANT), None);
-    }
-}
-
 impl Tree {
     // Helper function to find a child node of a specific kind.
     fn find_child(&self, kind: TreeKind) -> Option<&Tree> {
@@ -619,6 +619,10 @@ impl Tree {
                 _ => None,
             })
             .next()
+    }
+
+    pub fn nth_child(&self, n: usize) -> Option<&Child> {
+        self.children.get(n)
     }
 
     pub fn num_functions(&self) -> usize {
@@ -777,7 +781,7 @@ impl Tree {
                     // Find the child node of ExternDecl that is a FunctionDef.
                     if let Some(function_def) = extern_decl.find_child(TreeKind::FunctionDef) {
                         functions.push(ExternDecl::Function(
-                            function_def.transform_function_with_diagnostics(diagnostics),
+                            function_def.clone().transform_function_with_diagnostics(diagnostics),
                         ));
                         // functions.push(ExternDecl::Function(function_def.
                         // transform_function()));
@@ -797,7 +801,14 @@ impl Tree {
         AstSink { translation_unit: TranslationUnit { functions }, syntax_errors: Vec::new() }
     }
 
-    fn transform_function_with_diagnostics(&self, diagnostics: &mut DiagnosticsEngine) -> Function {
+    fn push_error(&mut self, error: Diagnostic<usize>, diagnostics: &mut DiagnosticsEngine) {
+        diagnostics.emit(error);
+    }
+
+    fn transform_function_with_diagnostics(
+        &mut self,
+        diagnostics: &mut DiagnosticsEngine,
+    ) -> Function {
         let (return_type, params, name) = self.extract_function_signature();
         let body = self.extract_function_body();
 
@@ -836,8 +847,12 @@ impl Tree {
             //     self.file_id,
             //     self.range,
             // ));
+            self.push_error(
+                diagnostics::non_void_function_doesnt_return_value(self.file_id, self.range),
+                diagnostics,
+            );
 
-            // println!("self: {:#?}", self);
+            println!("diag {:#?}", diagnostics);
 
             // if let Some(mut ast_sink) = self.ast_sink.clone() {
             //     // println!("ast_sink {:#?}", ast_sink);
@@ -1642,6 +1657,20 @@ impl Tree {
                 .any(|child| matches!(child, Child::Tree(tree) if tree.contains_errors()))
     }
 
+    pub fn num_errors(&self) -> usize {
+        if self.kind == TreeKind::ErrorTree {
+            1
+        } else {
+            self.children
+                .iter()
+                .map(|child| match child {
+                    Child::Tree(tree) => tree.num_errors(),
+                    _ => 0,
+                })
+                .sum()
+        }
+    }
+
     fn transform_type(&self) -> DataType {
         // Extract the type specifier from the parse tree
         let type_specifier = &self.children[0];
@@ -1672,6 +1701,10 @@ impl Tree {
 
     fn extract_block_item_list(&self) -> Statement {
         todo!()
+    }
+
+    pub(crate) fn is_function(&self) -> bool {
+        self.kind == TreeKind::FunctionDef
     }
 }
 

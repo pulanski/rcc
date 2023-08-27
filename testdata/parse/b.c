@@ -17,26 +17,25 @@
 //     return 0;
 // }
 
-
 // int main(int argc, char **argv) {
-    // int x = 10;
+// int x = 10;
 
-    // if (x == 10) {
-    //     printf("x is 10\n");
-    // } else {
-    //     printf("x is not 10\n");
-    // }
+// if (x == 10) {
+//     printf("x is 10\n");
+// } else {
+//     printf("x is not 10\n");
+// }
 
-    // int x[5] = {1, 2, 3, 4, 5};
+// int x[5] = {1, 2, 3, 4, 5};
 
-    // Declare an array of integers with designated initializers.
-    // int arr[5] = {
-    //     [2] = 42,   // Initialize the element at index 2 to 42
-    //     [0] = 10,   // Initialize the element at index 0 to 10
-    //     [4] = 99    // Initialize the element at index 4 to 99
-    // };
+// Declare an array of integers with designated initializers.
+// int arr[5] = {
+//     [2] = 42,   // Initialize the element at index 2 to 42
+//     [0] = 10,   // Initialize the element at index 0 to 10
+//     [4] = 99    // Initialize the element at index 4 to 99
+// };
 
-    // return 0;
+// return 0;
 // }
 
 // int foo(int x) {
@@ -66,9 +65,21 @@ int qux(int x) {}
 //     return x;
 // }
 
-
 // int x[5] = {1, 2, 3, 4, 5};
 
-int x = 20;
+// int x = 20;
 
 // 🔥
+
+int main(int argc, char **argv)
+{
+
+}
+
+int x = 3;
+
+// TODO: implement parsing routine to handle top level struct declarations
+// struct Point {
+//     int x;
+//     int y;
+// };

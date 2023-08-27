@@ -2057,7 +2057,8 @@ pub(crate) fn direct_declarator(p: &mut Parser) {
     p.enter(TreeKind::DirectDeclarator);
     let m = p.open();
 
-    println!("parsing direct_declarator. current token: {:?}", p.current_token());
+    // println!("parsing direct_declarator. current token: {:?}",
+    // p.current_token());
 
     // Check for the recursive case where the name comes first
     if p.at(TokenKind::IDENTIFIER) {
@@ -4205,3 +4206,71 @@ fn type_qualifier(p: &mut Parser) {
 
 //     tree
 // }
+
+#[cfg(test)]
+mod tests {
+    use rstest::rstest;
+
+    use super::*;
+
+    // Helper function to check if the parse tree contains no errors
+    fn assert_no_errors(tree: &Tree) {
+        let num_errors = tree.num_errors();
+        assert!(num_errors == 0, "Parse tree contains {num_errors} errors");
+    }
+
+    #[rstest]
+    // Easy
+    #[case::function("testdata/parse/ok/easy/function.c")]
+    #[case::bitwise_operations_and_shifts("testdata/parse/ok/easy/bitwise_operations_and_shifts.c")]
+    #[case::function_w_params("testdata/parse/ok/easy/function_w_params.c")]
+    #[case::conditional_statement("testdata/parse/ok/easy/conditional_statement.c")]
+    #[case::while_loop("testdata/parse/ok/easy/while_loop.c")]
+    #[case::function_w_complex_statements("testdata/parse/ok/easy/function_w_complex_statements.c")]
+    #[case::multiple_funcs_and_decls("testdata/parse/ok/easy/multiple_funcs_and_decls.c")]
+    // Medium
+    #[case::recursive("testdata/parse/ok/medium/recursive.c")]
+    #[case::array_and_loop("testdata/parse/ok/medium/array_and_loop.c")]
+    #[case::complex_conditional("testdata/parse/ok/medium/complex_conditional.c")]
+    // #[case::advanced_function_decl("testdata/parse/ok/medium/
+    // advanced_function_decl.c")] #[case::function_pointers("testdata/parse/ok/
+    // medium/function_pointers.c")] #[case::pointer_and_struct("testdata/parse/
+    // ok/medium/pointer_and_struct.c")] // TODO: toplevel struct parsing
+    //  #[case::enum_declaration("testdata/parse/ok/
+    // enum_declaration.c")] # TODO: implement #[case::struct_definition("
+    // testdata/parse/ok/struct_definition. c")] # TODO: implement
+    // #[case("testdata/parse/ok/typedef.c")]
+    fn valid_syntax(#[case] file_path: &str) {
+        // Parse the source code
+        let mut diagnostics = DiagnosticsEngine::new();
+
+        if let Ok(parsed_tree) = parse_file_with_diagnotics(file_path, &mut diagnostics) {
+            // Check if the parse tree contains no errors
+            assert_no_errors(&parsed_tree);
+        } else {
+            let source_code = std::fs::read_to_string(file_path).unwrap();
+            panic!("Failed to parse source code:\n\n{source_code}");
+        }
+
+        // // Iterate through the files in the testdata/parse/ok directory and
+        // parse each // file for correctness and regression testing
+        // for entry in std::fs::read_dir("
+        //     let entry = entry.unwrap();
+        //     let path = entry.path();
+
+        //     if path.is_file() {
+        //         if let Some(path) = path.to_str() {
+        //             if let Ok(parsed_tree) = parse_file_with_diagnotics(path,
+        // &mut diagnostics) {                 eprintln!("parsed_tree:
+        // {parsed_tree}");                 // Check if the parse tree
+        // contains no errors
+        // assert_no_errors(&parsed_tree);             } else {
+        //                 let source_code =
+        // std::fs::read_to_string(path).unwrap();
+        // panic!("Failed to parse source code:\n\n{source_code}");
+        //             }
+        //         }
+        //     }
+        // }
+    }
+}

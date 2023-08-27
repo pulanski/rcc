@@ -7,7 +7,11 @@
     },
     "files.associations": {
         "*.dockerfile.*": "dockerfile",
-        "bitset": "c"
+        "bitset": "c",
+        "limits": "c",
+        "chrono": "c",
+        "random": "c",
+        "algorithm": "c"
     },
     "ocaml.sandbox": {
         "kind": "opam",

@@ -1,7 +1,8 @@
 use crate::{
     lexer::{
+        Span,
         Token,
-        TokenKind, Span,
+        TokenKind,
     },
     parser::{
         display,
@@ -537,7 +538,18 @@ pub(crate) fn non_void_function_doesnt_return_value(
     file_id: usize,
     range: Span,
 ) -> Diagnostic<FileId> {
-    todo!()
+    Diagnostic::error()
+        .with_code("E0006")
+        .with_message(format!(
+            "non-void function does not return a value in all control paths [-Wreturn-type]"
+        ))
+        .with_labels(vec![Label::primary(file_id, *range.start()..*range.end())
+            .with_message("non-void function does not return a value in all control paths")])
+        .with_notes(vec![
+            "A function with a non-void return type must return a value in all control paths."
+                .to_string(),
+            "Ensure you return a value in all control paths.".to_string(),
+        ])
 }
 
 // "Ensure you use one of the valid declaration specifiers when declaring a
