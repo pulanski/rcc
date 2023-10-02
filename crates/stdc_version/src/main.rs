@@ -15,7 +15,7 @@ fn create_temp_c_file(c_code: &str) -> io::Result<()> {
     Ok(())
 }
 
-fn preprocess_c_code_with_clang() -> io::Result<String> {
+fn preprocess_stdc_version_with_clang() -> io::Result<String> {
     create_temp_c_file("__STDC_VERSION__")?;
 
     let output = Command::new("clang").arg("-E").arg("temp.c").arg("-o").arg("temp.out").output();
@@ -23,7 +23,7 @@ fn preprocess_c_code_with_clang() -> io::Result<String> {
     let output = match output {
         Ok(output) => output,
         Err(e) => {
-            println!("Error: {}", e);
+            println!("Error: {e}");
             return Err(e);
         }
     };
@@ -41,7 +41,7 @@ fn preprocess_c_code_with_clang() -> io::Result<String> {
 }
 
 fn current_stdc_version() -> Option<String> {
-    match preprocess_c_code_with_clang() {
+    match preprocess_stdc_version_with_clang() {
         Ok(output) => Some(output),
         _ => None,
     }

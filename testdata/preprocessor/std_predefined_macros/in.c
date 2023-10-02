@@ -33,6 +33,10 @@ int main()
     // Declare a variable to store __INCLUDE_LEVEL__.
     int include_level = __INCLUDE_LEVEL__;
 
+    // Declare a variable to store __VERSION__.
+    const char *version = __VERSION__;
+
+    // TODO: Maybe implement these macros.
     // __VERSION__
 
     // __OPTIMIZE__

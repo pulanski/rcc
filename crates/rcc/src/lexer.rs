@@ -808,12 +808,7 @@ impl TokenStream {
     }
 
     pub fn pretty_print(&self) -> String {
-        self.tokens
-            .iter()
-            .map(|token| token.pretty_print())
-            .collect::<Vec<String>>()
-            .join("\n")
-            .into()
+        self.tokens.iter().map(|token| token.pretty_print()).collect::<Vec<String>>().join("\n")
     }
 }
 

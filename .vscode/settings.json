@@ -11,10 +11,14 @@
         "limits": "c",
         "chrono": "c",
         "random": "c",
-        "algorithm": "c"
+        "algorithm": "c",
+        "b.h": "c"
     },
     "ocaml.sandbox": {
         "kind": "opam",
         "switch": "default"
-    }
+    },
+    "rust-analyzer.linkedProjects": [
+        "./crates/rcc/Cargo.toml"
+    ]
 }

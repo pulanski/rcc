@@ -17,7 +17,7 @@ int main()
     const char *date = "Aug 27 2023";
 
 
-    const char *time = "18:43:26";
+    const char *time = "21:52:19";
 
 
     int stdc = 1;
@@ -39,5 +39,8 @@ int main()
 
 
     int include_level = 0;
-# 45 "testdata/preprocessor/std_predefined_macros/in.c"
+
+
+    const char *version = "Homebrew Clang 16.0.2";
+# 49 "testdata/preprocessor/std_predefined_macros/in.c"
 }

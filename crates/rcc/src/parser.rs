@@ -1072,8 +1072,6 @@ pub fn translation_unit(p: &mut Parser) {
             // TODO: make more robust here...
             p.advance();
             p.tree_sink.push_error(err);
-        } else {
-            // TODO: Error recovery.
         }
 
         if !seen_extern {

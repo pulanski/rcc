@@ -46,25 +46,25 @@ fn main() -> Result<ExitCode> {
     subscriber",
     );
 
-    preprocessor::main();
+    // preprocessor::main();
 
-    // let mut diagnostics = diagnostics::DiagnosticsEngine::new();
+    let mut diagnostics = diagnostics::DiagnosticsEngine::new();
 
-    // let file_path = "testdata/parse/b.c";
-    // let text = fs::read_to_string(file_path)?;
-    // let file_id = diagnostics.add_file(file_path, text);
+    let file_path = "testdata/parse/b.c";
+    let text = fs::read_to_string(file_path)?;
+    let file_id = diagnostics.add_file(file_path, text);
 
     // // Parse the file into a CST
-    // let mut cst = parser::parse_file_with_diagnotics(file_path, &mut
-    // diagnostics)?; // let mut cst =
+    let mut cst = parser::parse_file_with_diagnotics(file_path, &mut diagnostics)?;
+    // let mut cst =
     // parser::parse_file("testdata/parse/b.c")?; // // Reduce the CST to an AST
     // // let ast = ast::lower_with_diagnostics(file_id, cst.clone(), &mut
     // // diagnostics); println!("{:#?}", ast);
 
-    // let mut ast_sink = ast::reduce_with_diagnostics(&mut cst, &mut diagnostics);
+    let mut ast_sink = ast::reduce_with_diagnostics(&mut cst, &mut diagnostics);
 
-    // ast_sink.drain_errors(&mut diagnostics);
-    // diagnostics.flush();
+    ast_sink.drain_errors(&mut diagnostics);
+    diagnostics.flush();
     // let file_id = SimpleFiles::new().add("testdata/parse/b.c", cst.source());
 
     // let ast_sink = ast::lower_with_diagnostics(cst, file_id, &mut

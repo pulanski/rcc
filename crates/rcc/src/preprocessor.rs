@@ -10,6 +10,7 @@ use logos::{
 use owo_colors::OwoColorize;
 use regex::Regex;
 use std::fs::File;
+use std::io::Read;
 use std::io::{
     self,
     BufRead,
@@ -17,6 +18,7 @@ use std::io::{
     Write,
 };
 use std::path::Path;
+use std::process::Command;
 use std::time::Instant;
 use walkdir::WalkDir;
 
@@ -40,9 +42,12 @@ impl Preprocessor {
         // Perform global transformations on text (https://www.math.utah.edu/docs/info/cpp_1.html#SEC2)
         // let text = global_transform(text, self.file_id);
 
+        let include_directories =
+            vec![String::from("/usr/include"), String::from("/usr/local/include")];
+
         for line in text.lines() {
             let line = line;
-            let processed_line = process_line(line);
+            let processed_line = process_line(line, include_directories.as_slice());
             self.output.transformed_text.push_str(&processed_line);
             self.output.transformed_text.push('\n');
         }
@@ -84,7 +89,11 @@ impl TextSink {
     }
 }
 
-fn preprocess_file(input_path: &str, output_path: &str) -> io::Result<()> {
+fn preprocess_file(
+    input_path: &str,
+    output_path: &str,
+    include_directories: &[String],
+) -> io::Result<()> {
     let input_file = File::open(input_path)?;
     let output_file = File::create(output_path)?;
 
@@ -94,20 +103,36 @@ fn preprocess_file(input_path: &str, output_path: &str) -> io::Result<()> {
     let text = reader.lines().collect::<io::Result<Vec<String>>>()?.join("\n");
 
     // Remove leading and trailing whitespace
-    let text =
-        text.strip_suffix("\r\n").or_else(|| text.strip_suffix('\n')).unwrap_or(&text).to_string();
+    let text = remove_leading_and_trailing_whitespace(text, input_path);
 
     // Perform global transformations on text (https://www.math.utah.edu/docs/info/cpp_1.html#SEC2)
     let text = global_transform(&text, Path::new(input_path));
 
     for line in text.lines() {
         let line = line;
-        let processed_line = process_line(line);
+        let processed_line = process_line(line, include_directories);
         writer.write_all(processed_line.as_bytes())?;
         writer.write_all(b"\n")?;
     }
 
     Ok(())
+}
+
+fn remove_leading_and_trailing_whitespace(text: String, input_path: &str) -> String {
+    tracing::debug!(
+        "{}",
+        &format!(
+            "  {} Removing {} from {}{}{}",
+            "PREPROCESSOR".blue(),
+            "leading and trailing whitespace".green(),
+            "'".cyan(),
+            input_path.yellow(),
+            "'".cyan()
+        )
+    );
+    let text =
+        text.strip_suffix("\r\n").or_else(|| text.strip_suffix('\n')).unwrap_or(&text).to_string();
+    text
 }
 
 /// Most C preprocessor features are inactive unless you give specific
@@ -130,7 +155,13 @@ fn global_transform(text: &str, input_path: &Path) -> String {
     let text = remove_backslash_newline(&text);
 
     // Replace predefined macro names with their expansions.
-    replace_predefined_macros(&text, input_path)
+    let text = replace_predefined_macros(&text, input_path);
+
+    // TODO: Replace non-standard macros with their expansions.
+    // https://www.math.utah.edu/docs/info/cpp_1.html#SEC15
+    // let text = replace_non_standard_macros(&text);
+
+    text
 }
 
 #[allow(non_camel_case_types, clippy::upper_case_acronyms)]
@@ -151,6 +182,16 @@ pub enum TokenKind {
     STDC,
     #[token("__STDC_VERSION__")]
     STDC_VERSION,
+    #[token("__GNUC__")]
+    GNUC,
+    #[token("__GNUC_MINOR__")]
+    GNUC_MINOR,
+    #[token("__BASE_FILE__")]
+    BASEFILE,
+    #[token("__INCLUDE_LEVEL__")]
+    INCLUDE_LEVEL,
+    #[token("#include")]
+    INCLUDE,
 
     // Punctuation
     #[token("+")]
@@ -493,19 +534,180 @@ fn current_time() -> String {
     format!("{hour}:{minute}:{second}")
 }
 
+fn create_temp_c_file(c_code: &str) -> io::Result<()> {
+    let mut file = File::create("temp.c")?;
+    file.write_all(c_code.as_bytes())?;
+    Ok(())
+}
+
+fn preprocess_stdc_version_with_clang() -> io::Result<String> {
+    create_temp_c_file("__STDC_VERSION__")?;
+
+    let output = Command::new("clang").arg("-E").arg("temp.c").arg("-o").arg("temp.out").output();
+
+    let output = match output {
+        Ok(output) => output,
+        Err(e) => {
+            println!("Error: {e}");
+            return Err(e);
+        }
+    };
+
+    // Remove any lines that start with a hash sign
+    let output = std::fs::read_to_string("temp.out")?;
+    let output =
+        output.lines().filter(|line| !line.starts_with('#')).collect::<Vec<_>>().join("\n");
+
+    // Cleanup
+    std::fs::remove_file("temp.c")?;
+    std::fs::remove_file("temp.out")?;
+
+    Ok(output)
+}
+
+// Define a struct to hold the macro and its value.
+#[derive(Debug)]
+pub struct MacroValue {
+    pub macro_name: String,
+    pub value:      String,
+}
+
+// pub struct PreprocessorContext {
+//     pub macros: HashSet<MacroValue>,
+// }
+
+impl MacroValue {
+    pub fn new(macro_name: &str, value: &str) -> Self {
+        MacroValue { macro_name: macro_name.to_string(), value: value.to_string() }
+    }
+}
+
+// Preprocess C code and retrieve macro values.
+pub fn get_macro_values(macros: &[&str]) -> io::Result<Vec<MacroValue>> {
+    // Create C code which is simply a line for each macro.
+    // e.g.
+    // __STDC_VERSION__
+    // __GNUC__
+    // __GNUC_MINOR__
+    let mut c_code = String::new();
+    for macro_name in macros {
+        c_code.push_str(macro_name);
+        c_code.push('\n');
+    }
+
+    // Try to use Clang for preprocessing.
+    let clang_result = preprocess_with_compiler("clang", &c_code, macros);
+
+    match clang_result {
+        Ok(result) => Ok(result),
+        Err(_) => {
+            // If Clang is not found, try GCC.
+            let gcc_result = preprocess_with_compiler("gcc", &c_code, macros);
+
+            match gcc_result {
+                Ok(result) => Ok(result),
+                Err(_) => {
+                    // If neither Clang nor GCC is found, use default values.
+                    // let mut default_values = Vec::new();
+                    // for macro_name in macros {
+                    //     default_values.push(MacroValue::new(macro_name, "default_value"));
+                    // }
+                    Ok(Vec::new())
+                }
+            }
+        }
+    }
+}
+
+// Helper function to preprocess C code using a given compiler.
+fn preprocess_with_compiler(
+    compiler: &str,
+    c_code: &str,
+    macros: &[&str],
+) -> io::Result<Vec<MacroValue>> {
+    // Create a temporary C file.
+    create_temp_c_file(c_code)?;
+
+    // Build the command to preprocess the file.
+    let mut cmd = Command::new(compiler);
+    cmd.arg("-E").arg("temp.c").arg("-o").arg("temp.out");
+
+    // Execute the command.
+    let output = cmd.output();
+    let out = std::fs::read_to_string("temp.out")?;
+
+    // Remove any lines starting with a hash sign
+    let compiler_out = out.lines().filter(|line| !line.starts_with('#')).collect::<Vec<&str>>();
+
+    // Parse the macro values from the preprocessed output.
+    let mut macro_values = Vec::new();
+    for (out_idx, macro_name) in macros.iter().enumerate() {
+        if let Some(value) = extract_macro_value(compiler_out[out_idx], macro_name) {
+            macro_values.push(MacroValue::new(macro_name, &value));
+
+            // println!("{macro_name} = {value}");
+        }
+    }
+
+    // Cleanup
+    std::fs::remove_file("temp.c")?;
+    std::fs::remove_file("temp.out")?;
+
+    Ok(macro_values)
+}
+
+// Helper function to extract the value of a macro from preprocessed output.
+fn extract_macro_value(output: &str, macro_name: &str) -> Option<String> {
+    for line in output.lines() {
+        if line.starts_with("#define") && line.contains(macro_name) {
+            let parts: Vec<&str> = line.split_whitespace().collect();
+            if parts.len() >= 3 {
+                return Some(parts[2].to_string());
+            }
+        }
+    }
+
+    // Predefined macros are not defined by the preprocessor, so we need to
+    // extract their values from the compiler.
+    match macro_name {
+        __GNUC__ | __GNUC_MINOR__ | __STDC_VERSION__ => Some(output.to_string()),
+        _ => None,
+    }
+}
+
 // This macro expands to the C Standard's version number, a long integer
 // constant of the form `yyyymmL' where yyyy and mm are the year and month of
 // the Standard version. This signifies which version of the C Standard the
 // preprocessor conforms to. Like `__STDC__', whether this version number is
 // accurate for the entire implementation depends on what C compiler will
 // operate on the output from the preprocessor.
-fn current_stdc_version() -> String {
-    // TODO: implement
-    todo!()
+fn current_stdc_version() -> Option<String> {
+    match preprocess_stdc_version_with_clang() {
+        Ok(output) => Some(output),
+        _ => None,
+    }
 }
 
+const __FILE__: &str = "__FILE__";
+const __LINE__: &str = "__LINE__";
+const __DATE__: &str = "__DATE__";
+const __TIME__: &str = "__TIME__";
+const __STDC__: &str = "__STDC__";
+const __GNUC__: &str = "__GNUC__";
+const __GNUC_MINOR__: &str = "__GNUC_MINOR__";
+const __STDC_VERSION__: &str = "__STDC_VERSION__";
+const __BASE_FILE__: &str = "__BASE_FILE__";
+const __INCLUDE_LEVEL__: &str = "__INCLUDE_LEVEL__";
+
+const DEFAULT_STDC: &str = "1";
+const DEFAULT_STDC_VERSION: &str = "201710L";
+const DEFAULT_GNUC: &str = "4";
+const DEFAULT_GNUC_MINOR: &str = "2";
+
 fn replace_predefined_macros(input: &str, input_path: &Path) -> String {
-    tracing::trace!(
+    let mut include_level = 0; // Initialize the include level counter
+
+    tracing::debug!(
         "{}",
         &format!(
             "  {} Replacing {} in {}{}{}",
@@ -519,7 +721,16 @@ fn replace_predefined_macros(input: &str, input_path: &Path) -> String {
     let mut output = String::new();
     let mut lexer = TokenKind::lexer(input);
 
-    // println!("lexer: {:?}", lexer);
+    // Extract the values of certain predefined macros from
+    // other host C compilers. This is meant for both testing purposes
+    // as well as to drive the implementation of the preprocessor over
+    // certain non-standard features, or non-trivial features to implement.
+    let macros = vec![__GNUC__, __GNUC_MINOR__, __STDC_VERSION__];
+
+    let macro_values = match get_macro_values(&macros) {
+        Ok(values) => values,
+        Err(_) => Vec::new(),
+    };
 
     while let Some(token_result) = lexer.next() {
         match token_result {
@@ -528,12 +739,12 @@ fn replace_predefined_macros(input: &str, input_path: &Path) -> String {
                 // This macro expands to the name of the current input file, in the form of a C
                 // string constant. The precise name returned is the one that was specified in
                 // `#include' or as the input file name argument.
-                tracing::trace!(
+                tracing::debug!(
                     "{}",
                     &format!(
                         "  {}  {} {} {}{}{}",
                         "PREPROCESSOR".blue(),
-                        "__FILE__".cyan(),
+                        __FILE__.cyan(),
                         "->".black(),
                         "'".cyan(),
                         input_path.to_string_lossy().yellow(),
@@ -543,6 +754,16 @@ fn replace_predefined_macros(input: &str, input_path: &Path) -> String {
                 output.push('\"');
                 output.push_str(input_path.to_str().unwrap());
                 output.push('\"');
+            }
+            Ok(TokenKind::INCLUDE) => {
+                // Handle #include directive
+                include_level += 1; // Increment include level
+
+                output.push_str("#include");
+            }
+            Ok(TokenKind::EOF) => {
+                // Handle end of file
+                include_level -= 1; // Decrement include level
             }
             Ok(TokenKind::LINE) => {
                 // This macro expands to the current input line number, in the
@@ -566,12 +787,12 @@ fn replace_predefined_macros(input: &str, input_path: &Path) -> String {
 
                 let line_number = line_number(lexer.span(), input);
 
-                tracing::trace!(
+                tracing::debug!(
                     "{}",
                     &format!(
                         "  {}  {} {} {}{}{}",
                         "PREPROCESSOR".blue(),
-                        "__LINE__".cyan(),
+                        __LINE__.cyan(),
                         "->".black(),
                         "'".cyan(),
                         line_number.to_string().red(),
@@ -587,12 +808,12 @@ fn replace_predefined_macros(input: &str, input_path: &Path) -> String {
                 // preprocessor is being run. The string constant contains eleven characters and
                 // looks like `"Jan 29 1987"' or `"Apr 1 1905"'.
 
-                tracing::trace!(
+                tracing::debug!(
                     "{}",
                     &format!(
                         "  {}  {} {} {}{}{}",
                         "PREPROCESSOR".blue(),
-                        "__DATE__".cyan(),
+                        __DATE__.cyan(),
                         "->".black(),
                         "'".cyan(),
                         current_date().magenta(),
@@ -609,12 +830,12 @@ fn replace_predefined_macros(input: &str, input_path: &Path) -> String {
                 // preprocessor is being run. The string constant contains eight characters and
                 // looks like `"23:59:01"'.
 
-                tracing::trace!(
+                tracing::debug!(
                     "{}",
                     &format!(
                         "  {}  {} {} {}{}{}",
                         "PREPROCESSOR".blue(),
-                        "__TIME__".cyan(),
+                        __TIME__.cyan(),
                         "->".black(),
                         "'".cyan(),
                         current_time().magenta(),
@@ -634,19 +855,26 @@ fn replace_predefined_macros(input: &str, input_path: &Path) -> String {
                 // mere fact of defining this macro does not imply that the
                 // compiler conforms. See section Alternate Preprocessing.
 
-                tracing::trace!(
+                let stdc = macro_values
+                    .iter()
+                    .find(|m| m.macro_name == __STDC__)
+                    .map(|m| m.value.clone())
+                    .unwrap_or(DEFAULT_STDC.to_owned());
+
+                tracing::debug!(
                     "{}",
                     &format!(
                         "  {}  {} {} {}{}{}",
                         "PREPROCESSOR".blue(),
-                        "__STDC__".cyan(),
+                        __STDC__.cyan(),
                         "->".black(),
                         "'".cyan(),
-                        "1".red(),
+                        stdc.red(),
                         "'".cyan(),
                     )
                 );
-                output.push('1');
+
+                output.push_str(&stdc);
             }
             Ok(TokenKind::STDC_VERSION) => {
                 // __STDC_VERSION__
@@ -660,18 +888,130 @@ fn replace_predefined_macros(input: &str, input_path: &Path) -> String {
                 // compiler will operate on the output from the
                 // preprocessor.
 
-                // tracing::trace!(
-                //     "{}",
-                //     &format!(
-                //         "  {}  {} {} {}{}{}",
-                //         "PREPROCESSOR".blue(),
-                //         "__STDC_VERSION__".cyan(),
-                //         "->".black(),
-                //         "'".cyan(),
-                //         "201710L".red(),
-                //         "'".cyan(),
-                //     )
-                // );
+                let stdc_version = &macro_values
+                    .iter()
+                    .find(|m| m.macro_name == __STDC_VERSION__)
+                    .map(|m| m.value.clone())
+                    .unwrap_or(DEFAULT_STDC_VERSION.to_owned());
+
+                tracing::debug!(
+                    "{}",
+                    &format!(
+                        "  {}  {} {} {}{}{}",
+                        "PREPROCESSOR".blue(),
+                        __STDC_VERSION__.cyan(),
+                        "->".black(),
+                        "'".cyan(),
+                        stdc_version.red(),
+                        "'".cyan(),
+                    )
+                );
+
+                output.push_str(stdc_version);
+            }
+            Ok(TokenKind::GNUC) => {
+                // __GNUC__
+                // This macro is defined if and only if this is GNU C. This
+                // macro is defined only when the entire GNU C compiler is in
+                // use; if you invoke the preprocessor directly, `__GNUC__' is
+                // undefined. The value identifies the major version number of
+                // GNU CC (`1' for GNU CC version 1, which is now obsolete, and
+                // `2' for version 2).
+
+                let gnu_c = &macro_values
+                    .iter()
+                    .find(|m| m.macro_name == __GNUC__)
+                    .map(|m| m.value.clone())
+                    .unwrap_or(DEFAULT_GNUC.to_owned());
+
+                tracing::debug!(
+                    "{}",
+                    &format!(
+                        "  {}  {} {} {}{}{}",
+                        "PREPROCESSOR".blue(),
+                        __GNUC__.cyan(),
+                        "->".black(),
+                        "'".cyan(),
+                        gnu_c.red(),
+                        "'".cyan(),
+                    )
+                );
+
+                output.push_str(gnu_c);
+            }
+            Ok(TokenKind::GNUC_MINOR) => {
+                // __GNUC_MINOR__
+                // This macro is defined if and only if this is GNU C. This
+                // macro is defined only when the entire GNU C compiler is in
+                // use; if you invoke the preprocessor directly,
+                // `__GNUC_MINOR__' is undefined. The value identifies the
+                // minor version number of GNU CC.
+
+                let gnu_c_minor = &macro_values
+                    .iter()
+                    .find(|m| m.macro_name == __GNUC_MINOR__)
+                    .map(|m| m.value.clone())
+                    .unwrap_or(DEFAULT_GNUC_MINOR.to_owned());
+
+                tracing::debug!(
+                    "{}",
+                    &format!(
+                        "  {}  {} {} {}{}{}",
+                        "PREPROCESSOR".blue(),
+                        __GNUC_MINOR__.cyan(),
+                        "->".black(),
+                        "'".cyan(),
+                        gnu_c_minor.red(),
+                        "'".cyan(),
+                    )
+                );
+
+                output.push_str(gnu_c_minor);
+            }
+            Ok(TokenKind::BASEFILE) => {
+                // __BASE_FILE__
+                // This macro expands to the name of the main input file, in the form of a C
+                // string constant. This is the source file that was specified on the command
+                // line of the preprocessor or C compiler.
+
+                tracing::debug!(
+                    "{}",
+                    &format!(
+                        "  {}  {} {} {}{}{}",
+                        "PREPROCESSOR".blue(),
+                        __BASE_FILE__.cyan(),
+                        "->".black(),
+                        "'".cyan(),
+                        input_path.to_string_lossy().yellow(),
+                        "'".cyan(),
+                    )
+                );
+
+                output.push('\"');
+                output.push_str(input_path.to_str().unwrap());
+                output.push('\"');
+            }
+            Ok(TokenKind::INCLUDE_LEVEL) => {
+                //  __INCLUDE_LEVEL__
+                // This macro expands to a decimal integer constant that represents the depth of
+                // nesting in include files. The value of this macro is incremented on every
+                // `#include' directive and decremented at every end of file. For input files
+                // specified by command line arguments, the nesting level is zero.
+
+                tracing::debug!(
+                    "{}",
+                    &format!(
+                        "  {}   {} {} {}{}{}",
+                        "PREPROCESSOR".blue(),
+                        __INCLUDE_LEVEL__.cyan(),
+                        "->".black(),
+                        "'".cyan(),
+                        include_level.to_string().red(),
+                        "'".cyan(),
+                    )
+                );
+
+                output.push('0');
             }
             Ok(_) => {
                 // println!("replacing other: {:?}", lexer.slice());
@@ -691,13 +1031,315 @@ fn replace_predefined_macros(input: &str, input_path: &Path) -> String {
     output
 }
 
-fn process_line(line: &str) -> String {
+fn process_line(line: &str, include_directories: &[String]) -> String {
     // Ignore empty lines
-    if line.is_empty() {
+    if line.trim().is_empty() {
         return line.to_string();
     }
 
+    tracing::trace!(
+        "{}",
+        &format!(
+            "  {} Processing line {}{}{}",
+            "PREPROCESSOR".blue(),
+            "'".cyan(),
+            line.yellow(),
+            "'".cyan()
+        )
+    );
+
+    // Check if the line starts with a preprocessing directive
+    if line.trim().starts_with("#include") {
+        // Parse the #include directive and retrieve the included file's name
+        let included_file = parse_include_directive(line);
+
+        tracing::trace!(
+            "{}",
+            &format!(
+                "  {}  {} {} {}{}{}",
+                "PREPROCESSOR".blue(),
+                "#include".cyan(),
+                "->".black(),
+                "'".cyan(),
+                included_file.yellow(),
+                "'".cyan(),
+            )
+        );
+
+        // Find and read the content of the included file
+        // let include_content = read_included_file(&included_file, include_directories)
+        //     .unwrap_or_else(|e| {
+        //         tracing::error!("Error reading included file: {}", e);
+        //         format!("/* {e} */")
+        //     });
+
+        // // Recursively process the included content (in case it has directives)
+        // let processed_include_content = process_code(&include_content,
+        // include_directories);
+
+        // // Replace the #include directive with the processed content
+        // return processed_include_content;
+
+        return included_file; // temp
+    }
+
     line.to_string()
+}
+
+fn parse_include_directive(line: &str) -> String {
+    // Extract the filename from the #include directive
+
+    let mut parts = line.split_whitespace();
+    let include_directive = parts.next().unwrap_or("");
+    let include_location = parts.next().unwrap_or("");
+    println!("line: {line}");
+    println!("include_directive: {include_directive}");
+    println!("include_location: {include_location}");
+
+    // "parsing include directive"
+    tracing::debug!(
+        "{}",
+        &format!(
+            "  {}  Parsing {} {} {} {}{}{}{}",
+            "PREPROCESSOR".blue(),
+            "#include".cyan(),
+            "directive".green(),
+            "->".black(),
+            "'".cyan(),
+            include_location.yellow(),
+            "'".cyan(),
+            "...".black(),
+        )
+    );
+
+    if include_location.starts_with('<') && include_location.ends_with('>') {
+        // Angle-bracket include
+        tracing::trace!(
+            "{}",
+            &format!(
+                "  {}  {} {} {}{}{}",
+                "PREPROCESSOR".blue(),
+                "#include".cyan(),
+                "->".black(),
+                "<".cyan(),
+                include_location.yellow(),
+                ">".cyan(),
+            )
+        );
+
+        return include_location[1..include_location.len() - 1].to_string();
+    } else if include_location.starts_with('"') && include_location.ends_with('"') {
+        // Quoted include
+
+        tracing::trace!(
+            "{}",
+            &format!(
+                "  {}  {} {} {}{}{}",
+                "PREPROCESSOR".blue(),
+                "#include".cyan(),
+                "->".black(),
+                "\"".cyan(),
+                include_location.yellow(),
+                "\"".cyan(),
+            )
+        );
+
+        return include_location[1..include_location.len() - 1].to_string();
+    } else {
+        // Invalid include
+        println!("Invalid include 1: {line}");
+        return format!("/* Invalid include: {line} */");
+    }
+
+    // println!("{:#?}", parts.nth(1));
+
+    // todo!();
+
+    // Check if there's at least one token after #include
+    // if let Some(token) = include_directive {
+    //     tracing::trace!(
+    //         "{}",
+    //         &format!(
+    //             "  {}  {} {} {}{}{}",
+    //             "PREPROCESSOR".blue(),
+    //             "#include".cyan(),
+    //             "->".black(),
+    //             "'".cyan(),
+    //             token.yellow(),
+    //             "'".cyan(),
+    //         )
+    //     );
+
+    //     println!("token: {token}");
+    //     if token.starts_with('<') && token.ends_with('>') {
+    //         // Angle-bracket include
+    //         tracing::trace!(
+    //             "{}",
+    //             &format!(
+    //                 "  {}  {} {} {}{}{}",
+    //                 "PREPROCESSOR".blue(),
+    //                 "#include".cyan(),
+    //                 "->".black(),
+    //                 "<".cyan(),
+    //                 token.yellow(),
+    //                 ">".cyan(),
+    //             )
+    //         );
+
+    //         println!("token: {token}");
+
+    //         token.to_string();
+    //     } else if token.starts_with('"') && token.ends_with('"') {
+    //         // Quoted include
+
+    //         tracing::trace!(
+    //             "{}",
+    //             &format!(
+    //                 "  {}  {} {} {}{}{}",
+    //                 "PREPROCESSOR".blue(),
+    //                 "#include".cyan(),
+    //                 "->".black(),
+    //                 "\"".cyan(),
+    //                 token.yellow(),
+    //                 "\"".cyan(),
+    //             )
+    //         );
+
+    //         return token[1..token.len() - 1].to_string();
+    //     } else {
+    //         // Invalid include
+    //         println!("Invalid include 1: {line}");
+    //         return format!("/* Invalid include: {line} */");
+    //     }
+    // }
+
+    format!("/* Invalid include: {line} */")
+    //     if let Some(remainder) = parts.next() {
+    //         if token.starts_with('<') && token.ends_with('>') {
+    //             // Angle-bracket include
+    //             tracing::trace!(
+    //                 "{}",
+    //                 &format!(
+    //                     "  {}  {} {} {}{}{}",
+    //                     "PREPROCESSOR".blue(),
+    //                     "#include".cyan(),
+    //                     "->".black(),
+    //                     "<".cyan(),
+    //                     token.yellow(),
+    //                     ">".cyan(),
+    //                 )
+    //             );
+
+    //             token.to_string()
+    //         } else if token.starts_with('"') && token.ends_with('"') {
+    //             // Quoted include
+
+    //             tracing::trace!(
+    //                 "{}",
+    //                 &format!(
+    //                     "  {}  {} {} {}{}{}",
+    //                     "PREPROCESSOR".blue(),
+    //                     "#include".cyan(),
+    //                     "->".black(),
+    //                     "\"".cyan(),
+    //                     token.yellow(),
+    //                     "\"".cyan(),
+    //                 )
+    //             );
+
+    //             return token[1..token.len() - 1].to_string();
+    //         } else {
+    //             // Invalid include
+    //             println!("Invalid include 1: {line}");
+    //             format!("/* Invalid include: {line} */")
+    //         }
+    //     } else {
+    //         // Invalid include
+    //         println!("Invalid include 2: {line}");
+    //         format!("/* Invalid include: {line} */")
+    //     }
+    // } else {
+    //     // Invalid include
+    //     println!("Invalid include 3: {line}");
+    //     format!("/* Invalid include: {line} */")
+    // }
+}
+
+// fn read_included_file(filename: &str, include_directories: &[String]) ->
+// String {     // Implement logic to find and read the included file from the
+// specified     // directories You'll need to search for the file in
+// include_directories and     // read its content Return the content as a
+// string     // Handle error cases (file not found, etc.) appropriately
+//     // For simplicity, we'll assume the file content for this example
+//     if filename == "stdio.h" {
+//         // Simulate reading the content of stdio.h
+//         return r#"
+//             #pragma once
+
+//             #include <stddef.h>
+
+//             FILE *fopen(const char *filename, const char *mode);
+//             int fclose(FILE *stream);
+//             size_t fread(void *ptr, size_t size, size_t count, FILE *stream);
+//             size_t fwrite(const void *ptr, size_t size, size_t count, FILE
+// *stream);             int fprintf(FILE *stream, const char *format, ...);
+//             int fscanf(FILE *stream, const char *format, ...);
+//         "#
+//         .to_string();
+//     } else {
+//         // Simulate reading the content of an unknown file
+//         return format!("/* Contents of {} not found */", filename);
+//     }
+// }
+
+fn read_included_file(filename: &str, include_directories: &[String]) -> Result<String, String> {
+    // Iterate through each include directory to find the file
+    for include_dir in include_directories {
+        // Construct the full path to the file using the include directory
+        let full_path = format!("{include_dir}/{filename}");
+
+        tracing::trace!(
+            "{}",
+            &format!(
+                "  {}  {} {}{}{}{}",
+                "PREPROCESSOR".blue(),
+                "Searching".black(),
+                "'".cyan(),
+                full_path.yellow(),
+                "'".cyan(),
+                "...".black(),
+            )
+        );
+
+        // Attempt to open the file
+        match File::open(&full_path) {
+            Ok(mut file) => {
+                // Read the content of the file into a string
+                let mut content = String::new();
+                if let Err(_) = file.read_to_string(&mut content) {
+                    return Err(format!("Failed to read file: {}", full_path));
+                }
+                return Ok(content);
+            }
+            Err(_) => {
+                // File not found in this directory, continue searching
+                continue;
+            }
+        }
+    }
+
+    // If the file is not found in any include directory, return an error
+    Err(format!("File not found: {}", filename))
+}
+
+fn process_code(code: &str, include_directories: &[String]) -> String {
+    // Split the code into lines and process each line
+    let lines: Vec<&str> = code.lines().collect();
+    let processed_lines: Vec<String> =
+        lines.iter().map(|line| process_line(line, include_directories)).collect();
+
+    // Join the processed lines back into a single string
+    processed_lines.join("\n")
 }
 
 fn remove_comments(input: &str) -> String {
@@ -723,6 +1365,9 @@ fn remove_backslash_newline(line: &str) -> String {
 }
 
 fn preprocess_files_recursively(root_dir: &str) -> io::Result<()> {
+    let include_directories =
+        vec![String::from("/usr/include"), String::from("/usr/local/include"), String::from(".")];
+
     for entry in WalkDir::new(root_dir) {
         let entry = entry?;
         if entry.file_type().is_file() {
@@ -733,10 +1378,6 @@ fn preprocess_files_recursively(root_dir: &str) -> io::Result<()> {
                 if extension == "c" && entry.file_name() == "in.c" {
                     let input_path = entry.path();
                     let output_path = input_path.with_file_name("out.c");
-
-                    // println!("Preprocessing {}...", input_path.to_string_lossy());
-                    // println!("  Writing to {}...", output_path.to_string_lossy());
-
                     let start = Instant::now();
 
                     tracing::debug!(
@@ -750,7 +1391,11 @@ fn preprocess_files_recursively(root_dir: &str) -> io::Result<()> {
                         )
                     );
 
-                    preprocess_file(input_path.to_str().unwrap(), output_path.to_str().unwrap())?;
+                    preprocess_file(
+                        input_path.to_str().unwrap(),
+                        output_path.to_str().unwrap(),
+                        &include_directories,
+                    )?;
 
                     let elapsed = start.elapsed();
 
