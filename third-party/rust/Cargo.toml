@@ -13,7 +13,7 @@ allocative = "0.2.0"
 always-assert = "0.1.3"
 amplify = "3.14.1"
 annotate-snippets = { version = "0.9.0", features = ["color"] }
-anyhow = "1.0.70"
+anyhow = "1.0.82"
 anymap = "0.12.1"
 aquamarine = "0.3.0"
 arbitrary = "1.1.0"
